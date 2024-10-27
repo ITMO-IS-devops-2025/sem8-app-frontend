@@ -6,8 +6,8 @@ WORKDIR /panpipe-frontend/
 COPY package.json /panpipe-frontend/
 RUN npm install
 
-COPY public/ /client/public
-COPY src/ /client/src
-COPY tsconfig.json /client/
+COPY public/ /panpipe-frontend/public
+COPY src/ /panpipe-frontend/src
+COPY tsconfig.json /panpipe-frontend/
 
 ENTRYPOINT ["npm", "start"]
