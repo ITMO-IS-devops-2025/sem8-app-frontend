@@ -42,7 +42,7 @@ jobs:
         uses: appleboy/ssh-action@v0.1.5
         env:
           GHCR_USERNAME: ${{ github.actor }}
-          GHCR_TOKEN: ${{ secrets.GITHUB_TOKEN}}
+          GHCR_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           IMAGE_NAME: ${{ env.IMAGE_NAME }}
           FRONTEND_SERVER_PORT: ${{ secrets.FRONTEND_SERVER_PORT }}
         with:
