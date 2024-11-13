@@ -1,13 +1,18 @@
 import {Habit} from "../habit/Habit";
 
-export class Group {
-    id: number
-    name: string
-    habits: Habit[]
+type userId = {
+    userId: string;
+};
 
-    constructor(id: number, name: string, habits: Habit[]) {
-        this.id = id
-        this.name = name
-        this.habits = habits
+
+export class Group {
+    id?: string;
+    name: string;
+    participants?: userId[];
+
+    constructor(id: string | undefined, name: string, participants: userId[] | undefined) {
+        this.id = id;
+        this.name = name;
+        this.participants = participants;
     }
 }
