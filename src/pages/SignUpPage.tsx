@@ -28,10 +28,10 @@ export function SignUpPage(props: { currentUser: User | undefined; setCurrentUse
         }
     }
 
-    return <div className="form">
+    return <div className="form" >
         <Form onSubmit={handleForm}>
-            <FormControl isRequired>
-                <FormLabel>Введите ваше имя: </FormLabel>
+            <FormControl isRequired >
+                <FormLabel >Введите ваше имя: </FormLabel>
                 <Input type='text' name="name"/>
             </FormControl>
             <FormControl isRequired>
@@ -42,7 +42,7 @@ export function SignUpPage(props: { currentUser: User | undefined; setCurrentUse
                 <FormLabel>Введите ваш пароль: </FormLabel>
                 <Input type='text' name="password"/>
             </FormControl>
-            <Button colorScheme="pink" type={"submit"}>Зарегистрироваться</Button>
+            <Button colorScheme="pink" type={"submit"} >Зарегистрироваться</Button>
             { error? <div className="errorMessage">
                 Пользователь с таким юзернеймом уже есть! извините!!
             </div> : ""}

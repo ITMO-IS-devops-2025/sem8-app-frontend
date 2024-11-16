@@ -1,13 +1,13 @@
-import { useState, useEffect } from "react";
-import { User } from "../model/user/User";
-import { Group } from "../model/group/Group";
-import { List, ListItem } from "@chakra-ui/react";
-import { useParams } from "react-router-dom";
+import {useState, useEffect} from "react";
+import {User} from "../model/user/User";
+import {Group} from "../model/group/Group";
+import {Box, Heading, List, ListItem} from "@chakra-ui/react";
+import {useParams} from "react-router-dom";
 import {GroupController} from "../controllers/GroupController";
 import {UserController} from "../controllers/UserController";
 
 export function GroupPage(props: { currentUser: User | undefined }) {
-    const { groupId } = useParams<{ groupId: string }>();  // Получаем ID группы из URL
+    const {groupId} = useParams<{ groupId: string }>();  // Получаем ID группы из URL
     const [group, setGroup] = useState<Group | null>(null);
     const [participants, setParticipants] = useState<User[]>([]);
     const [error, setError] = useState(false);
@@ -43,6 +43,7 @@ export function GroupPage(props: { currentUser: User | undefined }) {
                 setError(true);
             }
         }
+
         fetchGroupData();
     }, [groupId]);
 
@@ -52,17 +53,19 @@ export function GroupPage(props: { currentUser: User | undefined }) {
 
             {group && (
                 <div>
-                    <h1>Группа: {group.name}</h1>
-                    <h2>Список участников:</h2>
-                    <List spacing={3}>
-                        {participants.map((participant) => (
-                            <ListItem key={participant.id}>
-                                {participant.login}
-                            </ListItem>
-                        ))}
-                    </List>
+                    <Box px={6}>
+                        <Heading as="h1" size="lg" mt={4}>Группа: {group.name}</Heading>
+                        <Heading as="h2" size="md" mt={4}>Список участников:</Heading>
+                        <List spacing={3}>
+                            {participants.map((participant) => (
+                                <ListItem key={participant.id}>
+                                    {participant.login}
+                                </ListItem>
+                            ))}
+                        </List>
+                    </Box>
                 </div>
-            )}
+                )}
         </div>
-    );
+);
 }

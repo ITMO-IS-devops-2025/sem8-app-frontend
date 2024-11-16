@@ -34,14 +34,14 @@ export function HabitPage(props: { currentUser: User | undefined }) {
             {error && <div className="error-message">Произошла ошибка при загрузке данных привычки.</div>}
 
             {habit && (
-                <Box>
+                <Box px={6}>
                     <Heading as="h1">Привычка: {habit.name}</Heading>
                     <Text fontSize="xl">Периодичность: {habit.periodicity}</Text>
                     <Text fontSize="xl">Цель: {habit.goal}</Text>
                     <Text fontSize="xl">Тип результата: {habit.resultType}</Text>
 
-                    <Heading as="h2" size="lg" mt={4}>Оценки:</Heading>
-                    <List spacing={3}>
+                    <Heading as="h2" size="mt" mt={4}>Оценки:</Heading>
+                    <List spacing={3} >
                         {habit.marks?.map((mark, index) => (
                             <ListItem key={index}>
                                 <Text>Дата: {mark.timestamp.toLocaleString()}</Text>
@@ -49,6 +49,7 @@ export function HabitPage(props: { currentUser: User | undefined }) {
                             </ListItem>
                         ))}
                     </List>
+
                 </Box>
             )}
         </div>
