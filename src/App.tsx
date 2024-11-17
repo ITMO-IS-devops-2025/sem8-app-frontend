@@ -1,6 +1,5 @@
 import React, {useEffect, useState} from 'react';
 import './styles/App.css';
-// import {receiveAndUpdateCurrentUser} from "./utils/auth/ReceiveAndUpdateCurrentUser";
 import {createBrowserRouter, Outlet, RouterProvider} from "react-router-dom";
 import {User} from "./model/user/User";
 import {ChakraProvider, Spinner} from "@chakra-ui/react";
@@ -10,6 +9,11 @@ import {MainPage} from "./pages/MainPage";
 import {SignInPage} from "./pages/SignInPage";
 import {SignUpPage} from "./pages/SignUpPage";
 import {SignOutPage} from "./pages/SignOutPage";
+import {GroupPage} from "./pages/GroupPage";
+import {GroupListPage} from "./pages/GroupListPage";
+import {GroupCreationPage} from "./pages/GroupCreationPage";
+import {HabitPage} from "./pages/HabitPage";
+import {HabitCreationPage} from "./pages/HabitCreationPage";
 
 function App() {
   // let [loading, setLoading] = useState(true)
@@ -40,6 +44,26 @@ function App() {
         {
           path: "/signOut",
           element: <SignOutPage currentUser={currentUser} setCurrentUser={setCurrentUser}/>,
+        },
+        {
+          path: "/group/:groupId",
+          element: <GroupPage currentUser={currentUser} />,
+        },
+        {
+          path: "/groups",
+          element: <GroupListPage currentUser={currentUser} />,
+        },
+        {
+          path: "/group-creation",
+          element: <GroupCreationPage currentUser={currentUser} />,
+        },
+        {
+          path: "/habit/:habitId",
+          element: <HabitPage currentUser={currentUser} />,
+        },
+        {
+          path: "/habit-creation",
+          element: <HabitCreationPage currentUser={currentUser} />,
         },
       ]
     },

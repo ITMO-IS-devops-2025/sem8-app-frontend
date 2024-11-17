@@ -1,17 +1,27 @@
-import {Result} from "./Result";
+type Result = {
+    value: string | null;
+};
+
+type Mark = {
+    id: string;
+    timestamp: Date;
+    result: Result;
+};
 
 export class Habit {
+    id : string
     name: string
     periodicity: string
     goal: string
-    type: string
-    results: Result[]
+    resultType: string
+    marks?: Mark[];
 
-    constructor(name: string, periodicity: string, goal: string, type: string, results: Result[]) {
+    constructor(id : string, name: string, periodicity: string, goal: string, resultType: string, marks: Mark[] = []) {
+        this.id = id
         this.name = name
         this.periodicity = periodicity
         this.goal = goal
-        this.type = type
-        this.results = results
+        this.resultType = resultType
+        this.marks = marks
     }
 }

@@ -1,13 +1,15 @@
 export class HabitTemplate {
+    id : string
     name: string
     periodicity: string
     goal: string
-    type: string
+    resultType: string
 
-    constructor(name: string, periodicity: string, goal: string, type: string) {
+    constructor(id : string, name: string, periodicity: string, goal: string, resultType: string) {
+        this.id = id
         this.name = name
         this.periodicity = periodicity
         this.goal = goal
-        this.type = type
+        this.resultType = resultType
     }
 }
