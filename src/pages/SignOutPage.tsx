@@ -1,6 +1,6 @@
 import {User} from "../model/user/User";
 import {NavigateOnLogout} from "../utils/auth/NavigateOnLogin";
-import {AuthController} from "@/controllers/AuthController";
+import {AuthController} from "../controllers/AuthController";
 
 export function SignOutPage(props: { currentUser: User | undefined; setCurrentUser: (newPersonData: undefined) => void; }) {
     let navigate = NavigateOnLogout(props.currentUser)
