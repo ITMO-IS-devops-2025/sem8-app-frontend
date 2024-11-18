@@ -15,7 +15,9 @@ export function MainPage(props: { currentUser: User | undefined }) {
             const response = await new HabitController().getHabits();
             if (response instanceof Error) {
                 setError(true);
-            } else if (Array.isArray(response.habits)){
+            } else if ("habits" in response){
+                console.log("+", response)
+                // @ts-ignore
                 setHabits(response.habits);
             }
         } catch (err) {

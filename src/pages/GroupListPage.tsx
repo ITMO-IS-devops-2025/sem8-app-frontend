@@ -15,8 +15,9 @@ export function GroupListPage(props: { currentUser: User | undefined }) {
                 const response = await new GroupController().getGroups();
                 if (response instanceof Error) {
                     setError(true);
-                } else if (Array.isArray(response)) {
-                    setGroups(response);
+                } else if ("groups" in response) {
+                    // @ts-ignore
+                    setGroups(response.groups);
                 }
             } catch (err) {
                 setError(true);
@@ -33,9 +34,9 @@ export function GroupListPage(props: { currentUser: User | undefined }) {
 
             <List spacing={3}>
                 {groups.map((group) => (
-                    <ListItem key={group.id}>
-                        <Link to={`/group/${group.id}`}>
-                            {group.name} - {group.participants?.length} участников
+                    <ListItem key={group.groupId}>
+                        <Link to={`/group/${group.groupId}`}>
+                            {group.name}
                         </Link>
                     </ListItem>
                 ))}

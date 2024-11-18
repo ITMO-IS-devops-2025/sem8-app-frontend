@@ -19,7 +19,7 @@ export class GroupController extends BaseController {
 
     async createGroup (name : string) {
         let url = "groups";
-        return await this.api<Group>(url, name, "POST");
+        return await this.api<Group>(url, {"name" : name}, "POST");
         /*return new Group("5", name, [{userId : "1"}]);*/
     }
 

@@ -18,8 +18,9 @@ export function HabitCreationPage(props: { currentUser: User | undefined }) {
                 const response = await new HabitController().getHabitTemplates();
                 if (response instanceof Error) {
                     setError(true);
-                } else if (Array.isArray(response)){
-                    setHabitTemplates(response);
+                } else if ("templates" in response){
+                    // @ts-ignore
+                    setHabitTemplates(response.templates);
                 }
             } catch (err) {
                 setError(true);
@@ -54,12 +55,12 @@ export function HabitCreationPage(props: { currentUser: User | undefined }) {
                     <List spacing={3}>
                         {habitTemplates.map((template) => (
                             <ListItem
-                                key={template.id}
+                                key={template.templateId}
                                 p={2}
-                                bg={selectedTemplate === template.id ? "teal.100" : "white"}
+                                bg={selectedTemplate === template.templateId ? "teal.100" : "white"}
                                 borderRadius="md"
                                 cursor="pointer"
-                                onClick={() => setSelectedTemplate(template.id)}
+                                onClick={() => setSelectedTemplate(template.templateId)}
                             >
                                 <strong>{template.name}</strong>
                                 <Box mt={1}>

@@ -4,12 +4,12 @@ type userId = {
 
 
 export class Group {
-    id?: string;
+    groupId?: string;
     name: string;
     participants?: userId[];
 
-    constructor(id: string | undefined, name: string, participants: userId[] | undefined) {
-        this.id = id;
+    constructor(groupId: string | undefined, name: string, participants: userId[] | undefined) {
+        this.groupId = groupId;
         this.name = name;
         this.participants = participants;
     }

@@ -20,9 +20,8 @@ export function GroupCreationPage(props: { currentUser: User | undefined }) {
             const response = await new GroupController().createGroup(groupName);
             if (response instanceof Error) {
                 setError("Ошибка при создании группы");
-            } else {
-                console.log(response);
-                //navigate(`/group/${response.id}`);
+            } else if ("groupId" in response){
+                navigate(`/group/${response.groupId}`);
             }
         } catch (err) {
             setError("Произошла ошибка при создании группы");

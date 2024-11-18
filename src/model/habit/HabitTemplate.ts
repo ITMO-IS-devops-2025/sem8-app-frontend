@@ -1,12 +1,12 @@
 export class HabitTemplate {
-    id : string
+    templateId : string
     name: string
     periodicity: string
     goal: string
     resultType: string
 
-    constructor(id : string, name: string, periodicity: string, goal: string, resultType: string) {
-        this.id = id
+    constructor(templateId : string, name: string, periodicity: string, goal: string, resultType: string) {
+        this.templateId = templateId
         this.name = name
         this.periodicity = periodicity
         this.goal = goal

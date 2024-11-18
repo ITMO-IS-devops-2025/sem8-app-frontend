@@ -21,7 +21,7 @@ export function GroupPage(props: { currentUser: User | undefined }) {
                 let response = await new GroupController().getGroupById(groupId);
                 if (response instanceof Error) {
                     setError(true);
-                } else if ("id" in response) {
+                } else if ("name" in response) {
                     setGroup(response);
                     if (response.participants && response.participants.length > 0) {
                         const participantsWithLogins = await Promise.all(
@@ -51,6 +51,7 @@ export function GroupPage(props: { currentUser: User | undefined }) {
 
     return (
         <div className="group-page">
+
             {error && <div className="error-message">Произошла ошибка при загрузке данных группы.</div>}
 
             {group && (
