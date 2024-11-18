@@ -1,7 +1,7 @@
-import { useState } from "react";
+import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { GroupController } from "../controllers/GroupController";
-import { Input, Button } from "@chakra-ui/react";
+import {Input, Button, Select, FormControl, FormLabel, Box, Heading, List, ListItem} from "@chakra-ui/react";
 import {User} from "../model/user/User";
 import {Group} from "../model/group/Group"
 
@@ -29,18 +29,20 @@ export function GroupCreationPage(props: { currentUser: User | undefined }) {
     };
 
     return (
-        <div className="group-creation-page">
-            <h1>Создать новую группу</h1>
-            {error && <div className="error-message">{error}</div>}
-            <Input
-                placeholder="Введите название группы"
-                value={groupName}
-                onChange={(e) => setGroupName(e.target.value)}
-                mb={4}
-            />
-            <Button colorScheme="teal" onClick={handleCreateGroup}>
-                Создать группу
-            </Button>
+        <div className="group-creation-page" >
+            <Box px={6}>
+                <Heading size="md" mb={3}>Создать новую групп</Heading>
+                {error && <div className="error-message">{error}</div>}
+                <Input
+                    placeholder="Введите название группы"
+                    value={groupName}
+                    onChange={(e) => setGroupName(e.target.value)}
+                    mb={4}
+                />
+                <Button colorScheme="teal" onClick={handleCreateGroup}>
+                    Создать группу
+                </Button>
+            </Box>
         </div>
     );
 }

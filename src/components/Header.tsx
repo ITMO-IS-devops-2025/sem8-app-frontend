@@ -17,6 +17,7 @@ export function Header(props: { currentUser: User | undefined }) {
                 >
                     <ButtonGroup>
                         <NavLink to={"/"}><Button colorScheme='pink'>Главная</Button></NavLink>
+                        <NavLink to={"/groups"}><Button colorScheme='pink'>Группы</Button></NavLink>
                     </ButtonGroup>
                     <ButtonGroup gap='4'>
                         <NavLink to={"/signIn"}><Button colorScheme='pink'>Войти</Button></NavLink>
@@ -38,11 +39,9 @@ export function Header(props: { currentUser: User | undefined }) {
             >
                 <ButtonGroup gap='4'>
                     <NavLink to={"/"}><Button colorScheme='pink'>Главная</Button></NavLink>
-                    <NavLink to={"/users"}><Button color='#D53F8C'>Пользователи</Button></NavLink>
                     <NavLink to={"/groups"}><Button color='#D53F8C'>Группы</Button></NavLink>
                 </ButtonGroup>
                 <ButtonGroup gap='4'>
-                    <NavLink to={"/profile"}><Button colorScheme='pink'>Профиль</Button></NavLink>
                     <NavLink to={"/signOut"}><Button color='#D53F8C'>Выйти</Button></NavLink>
                 </ButtonGroup>
             </Box>

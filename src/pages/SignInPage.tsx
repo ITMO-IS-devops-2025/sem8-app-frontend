@@ -35,7 +35,8 @@ export function SignInPage(props: { currentUser: User | undefined; setCurrentUse
         if (response instanceof ErrorResponse) {
             setError(true)
         } else {
-            props.setCurrentUser(response.currentUser)
+            let user = new User(response.userId, signInRequest.login)
+            props.setCurrentUser(user)
             // localStorage.setItem("token", response.token)
             navigate('/')
         }

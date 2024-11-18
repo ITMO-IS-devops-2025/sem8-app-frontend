@@ -49,9 +49,9 @@ export function HabitCreationPage(props: { currentUser: User | undefined }) {
 
     return (
         <div className="habit-creation-page">
-            <Box>
+            <Box px={6}>
                 <FormControl mb={4}>
-                    <FormLabel>Шаблон привычки</FormLabel>
+                    <Heading size="md" mt={6}>Шаблоны привычек</Heading>
                     <List spacing={3}>
                         {habitTemplates.map((template) => (
                             <ListItem
@@ -63,7 +63,7 @@ export function HabitCreationPage(props: { currentUser: User | undefined }) {
                                 onClick={() => setSelectedTemplate(template.templateId)}
                             >
                                 <strong>{template.name}</strong>
-                                <Box mt={1}>
+                                <Box mt={1} >
                                     <div>Периодичность: {template.periodicity}</div>
                                     <div>Цель: {template.goal}</div>
                                     <div>Тип результата: {template.resultType}</div>
