@@ -13,6 +13,6 @@ export class AuthController extends BaseController {
     }
 
     async signOut(){
-        return await this.api<null>("logout", null, "POST")
+        return await this.api<any>("logout", null, "POST")
     }
 }
