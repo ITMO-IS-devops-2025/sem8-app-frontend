@@ -15,7 +15,7 @@ export function MainPage(props: { currentUser: User | undefined }) {
             const response = await new HabitController().getHabits();
             if (response instanceof Error) {
                 setError(true);
-            } else {
+            } else if (Array.isArray(response.habits)){
                 setHabits(response.habits);
             }
         } catch (err) {
@@ -24,25 +24,26 @@ export function MainPage(props: { currentUser: User | undefined }) {
     }
 
     useEffect(() => {
-        if (props.currentUser) {
+        //if (props.currentUser) {
             fetchHabits();
-        }
+        //}
     }, [props.currentUser]);
 
-    if (props.currentUser === undefined) {
+
+    /*if (props.currentUser === undefined) {
         return (
             <div>
                 <Heading>Регистрируйся и присоединяйся к панпипе!</Heading>
             </div>
         );
-    }
+    }*/
 
     return (
         <div>
-            <Heading>Добро пожаловать, {props.currentUser.login}!</Heading>
+            <Heading>Добро пожаловать, {props.currentUser?.login}!</Heading>
 
             <Box mt={4}>
-                <Button colorScheme="teal" onClick={() => navigate("/habitCreation")}>
+                <Button colorScheme="teal" onClick={() => navigate("/habit-creation")}>
                     Создать привычку
                 </Button>
                 <Button colorScheme="blue" onClick={() => navigate("/groups")} ml={4}>

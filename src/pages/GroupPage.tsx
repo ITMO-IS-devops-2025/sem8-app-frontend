@@ -1,13 +1,13 @@
-import { useState, useEffect } from "react";
-import { User } from "../model/user/User";
-import { Group } from "../model/group/Group";
-import { List, ListItem } from "@chakra-ui/react";
-import { useParams } from "react-router-dom";
+import {useState, useEffect} from "react";
+import {User} from "../model/user/User";
+import {Group} from "../model/group/Group";
+import {List, ListItem} from "@chakra-ui/react";
+import {useParams} from "react-router-dom";
 import {GroupController} from "../controllers/GroupController";
 import {UserController} from "../controllers/UserController";
 
 export function GroupPage(props: { currentUser: User | undefined }) {
-    const { groupId } = useParams<{ groupId: string }>();  // Получаем ID группы из URL
+    const {groupId} = useParams<{ groupId: string }>();  // Получаем ID группы из URL
     const [group, setGroup] = useState<Group | null>(null);
     const [participants, setParticipants] = useState<User[]>([]);
     const [error, setError] = useState(false);
@@ -21,7 +21,7 @@ export function GroupPage(props: { currentUser: User | undefined }) {
                 let response = await new GroupController().getGroupById(groupId);
                 if (response instanceof Error) {
                     setError(true);
-                } else {
+                } else if ("id" in response) {
                     setGroup(response);
                     if (response.participants && response.participants.length > 0) {
                         const participantsWithLogins = await Promise.all(
@@ -30,19 +30,22 @@ export function GroupPage(props: { currentUser: User | undefined }) {
                                 if (userResponse instanceof Error) {
                                     setError(true);
                                 }
-                                return {
-                                    id: participant.userId,
-                                    login: userResponse.login
-                                };
+                                else if ("login" in userResponse) {
+                                    return {
+                                        id: participant.userId,
+                                        login: userResponse.login
+                                    };
+                                }
                             })
                         );
-                        setParticipants(participantsWithLogins);
+                        setParticipants(participantsWithLogins.filter((p) => p !== null) as User[]);
                     }
                 }
             } catch (err) {
                 setError(true);
             }
         }
+
         fetchGroupData();
     }, [groupId]);
 

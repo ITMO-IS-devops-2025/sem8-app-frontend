@@ -1,8 +1,8 @@
-import { useEffect, useState } from "react";
-import { GroupController } from "../controllers/GroupController";
-import { Group } from "../model/group/Group";
-import { List, ListItem, Button } from "@chakra-ui/react";
-import { Link } from "react-router-dom";
+import {useEffect, useState} from "react";
+import {GroupController} from "../controllers/GroupController";
+import {Group} from "../model/group/Group";
+import {List, ListItem, Button} from "@chakra-ui/react";
+import {Link} from "react-router-dom";
 import {User} from "../model/user/User";
 
 export function GroupListPage(props: { currentUser: User | undefined }) {
@@ -15,13 +15,14 @@ export function GroupListPage(props: { currentUser: User | undefined }) {
                 const response = await new GroupController().getGroups();
                 if (response instanceof Error) {
                     setError(true);
-                } else {
+                } else if (Array.isArray(response)) {
                     setGroups(response);
                 }
             } catch (err) {
                 setError(true);
             }
         }
+
         fetchGroups();
     }, []);
 
