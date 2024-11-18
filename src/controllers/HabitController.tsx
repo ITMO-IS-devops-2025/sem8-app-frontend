@@ -1,10 +1,11 @@
 import {BaseController} from "../controllers/BaseController";
 import {Habit} from "../model/habit/Habit";
 import {HabitTemplate} from "../model/habit/HabitTemplate";
+import {Habits} from "@/model/habit/Habits";
 
 export class HabitController extends BaseController {
     async getHabitTemplates(){
-        let url = "/habits/templates";
+        let url = "habits/templates";
         return await this.api<HabitTemplate[]>(url);
         /*return [
             new HabitTemplate("5", "Прес качат", "День", "1000 раз", "Галочка"),
@@ -13,9 +14,7 @@ export class HabitController extends BaseController {
     }
     async getHabits(){
         let url = "habits";
-        return {
-            habits: await this.api<Habit[]>(url)
-        };
+        return await this.api<Habits>(url);
         /*return {
             habits: [
                 new Habit("7", "Прес качат", "День", "1000 раз", "Галочка"),
@@ -42,12 +41,12 @@ export class HabitController extends BaseController {
 
     async createHabitFromTemplate(templateId : string){
         let url = "habits";
-        return await this.api<Habit>(url, templateId, "POST");
+        return await this.api<Habit>(url, {"templateId" : templateId}, "POST");
         /*return { habitId : "10" };*/
     }
 
     async changeHabitMark (habitId : string, markId : string, value : string){
-        let url = "/habits/" + habitId + "/marks/" + markId + "/result";
+        let url = "habits/" + habitId + "/marks/" + markId + "/result";
         return await this.api<any>(url, value, "PUT");
         /*return {};*/
     }

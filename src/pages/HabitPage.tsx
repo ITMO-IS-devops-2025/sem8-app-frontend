@@ -71,7 +71,7 @@ export function HabitPage(props: { currentUser: User | undefined }) {
                         {habit.marks?.map((mark, index) => (
                             <ListItem key={index}>
                                 <Text>Дата: {mark.timestamp.toLocaleString()}</Text>
-                                {mark.result.value === null ? (
+                                {mark.result === null ? (
                                     <>
                                         {habit.resultType === "Boolean" && (
                                             <Checkbox

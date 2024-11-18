@@ -25,12 +25,12 @@ export class BaseController {
             headers: headers,
             method: method,
             mode: 'cors',
-            credentials: "include"
+            credentials: 'include'
         };
         if (body !== null) {
             options.body = JSON.stringify(body);
         }
-
+        console.log(options.body);
         return await fetch(url, options);
     }
 
