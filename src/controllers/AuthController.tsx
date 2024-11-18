@@ -11,4 +11,8 @@ export class AuthController extends BaseController {
     async signIn(user: SignInRequest) {
         return await this.api<AuthResponse>("login", user, "POST")
     }
+
+    async signOut(){
+        return await this.api<any>("logout", null, "POST")
+    }
 }
