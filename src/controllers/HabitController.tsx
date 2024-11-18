@@ -47,7 +47,7 @@ export class HabitController extends BaseController {
 
     async changeHabitMark (habitId : string, markId : string, value : string){
         let url = "habits/" + habitId + "/marks/" + markId + "/result";
-        return await this.api<any>(url, value, "PUT");
+        return await this.api<any>(url, {"value" : value}, "PUT");
         /*return {};*/
     }
 
