@@ -9,8 +9,8 @@ export class UserController extends BaseController {
     }
 
     async getUserById(id: string) {
-        /*let url = "users/" + id;
-        return await this.api<User>(url)*/
-        return new User ("1", "Игорь")
+        let url = "users/" + id;
+        return await this.api<User>(url);
+        /*return new User ("1", "Игорь")*/
     }
 }

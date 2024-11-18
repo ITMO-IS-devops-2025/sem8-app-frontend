@@ -1,5 +1,3 @@
-import {Habit} from "../habit/Habit";
-
 type userId = {
     userId: string;
 };

@@ -15,7 +15,7 @@ export function MainPage(props: { currentUser: User | undefined }) {
             const response = await new HabitController().getHabits();
             if (response instanceof Error) {
                 setError(true);
-            } else {
+            } else if (Array.isArray(response.habits)){
                 setHabits(response.habits);
             }
         } catch (err) {
@@ -25,7 +25,7 @@ export function MainPage(props: { currentUser: User | undefined }) {
 
     useEffect(() => {
         //if (props.currentUser) {
-        fetchHabits();
+            fetchHabits();
         //}
     }, [props.currentUser]);
 
@@ -38,9 +38,18 @@ export function MainPage(props: { currentUser: User | undefined }) {
         );
     }*/
 
-
     return (
         <div>
+            <Heading>Добро пожаловать, {props.currentUser?.login}!</Heading>
+
+            <Box mt={4}>
+                <Button colorScheme="teal" onClick={() => navigate("/habit-creation")}>
+                    Создать привычку
+                </Button>
+                <Button colorScheme="blue" onClick={() => navigate("/groups")} ml={4}>
+                    Перейти в группы
+                </Button>
+            </Box>
             {error && <div>Произошла ошибка при загрузке привычек.</div>}
 
             {habits.length > 0 ? (

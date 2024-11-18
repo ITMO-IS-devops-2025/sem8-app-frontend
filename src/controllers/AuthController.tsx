@@ -5,10 +5,10 @@ import {AuthResponse} from "../model/user/auth/AuthResponse";
 
 export class AuthController extends BaseController {
     async signUp(user: SignUpRequest) {
-        return await this.api<AuthResponse>("sign-up", user, "POST")
+        return await this.api<AuthResponse>("register", user, "POST")
     }
 
     async signIn(user: SignInRequest) {
-        return await this.api<AuthResponse>("sign-in", user, "POST")
+        return await this.api<AuthResponse>("login", user, "POST")
     }
 }

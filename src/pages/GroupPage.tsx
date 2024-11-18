@@ -21,7 +21,7 @@ export function GroupPage(props: { currentUser: User | undefined }) {
                 let response = await new GroupController().getGroupById(groupId);
                 if (response instanceof Error) {
                     setError(true);
-                } else {
+                } else if ("id" in response) {
                     setGroup(response);
                     if (response.participants && response.participants.length > 0) {
                         const participantsWithLogins = await Promise.all(
@@ -30,13 +30,15 @@ export function GroupPage(props: { currentUser: User | undefined }) {
                                 if (userResponse instanceof Error) {
                                     setError(true);
                                 }
-                                return {
-                                    id: participant.userId,
-                                    login: userResponse.login
-                                };
+                                else if ("login" in userResponse) {
+                                    return {
+                                        id: participant.userId,
+                                        login: userResponse.login
+                                    };
+                                }
                             })
                         );
-                        setParticipants(participantsWithLogins);
+                        setParticipants(participantsWithLogins.filter((p) => p !== null) as User[]);
                     }
                 }
             } catch (err) {

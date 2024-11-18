@@ -18,7 +18,7 @@ export function HabitCreationPage(props: { currentUser: User | undefined }) {
                 const response = await new HabitController().getHabitTemplates();
                 if (response instanceof Error) {
                     setError(true);
-                } else {
+                } else if (Array.isArray(response)){
                     setHabitTemplates(response);
                 }
             } catch (err) {
@@ -38,7 +38,7 @@ export function HabitCreationPage(props: { currentUser: User | undefined }) {
             const response = await new HabitController().createHabitFromTemplate(selectedTemplate);
             if (response instanceof Error) {
                 setError(true);
-            } else {
+            } else if ("habitId" in response){
                 navigate(`/habit/${response.habitId}`);
             }
         } catch (err) {

@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { GroupController } from "../controllers/GroupController";
 import {Input, Button, Select, FormControl, FormLabel, Box, Heading, List, ListItem} from "@chakra-ui/react";
 import {User} from "../model/user/User";
+import {Group} from "../model/group/Group"
 
 export function GroupCreationPage(props: { currentUser: User | undefined }) {
     const [groupName, setGroupName] = useState<string>("");
@@ -20,9 +21,8 @@ export function GroupCreationPage(props: { currentUser: User | undefined }) {
             if (response instanceof Error) {
                 setError("Ошибка при создании группы");
             } else {
-                // После создания группы переходим на страницу группы
-                console.log("group created", groupName);
-                navigate(`/group/${response.id}`);
+                console.log(response);
+                //navigate(`/group/${response.id}`);
             }
         } catch (err) {
             setError("Произошла ошибка при создании группы");

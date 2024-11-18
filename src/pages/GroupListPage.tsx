@@ -3,6 +3,7 @@ import {GroupController} from "../controllers/GroupController";
 import {Group} from "../model/group/Group";
 import {List, ListItem, Button, Box, Heading} from "@chakra-ui/react";
 import {Link, useNavigate} from "react-router-dom";
+
 import {User} from "../model/user/User";
 import {Card} from "@chakra-ui/react"
 
@@ -17,7 +18,7 @@ export function GroupListPage(props: { currentUser: User | undefined }) {
                 const response = await new GroupController().getGroups();
                 if (response instanceof Error) {
                     setError(true);
-                } else {
+                } else if (Array.isArray(response)) {
                     setGroups(response);
                 }
             } catch (err) {
