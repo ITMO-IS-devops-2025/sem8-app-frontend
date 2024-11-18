@@ -9,15 +9,15 @@ type Mark = {
 };
 
 export class Habit {
-    id : string
+    habitId : string
     name: string
     periodicity: string
     goal: string
     resultType: string
     marks?: Mark[];
 
-    constructor(id : string, name: string, periodicity: string, goal: string, resultType: string, marks: Mark[] = []) {
-        this.id = id
+    constructor(habitId : string, name: string, periodicity: string, goal: string, resultType: string, marks: Mark[] = []) {
+        this.habitId = habitId
         this.name = name
         this.periodicity = periodicity
         this.goal = goal

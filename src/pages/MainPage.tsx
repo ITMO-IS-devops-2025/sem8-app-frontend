@@ -60,12 +60,12 @@ export function MainPage(props: { currentUser: User | undefined }) {
                     <List spacing={3} px={6}>
                         {habits.map((habit) => (
                             <ListItem
-                                key={habit.id}
+                                key={habit.habitId}
                                 p={2}
                                 bg="gray.50"
                                 borderRadius="md"
                                 cursor="pointer"
-                                onClick={() => navigate(`/habit/${habit.id}`)}
+                                onClick={() => navigate(`/habit/${habit.habitId}`)}
                             >
                                 <strong>{habit.name}</strong>
                                 <Box mt={1}>
