@@ -9,7 +9,7 @@ export class ErrorResponse {
 export class BaseController {
 
     async api<T>(url: string, body: any = null, method: string = "GET"): Promise<T | ErrorResponse> {
-        let response = await this.request("http://localhost:8080/api/v1/" + url, body, method)
+        let response = await this.request("/api/v1/" + url, body, method)
         return response.ok ? JSON.parse(await response.text()) as T :
             new ErrorResponse(response.status, await response.text())
     }
