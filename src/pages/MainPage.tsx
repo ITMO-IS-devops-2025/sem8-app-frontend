@@ -50,13 +50,12 @@ export function MainPage(props: { currentUser: User | undefined }) {
                     Перейти в группы
                 </Button>
             </Box>
-
             {error && <div>Произошла ошибка при загрузке привычек.</div>}
 
             {habits.length > 0 ? (
                 <div>
-                    <Heading size="md" mt={6}>Ваши привычки:</Heading>
-                    <List spacing={3}>
+                    <Heading size="md" mt={6} px={6}>Ваши привычки:</Heading>
+                    <List spacing={3} px={6}>
                         {habits.map((habit) => (
                             <ListItem
                                 key={habit.id}
@@ -79,6 +78,13 @@ export function MainPage(props: { currentUser: User | undefined }) {
             ) : (
                 <div>У вас нет привычек. Создайте одну!</div>
             )}
+
+            <Box mt={4} px={6}>
+                <Button colorScheme="teal" onClick={() => navigate("/habit-creation")}>
+                    Создать привычку
+                </Button>
+            </Box>
+
         </div>
     );
 }
