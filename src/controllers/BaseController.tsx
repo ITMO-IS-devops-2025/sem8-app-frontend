@@ -24,7 +24,8 @@ export class BaseController {
         const options: RequestInit = {
             headers: headers,
             method: method,
-            mode: 'cors'
+            mode: 'cors',
+            credentials: "include"
         };
         if (body !== null) {
             options.body = JSON.stringify(body);

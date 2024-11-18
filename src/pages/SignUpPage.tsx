@@ -22,9 +22,7 @@ export function SignUpPage(props: { currentUser: User | undefined; setCurrentUse
         if (response instanceof ErrorResponse) {
             setError(true)
         } else {
-            props.setCurrentUser(response.currentUser)
-            // localStorage.setItem("token", response.token)
-            navigate('/')
+            navigate('/signIn')
         }
     }
 
