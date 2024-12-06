@@ -13,4 +13,22 @@ export class UserController extends BaseController {
         return await this.api<User>(url);
         /*return new User ("1", "Игорь")*/
     }
+
+
+    async changeUserPassword(id: string, prevPassword : string, newPassword : string) {
+        let url = "users/" + id + "/password";
+        return await this.api<User>(url, {prevPassword : prevPassword, newPassword : newPassword});
+    }
+
+    async getUserByLogin(login: string) {
+        let url = "users/" + login;
+        return await this.api<User>(url, {login : login});
+        /*return new User ("1", "Игорь")*/
+    }
+
+    async getUsers (){
+        let url = "users/";
+        return await this.api<User[]>(url);
+    }
+
 }

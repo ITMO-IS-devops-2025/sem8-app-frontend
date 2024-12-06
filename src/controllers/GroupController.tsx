@@ -23,4 +23,25 @@ export class GroupController extends BaseController {
         /*return new Group("5", name, [{userId : "1"}]);*/
     }
 
+    async addUserToGroup (groupId : string, userId : string ) {
+        let url = "groups/" + groupId + "/participants/" + userId;
+        return await this.api<Group>(url, {groupId : groupId, userId : userId}, "PUT");
+    }
+
+    async RemoveUserFromGroup (groupId : string, userId : string ) {
+        let url = "groups/" + groupId + "/participants/" + userId;
+        return await this.api<Group>(url, {groupId : groupId, userId : userId}, "DELETE");
+    }
+
+
+    async getGroupHabits (id : string){
+        let url = "groups" + id + "/habits";
+        return await this.api<Group[]>(url);
+    }
+
+    async getGroupHabitById (groupId : string, userId : string ){
+        let url = "groups" + groupId + "/habits" + userId;
+        return await this.api<Group[]>(url);
+    }
+
 }

@@ -40,8 +40,14 @@ export class HabitController extends BaseController {
     }
 
     async createHabitFromTemplate(templateId : string){
-        let url = "habits";
+        let url = "habits/templated-habits";
         return await this.api<Habit>(url, {"templateId" : templateId}, "POST");
+        /*return { habitId : "10" };*/
+    }
+
+    async createHabit( name : string, description : string, periodicity : string, goal : string, resultType : string){
+        let url = "habits";
+        return await this.api<Habit>(url, {"name" : name, "description" : description, "periodicity" : periodicity, "goal" : goal, "resultType" : resultType }, "POST");
         /*return { habitId : "10" };*/
     }
 
@@ -50,5 +56,13 @@ export class HabitController extends BaseController {
         return await this.api<any>(url, {"value" : value}, "PUT");
         /*return {};*/
     }
+
+    async changeHabitParameters ( habitId : string, name : string, description : string, periodicity : string, goal : string, resultType : string){
+        let url = "habits/" + habitId + "parameters";
+        return await this.api<any>(url, {"name" : name, "description" : description, "periodicity" : periodicity, "goal" : goal, "resultType" : resultType }, "PUT");
+        /*return {};*/
+    }
+
+
 
 }
