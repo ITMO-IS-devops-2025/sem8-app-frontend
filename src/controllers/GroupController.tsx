@@ -51,26 +51,26 @@ export class GroupController extends BaseController {
     }
 
     async createCommonHabitFromTemplate(templateId : string){
-        let url = "/users/common-habits";
-        return await this.api<string>(url, {"templateId" : templateId}, "POST");
+        let url = "/users/common-habits?templateId=" + templateId;
+        return await this.api<Habit>(url, {}, "POST");
         /*return { habitId : "10" };*/
     }
 
     async createCommonHabit( name : string, description : string, tags : string[], periodicity : string, goal : string, resultType : string){
         let url = "/users/common-habits";
-        return await this.api<string>(url, {"name" : name, "description" : description, "tags": tags, "periodicity" : periodicity, "goal" : goal, "resultType" : resultType }, "POST");
+        return await this.api<Habit>(url, {"name" : name, "description" : description, "tags": tags, "periodicity" : periodicity, "goal" : goal, "resultType" : resultType }, "POST");
         /*return { habitId : "10" };*/
     }
 
     async createPersonalHabitFromTemplate(templateId : string){
-        let url = "/users/personal-habits";
-        return await this.api<string>(url, {"templateId" : templateId}, "POST");
+        let url = "/users/personal-habits?templateId=" + templateId;
+        return await this.api<GroupHabitPersonal>(url, {}, "POST");
         /*return { habitId : "10" };*/
     }
 
     async createPersonalHabit( name : string, description : string, tags : string[], periodicity : string, goal : string, resultType : string){
         let url = "/users/personal-habits";
-        return await this.api<string>(url, {"name" : name, "description" : description, "tags": tags, "periodicity" : periodicity, "goal" : goal, "resultType" : resultType }, "POST");
+        return await this.api<GroupHabitPersonal>(url, {"name" : name, "description" : description, "tags": tags, "periodicity" : periodicity, "goal" : goal, "resultType" : resultType }, "POST");
         /*return { habitId : "10" };*/
     }
 

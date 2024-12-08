@@ -2,6 +2,7 @@ import {BaseController} from "./BaseController";
 import {User} from "../model/user/User";
 import {Habits} from "@/model/habit/Habits";
 import {Habit} from "@/model/habit/Habit";
+import {HabitTemplate} from "@/model/habit/HabitTemplate";
 
 export class UserController extends BaseController {
 
@@ -17,8 +18,8 @@ export class UserController extends BaseController {
     }
 
     async getUserByLogin(login: string) {
-        let url = "users/";
-        return await this.api<User>(url, {login : login});
+        let url = "users?login=" + login;
+        return await this.api<User>(url, {});
     }
 
     async getHabits(){
@@ -43,14 +44,14 @@ export class UserController extends BaseController {
     }
 
     async createHabitFromTemplate(templateId : string){
-        let url = "/users/habits";
-        return await this.api<string>(url, {"templateId" : templateId}, "POST");
+        let url = "/users/habits?templateId=" + templateId;
+        return await this.api<HabitTemplate>(url, {}, "POST");
         /*return { habitId : "10" };*/
     }
 
     async createHabit( name : string, description : string, tags : string[], periodicity : string, goal : string, resultType : string){
         let url = "/users/habits";
-        return await this.api<string>(url, {"name" : name, "description" : description, "tags": tags, "periodicity" : periodicity, "goal" : goal, "resultType" : resultType }, "POST");
+        return await this.api<Habit>(url, {"name" : name, "description" : description, "tags": tags, "periodicity" : periodicity, "goal" : goal, "resultType" : resultType }, "POST");
         /*return { habitId : "10" };*/
     }
 

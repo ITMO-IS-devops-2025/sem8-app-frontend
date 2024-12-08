@@ -19,7 +19,7 @@ export class HabitController extends BaseController {
         return await this.api<Tag[]>(url);
     }
 
-    async getHabitTag(tagId : string)  {
+    async getHabitTagById(tagId : string)  {
         let url = "habits/tags/" + tagId;
         return await this.api<string>(url);
     }
@@ -30,10 +30,28 @@ export class HabitController extends BaseController {
         /*return {};*/
     }
 
-    async changeHabitParameters ( habitId : string, name : string, description : string, periodicityType : string, periodicityValue: number, goal : string){
-        let url = "habits/" + habitId + "parameters";
-        return await this.api<any>(url, {"name" : name, "description" : description, "periodicityType" : periodicityType, "periodicityValue" : periodicityValue,  "goal" : goal}, "PUT");
-        /*return {};*/
+    async changeHabitParameters(
+        habitId: string,
+        name: string,
+        description: string,
+        periodicityType: string,
+        periodicityValue: number,
+        goal: string
+    ) {
+        // Формирование URL с query-параметрами
+        const queryParams = new URLSearchParams({
+            name,
+            description,
+            periodicityType,
+            periodicityValue: periodicityValue.toString(),
+            goal,
+        }).toString();
+
+        const url = `habits/${habitId}/parameters?${queryParams}`;
+
+        // Отправка запроса
+        return await this.api<any>(url, {}, "PUT");
     }
+
 
 }
