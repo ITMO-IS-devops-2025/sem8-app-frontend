@@ -1,5 +1,7 @@
 import {BaseController} from "./BaseController";
 import {User} from "../model/user/User";
+import {Habits} from "@/model/habit/Habits";
+import {Habit} from "@/model/habit/Habit";
 
 export class UserController extends BaseController {
 
@@ -14,16 +16,53 @@ export class UserController extends BaseController {
         /*return new User ("1", "Игорь")*/
     }
 
+    async getUserByLogin(login: string) {
+        let url = "users/";
+        return await this.api<User>(url, {login : login});
+    }
+
+    async getHabits(){
+        let url = "/users/habits";
+        return await this.api<Habits[]>(url);
+    }
+
+    async getHabitById(id : string){
+        let url = "/users/habits/" + id;
+        return await this.api<Habit>(url);
+        /*return new Habit(
+            "7",
+            "Прес качат",
+            "День",
+            "1000 раз",
+            "Float",
+            [
+                { id: "11", timestamp: new Date("2024-11-01T08:00:00"), result: { value: null } },
+                { id: "12", timestamp: new Date("2024-11-02T08:00:00"), result: { value: null } }
+            ]
+        );*/
+    }
+
+    async createHabitFromTemplate(templateId : string){
+        let url = "/users/habits";
+        return await this.api<string>(url, {"templateId" : templateId}, "POST");
+        /*return { habitId : "10" };*/
+    }
+
+    async createHabit( name : string, description : string, tags : string[], periodicity : string, goal : string, resultType : string){
+        let url = "/users/habits";
+        return await this.api<string>(url, {"name" : name, "description" : description, "tags": tags, "periodicity" : periodicity, "goal" : goal, "resultType" : resultType }, "POST");
+        /*return { habitId : "10" };*/
+    }
+
+    async getStatistics( habitId : string){
+        let url = "/users/habits" + habitId + "statistics";
+        return await this.api<number>(url);
+    }
+
 
     async changeUserPassword(id: string, prevPassword : string, newPassword : string) {
         let url = "users/" + id + "/password";
         return await this.api<User>(url, {prevPassword : prevPassword, newPassword : newPassword});
-    }
-
-    async getUserByLogin(login: string) {
-        let url = "users/" + login;
-        return await this.api<User>(url, {login : login});
-        /*return new User ("1", "Игорь")*/
     }
 
     async getUsers (){

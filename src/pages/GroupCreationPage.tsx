@@ -32,7 +32,7 @@ export function GroupCreationPage(props: { currentUser: User | undefined }) {
         <div className="group-creation-page" >
             <Box px={6}>
                 <Heading size="md" mb={3}>Создать новую групп</Heading>
-                {error && <div className="error-message">{error}</div>}
+                {error && <div className        ="error-message">{error}</div>}
                 <Input
                     placeholder="Введите название группы"
                     value={groupName}

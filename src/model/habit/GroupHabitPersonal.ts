@@ -3,23 +3,28 @@ type Result = {
 };
 
 type Mark = {
-    id: string;
     timestamp: Date;
+    personalMarks : PersonalMarks[];
+};
+
+type PersonalMarks = {
+    id: string;
+    userId : string;
     result: Result;
     comment : string;
-};
+}
 
 type Tag = {
     id: string;
-    name: string
+    name: string;
 };
 
 type Periodicity = {
-    type : string,
-    value : number
+    type : string;
+    value : number;
 };
 
-export class Habit {
+export class GroupHabitPersonal {
     habitId : string
     name: string
     description : string
