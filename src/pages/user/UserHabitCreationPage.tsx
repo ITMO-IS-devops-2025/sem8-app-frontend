@@ -1,27 +1,46 @@
 import React, { useState, useEffect } from "react";
 import { HabitController } from "../../controllers/HabitController";
 import { HabitTemplate } from "../../model/habit/HabitTemplate";
-import { Input, Button, Select, FormControl, FormLabel, Box, Heading, List, ListItem } from "@chakra-ui/react";
+import {
+    Input,
+    Button,
+    Select,
+    FormControl,
+    FormLabel,
+    Box,
+    Heading,
+    List,
+    ListItem,
+    Textarea,
+    Tag,
+    TagCloseButton,
+    TagLabel,
+    HStack,
+} from "@chakra-ui/react";
 import { useNavigate } from "react-router-dom";
 import { User } from "../../model/user/User";
 import { UserController } from "@/controllers/UserController";
+import {Periodicity} from "@/model/habit/Habit";
 
 export function UserHabitCreationPage(props: { currentUser: User | undefined }) {
     const [habitTemplates, setHabitTemplates] = useState<HabitTemplate[]>([]);
     const [selectedTemplate, setSelectedTemplate] = useState<string | null>(null);
     const [error, setError] = useState(false);
     const navigate = useNavigate();
+    // State для кастомной привычки
     const [customHabit, setCustomHabit] = useState({
         name: "",
-        description : "",
-        tags : [],
+        description: "",
+        tags: [] as string[],
         periodicity: {
-            value : "",
-            type : ""
-        },
+            value: "",
+            type: 0,
+        } as unknown as Periodicity,
         goal: "",
         resultType: "",
     });
+
+    const [tagInput, setTagInput] = useState(""); // Для добавления новых тегов
 
     useEffect(() => {
         async function fetchHabitTemplates() {
@@ -45,6 +64,7 @@ export function UserHabitCreationPage(props: { currentUser: User | undefined }) 
             setError(true);
             return;
         }
+
         try {
             const response = await new UserController().createHabitFromTemplate(selectedTemplate);
             if (response instanceof Error) {
@@ -59,7 +79,13 @@ export function UserHabitCreationPage(props: { currentUser: User | undefined }) 
 
     const handleCreateCustomHabit = async () => {
         try {
-            const response = await new UserController().createCustomHabit(customHabit);
+            const response = await new UserController().createCustomHabit(
+                customHabit.name,
+                customHabit.description,
+                customHabit.tags,
+                customHabit.periodicity,
+                customHabit.goal,
+                customHabit.resultType);
             if (response instanceof Error) {
                 setError(true);
             } else if ("id" in response) {
@@ -70,8 +96,32 @@ export function UserHabitCreationPage(props: { currentUser: User | undefined }) 
         }
     };
 
-    const handleInputChange = (field: string, value: string) => {
+    const handleInputChange = (field: string, value: any) => {
         setCustomHabit((prev) => ({ ...prev, [field]: value }));
+    };
+
+    const handlePeriodicityChange = (field: "value" | "type", value: string) => {
+        setCustomHabit((prev) => ({
+            ...prev,
+            periodicity: { ...prev.periodicity, [field]: value },
+        }));
+    };
+
+    const handleAddTag = () => {
+        if (tagInput.trim()) {
+            setCustomHabit((prev) => ({
+                ...prev,
+                tags: [...prev.tags, tagInput.trim()],
+            }));
+            setTagInput("");
+        }
+    };
+
+    const handleRemoveTag = (tag: string) => {
+        setCustomHabit((prev) => ({
+            ...prev,
+            tags: prev.tags.filter((t) => t !== tag),
+        }));
     };
 
     return (
@@ -124,14 +174,50 @@ export function UserHabitCreationPage(props: { currentUser: User | undefined }) 
                     </FormControl>
 
                     <FormControl mb={4}>
+                        <FormLabel>Описание</FormLabel>
+                        <Textarea
+                            placeholder="Введите описание"
+                            value={customHabit.description}
+                            onChange={(e) => handleInputChange("description", e.target.value)}
+                        />
+                    </FormControl>
+
+                    <FormControl mb={4}>
+                        <FormLabel>Теги</FormLabel>
+                        <HStack>
+                            <Input
+                                placeholder="Добавить тег"
+                                value={tagInput}
+                                onChange={(e) => setTagInput(e.target.value)}
+                            />
+                            <Button onClick={handleAddTag}>Добавить</Button>
+                        </HStack>
+                        <HStack mt={2} wrap="wrap">
+                            {customHabit.tags.map((tag, index) => (
+                                <Tag key={index} size="md" colorScheme="teal" borderRadius="full">
+                                    <TagLabel>{tag}</TagLabel>
+                                    <TagCloseButton onClick={() => handleRemoveTag(tag)} />
+                                </Tag>
+                            ))}
+                        </HStack>
+                    </FormControl>
+
+                    <FormControl mb={4}>
                         <FormLabel>Периодичность</FormLabel>
+                        <Input
+                            placeholder="Значение (например, 3)"
+                            value={customHabit.periodicity.value}
+                            onChange={(e) => handlePeriodicityChange("value", e.target.value)}
+                        />
                         <Select
-                            value={customHabit.periodicity}
-                            onChange={(e) => handleInputChange("periodicity", e.target.value)}
+                            mt={2}
+                            value={customHabit.periodicity.type}
+                            onChange={(e) => handlePeriodicityChange("type", e.target.value)}
                         >
-                            <option value="daily">Ежедневно</option>
-                            <option value="weekly">Еженедельно</option>
-                            <option value="monthly">Ежемесячно</option>
+                            <option value="">Выберите тип</option>
+                            <option value="days">Дни</option>
+                            <option value="weeks">Недели</option>
+                            <option value="months">Месяцы</option>
                         </Select>
                     </FormControl>
 
@@ -150,6 +236,7 @@ export function UserHabitCreationPage(props: { currentUser: User | undefined }) 
                             value={customHabit.resultType}
                             onChange={(e) => handleInputChange("resultType", e.target.value)}
                         >
+                            <option value="">Выберите тип результата</option>
                             <option value="Boolean">Да/Нет</option>
                             <option value="Float">Числовой</option>
                         </Select>

@@ -14,7 +14,7 @@ type Tag = {
     name: string
 };
 
-type Periodicity = {
+export type Periodicity = {
     type : string,
     value : number
 };
