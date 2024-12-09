@@ -11,11 +11,11 @@ import {
     HStack,
     Text,
 } from "@chakra-ui/react";
-import { User } from "../model/user/User";
-import { Group } from "../model/group/Group";
-import { Habit } from "../model/habit/Habit";
-import { GroupHabitPersonal } from "../model/habit/GroupHabitPersonal";
-import { GroupController } from "../controllers/GroupController";
+import { User } from "../../model/user/User";
+import { Group } from "../../model/group/Group";
+import { Habit } from "../../model/habit/Habit";
+import { GroupHabitPersonal } from "../../model/habit/GroupHabitPersonal";
+import { GroupController } from "../../controllers/GroupController";
 import {ErrorResponse} from "../controllers/BaseController";
 import {UserController} from "../controllers/UserController";
 
@@ -79,7 +79,7 @@ export function GroupPage(props: { currentUser: User | undefined }) {
     };
 
     const handleAddHabit = () => {
-        navigate(`/group/${groupId}/create-group-habit`);
+        navigate(`/group/${groupId}/group-habit-creation`);
     };
 
     return (
@@ -120,7 +120,10 @@ export function GroupPage(props: { currentUser: User | undefined }) {
                             </Heading>
                             <List spacing={3}>
                                 {commonHabits.map((habit) => (
-                                    <ListItem key={habit.habitId}>
+                                    <ListItem
+                                        key={habit.habitId}
+                                        onClick={() => navigate(`/group-common-habit/${habit.habitId}`)}
+                                    >
                                         <Text>{habit.name}</Text>
                                     </ListItem>
                                 ))}
@@ -134,7 +137,10 @@ export function GroupPage(props: { currentUser: User | undefined }) {
                             </Heading>
                             <List spacing={3}>
                                 {personalHabits.map((habit) => (
-                                    <ListItem key={habit.habitId}>
+                                    <ListItem
+                                        key={habit.habitId}
+                                        onClick={() => navigate(`/group-personal-habit/${habit.habitId}`)}
+                                    >
                                         <Text>{habit.name}</Text>
                                     </ListItem>
                                 ))}

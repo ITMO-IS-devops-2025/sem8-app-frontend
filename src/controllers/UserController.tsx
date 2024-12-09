@@ -1,8 +1,9 @@
 import {BaseController} from "./BaseController";
 import {User} from "../model/user/User";
-import {Habits} from "../model/habit/Habits";
-import {Habit} from "../model/habit/Habit";
-import {HabitTemplate} from "../model/habit/HabitTemplate";
+import {Habits} from "@/model/habit/Habits";
+import {Habit} from "@/model/habit/Habit";
+import {HabitTemplate} from "@/model/habit/HabitTemplate";
+import {Statistic} from "@/model/habit/Statistics";
 
 export class UserController extends BaseController {
 
@@ -49,7 +50,7 @@ export class UserController extends BaseController {
         /*return { habitId : "10" };*/
     }
 
-    async createHabit( name : string, description : string, tags : string[], periodicity : string, goal : string, resultType : string){
+    async createCustomHabit( name : string, description : string, tags : string[], periodicity : string, goal : string, resultType : string){
         let url = "/users/habits";
         return await this.api<Habit>(url, {"name" : name, "description" : description, "tags": tags, "periodicity" : periodicity, "goal" : goal, "resultType" : resultType }, "POST");
         /*return { habitId : "10" };*/
@@ -57,7 +58,7 @@ export class UserController extends BaseController {
 
     async getStatistics( habitId : string){
         let url = "/users/habits" + habitId + "statistics";
-        return await this.api<number>(url);
+        return await this.api<Statistic>(url);
     }
 
 

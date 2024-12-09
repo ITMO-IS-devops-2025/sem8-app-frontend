@@ -1,9 +1,9 @@
-import {User} from "../model/user/User";
+import {User} from "../../model/user/User";
 import {useState} from "react";
-import {SignInRequest} from "../model/user/auth/SignInRequest";
-import {NavigateOnLogin} from "../utils/auth/NavigateOnLogin";
-import {AuthController} from "../controllers/AuthController";
-import {ErrorResponse} from "../controllers/BaseController";
+import {SignInRequest} from "../../model/user/auth/SignInRequest";
+import {NavigateOnLogin} from "../../utils/auth/NavigateOnLogin";
+import {AuthController} from "../../controllers/AuthController";
+import {ErrorResponse} from "../../controllers/BaseController";
 import {Form} from "react-router-dom";
 import {
     Button,

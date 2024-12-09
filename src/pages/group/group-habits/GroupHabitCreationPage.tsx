@@ -1,18 +1,17 @@
 import React, { useState, useEffect } from "react";
-import { HabitController } from "../controllers/HabitController";
-import { HabitTemplate } from "../model/habit/HabitTemplate";
+import { HabitController } from "../../../controllers/HabitController";
+import { HabitTemplate } from "../../../model/habit/HabitTemplate";
 import {Input, Button, Select, FormControl, FormLabel, Box, Heading, List, ListItem} from "@chakra-ui/react";
 import { useNavigate } from "react-router-dom";
-import {User} from "../model/user/User";
+import {User} from "../../../model/user/User";
 import {UserController} from "../controllers/UserController";
 
-export function HabitCreationPage(props: { currentUser: User | undefined }) {
+export function GroupHabitCreationPage(props: { currentUser: User | undefined }) {
     const [habitTemplates, setHabitTemplates] = useState<HabitTemplate[]>([]);
     const [selectedTemplate, setSelectedTemplate] = useState<string | null>(null);
     const [error, setError] = useState(false);
     const navigate = useNavigate();
 
-    // Загружаем все шаблоны привычек
     useEffect(() => {
         async function fetchHabitTemplates() {
             try {
@@ -40,8 +39,8 @@ export function HabitCreationPage(props: { currentUser: User | undefined }) {
             const response = await new UserController().createHabitFromTemplate(selectedTemplate);
             if (response instanceof Error) {
                 setError(true);
-            } else if ("habitId" in response){
-                navigate(`/habit/${response.habitId}`);
+            } else if ("id" in response){
+                navigate(`/habit/${response.id}`);
             }
         } catch (err) {
             setError(true);

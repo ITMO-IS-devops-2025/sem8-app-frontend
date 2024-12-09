@@ -1,6 +1,6 @@
 import React, { useState } from "react";
-import { GroupController } from "../controllers/GroupController";
-import { UserController } from "../controllers/UserController";
+import { GroupController } from "../../controllers/GroupController";
+import { UserController } from "../../controllers/UserController";
 import {
     Input,
     Button,
@@ -12,7 +12,7 @@ import {
     ListItem,
     Text,
 } from "@chakra-ui/react";
-import { User } from "../model/user/User";
+import { User } from "../../model/user/User";
 import {ErrorResponse} from "../controllers/BaseController";
 import {NavigateOnLogout} from "../utils/auth/NavigateOnLogin";
 

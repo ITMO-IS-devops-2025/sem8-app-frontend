@@ -1,9 +1,9 @@
-import {User} from "../model/user/User";
+import {User} from "../../model/user/User";
 import {useState} from "react";
-import {NavigateOnLogin} from "../utils/auth/NavigateOnLogin";
-import {SignUpRequest} from "../model/user/auth/SignUpRequest";
-import {AuthController} from "../controllers/AuthController";
-import {ErrorResponse} from "../controllers/BaseController";
+import {NavigateOnLogin} from "../../utils/auth/NavigateOnLogin";
+import {SignUpRequest} from "../../model/user/auth/SignUpRequest";
+import {AuthController} from "../../controllers/AuthController";
+import {ErrorResponse} from "../../controllers/BaseController";
 import {Form} from "react-router-dom";
 import {Button, FormControl, FormLabel, Input} from "@chakra-ui/react";
 

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
-import { User } from "../model/user/User";
+import { User } from "../../model/user/User";
 import { Heading, Button, List, ListItem, Box } from "@chakra-ui/react";
-import { HabitController } from "../controllers/HabitController";
+import { HabitController } from "../../controllers/HabitController";
 import { useNavigate } from "react-router-dom";
 import {Habit} from "../model/habit/Habit";
 import {UserController} from "../controllers/UserController";
@@ -46,7 +46,7 @@ export function MainPage(props: { currentUser: User | undefined }) {
             <Heading>Добро пожаловать, {props.currentUser?.login}!</Heading>
 
             <Box mt={4}>
-                <Button colorScheme="teal" onClick={() => navigate("/habit-creation")}>
+                <Button colorScheme="teal" onClick={() => navigate("/user-habit-creation")}>
                     Создать привычку
                 </Button>
                 <Button colorScheme="blue" onClick={() => navigate("/groups")} ml={4}>
@@ -66,10 +66,11 @@ export function MainPage(props: { currentUser: User | undefined }) {
                                 bg="gray.50"
                                 borderRadius="md"
                                 cursor="pointer"
-                                onClick={() => navigate(`/habit/${habit.habitId}`)}
+                                onClick={() => navigate(`/user-habit/${habit.habitId}`)}
                             >
                                 <strong>{habit.name}</strong>
                                 <Box mt={1}>
+                                    <div>Периодичность: {habit.periodicity.value} {habit.periodicity.type}</div>
                                     <div>Цель: {habit.goal}</div>
                                     <div>Тип результата: {habit.resultType}</div>
                                 </Box>
@@ -80,12 +81,6 @@ export function MainPage(props: { currentUser: User | undefined }) {
             ) : (
                 <div>У вас нет привычек. Создайте одну!</div>
             )}
-
-            <Box mt={4} px={6}>
-                <Button colorScheme="teal" onClick={() => navigate("/habit-creation")}>
-                    Создать привычку
-                </Button>
-            </Box>
 
         </div>
     );
