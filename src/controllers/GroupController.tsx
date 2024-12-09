@@ -4,6 +4,11 @@ import {Habit} from "../model/habit/Habit";
 import {GroupHabitPersonal} from "../model/habit/GroupHabitPersonal";
 import {IdResponse} from "@/model/utils/response/IdResponse";
 
+type Periodicity = {
+    type : string,
+    value : number
+};
+
 export class GroupController extends BaseController {
     async getGroups (){
         let url = "groups";
@@ -57,7 +62,7 @@ export class GroupController extends BaseController {
         /*return { habitId : "10" };*/
     }
 
-    async createCommonHabit(id : string, name : string, description : string, tags : string[], periodicity : string, goal : string, resultType : string){
+    async createCommonHabit(id : string, name : string, description : string, tags : string[], periodicity : Periodicity, goal : string, resultType : string){
         let url = "/groups/" + id + "/common-habits";
         return await this.api<Habit>(url, {"name" : name, "description" : description, "tags": tags, "periodicity" : periodicity, "goal" : goal, "resultType" : resultType }, "POST");
         /*return { habitId : "10" };*/
@@ -69,7 +74,7 @@ export class GroupController extends BaseController {
         /*return { habitId : "10" };*/
     }
 
-    async createPersonalHabit(id : string, name : string, description : string, tags : string[], periodicity : string, goal : string, resultType : string){
+    async createPersonalHabit(id : string, name : string, description : string, tags : string[], periodicity : Periodicity, goal : string, resultType : string){
         let url = "/groups/" + id + "/personal-habits";
         return await this.api<GroupHabitPersonal>(url, {"name" : name, "description" : description, "tags": tags, "periodicity" : periodicity, "goal" : goal, "resultType" : resultType }, "POST");
         /*return { habitId : "10" };*/

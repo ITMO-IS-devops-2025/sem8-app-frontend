@@ -4,6 +4,11 @@ import {Habits} from "../model/habit/Habits";
 import {Habit} from "../model/habit/Habit";
 import {HabitTemplate} from "../model/habit/HabitTemplate";
 
+type Periodicity = {
+    type : string,
+    value : number
+};
+
 export class UserController extends BaseController {
 
     // это по токену. не делаем токены -- не используем эту функцию
@@ -49,7 +54,7 @@ export class UserController extends BaseController {
         /*return { habitId : "10" };*/
     }
 
-    async createHabit( name : string, description : string, tags : string[], periodicity : string, goal : string, resultType : string){
+    async createHabit( name : string, description : string, tags : string[], periodicity : Periodicity, goal : string, resultType : string){
         let url = "/users/habits";
         return await this.api<Habit>(url, {"name" : name, "description" : description, "tags": tags, "periodicity" : periodicity, "goal" : goal, "resultType" : resultType }, "POST");
         /*return { habitId : "10" };*/
