@@ -51,37 +51,37 @@ export class GroupController extends BaseController {
         return await this.api<GroupHabitPersonal>(url);
     }
 
-    async createCommonHabitFromTemplate(templateId : string){
-        let url = "/users/common-habits?templateId=" + templateId;
+    async createCommonHabitFromTemplate(id : string, templateId : string){
+        let url = "/groups/" + id + "/common-habits?templateId=" + templateId;
         return await this.api<Habit>(url, {}, "POST");
         /*return { habitId : "10" };*/
     }
 
-    async createCommonHabit( name : string, description : string, tags : string[], periodicity : string, goal : string, resultType : string){
-        let url = "/users/common-habits";
+    async createCommonHabit(id : string, name : string, description : string, tags : string[], periodicity : string, goal : string, resultType : string){
+        let url = "/groups/" + id + "/common-habits";
         return await this.api<Habit>(url, {"name" : name, "description" : description, "tags": tags, "periodicity" : periodicity, "goal" : goal, "resultType" : resultType }, "POST");
         /*return { habitId : "10" };*/
     }
 
-    async createPersonalHabitFromTemplate(templateId : string){
-        let url = "/users/personal-habits?templateId=" + templateId;
+    async createPersonalHabitFromTemplate(id : string, templateId : string){
+        let url = "/groups/" + id + "/personal-habits?templateId=" + templateId;
         return await this.api<GroupHabitPersonal>(url, {}, "POST");
         /*return { habitId : "10" };*/
     }
 
-    async createPersonalHabit( name : string, description : string, tags : string[], periodicity : string, goal : string, resultType : string){
-        let url = "/users/personal-habits";
+    async createPersonalHabit(id : string, name : string, description : string, tags : string[], periodicity : string, goal : string, resultType : string){
+        let url = "/groups/" + id + "/personal-habits";
         return await this.api<GroupHabitPersonal>(url, {"name" : name, "description" : description, "tags": tags, "periodicity" : periodicity, "goal" : goal, "resultType" : resultType }, "POST");
         /*return { habitId : "10" };*/
     }
 
-    async getCommonHabitStatistics( habitId : string){
-        let url = "common-habits/" + habitId + "statistics";
+    async getCommonHabitStatistics(id : string, habitId : string){
+        let url = "/groups/" + id + "common-habits/" + habitId + "statistics";
         return await this.api<number>(url);
     }
 
-    async getPersonalHabitStatistics( habitId : string){
-        let url = "personal-habits/" + habitId + "statistics";
+    async getPersonalHabitStatistics(id : string, habitId : string){
+        let url = "/groups/" + id + "personal-habits/" + habitId + "statistics";
         return await this.api<number>(url);
     }
 
