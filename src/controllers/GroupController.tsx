@@ -3,6 +3,7 @@ import {Group} from "../model/group/Group";
 import {Habit} from "../model/habit/Habit";
 import {GroupHabitPersonal} from "../model/habit/GroupHabitPersonal";
 import {IdResponse} from "@/model/utils/response/IdResponse";
+import {Statistic} from "@/model/habit/Statistics";
 
 export class GroupController extends BaseController {
     async getGroups (){
@@ -77,12 +78,12 @@ export class GroupController extends BaseController {
 
     async getCommonHabitStatistics(id : string, habitId : string){
         let url = "/groups/" + id + "common-habits/" + habitId + "statistics";
-        return await this.api<number>(url);
+        return await this.api<Statistic>(url);
     }
 
     async getPersonalHabitStatistics(id : string, habitId : string){
         let url = "/groups/" + id + "personal-habits/" + habitId + "statistics";
-        return await this.api<number>(url);
+        return await this.api<Statistic>(url);
     }
 
 }
