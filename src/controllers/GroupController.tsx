@@ -32,22 +32,22 @@ export class GroupController extends BaseController {
     }
 
     async getGroupCommonHabits (id : string){
-        let url = "groups" + id + "/common-habits";
+        let url = "groups/" + id + "/common-habits";
         return await this.api<Habit[]>(url);
     }
 
     async getGroupPersonalHabits (id : string){
-        let url = "groups" + id + "/personal-habits";
+        let url = "groups/" + id + "/personal-habits";
         return await this.api<GroupHabitPersonal[]>(url);
     }
 
     async getGroupCommonHabitById (groupId : string, habitId : string ){
-        let url = "groups" + groupId + "/common-habits" + habitId;
+        let url = "groups/" + groupId + "/common-habits" + habitId;
         return await this.api<Habit>(url);
     }
 
     async getGroupPersonalHabitById (groupId : string, habitId : string ){
-        let url = "groups" + groupId + "/personal-habits" + habitId;
+        let url = "groups/" + groupId + "/personal-habits" + habitId;
         return await this.api<GroupHabitPersonal>(url);
     }
 
@@ -76,12 +76,12 @@ export class GroupController extends BaseController {
     }
 
     async getCommonHabitStatistics( habitId : string){
-        let url = "common-habits" + habitId + "statistics";
+        let url = "common-habits/" + habitId + "statistics";
         return await this.api<number>(url);
     }
 
     async getPersonalHabitStatistics( habitId : string){
-        let url = "personal-habits" + habitId + "statistics";
+        let url = "personal-habits/" + habitId + "statistics";
         return await this.api<number>(url);
     }
 
