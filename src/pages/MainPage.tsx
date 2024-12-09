@@ -3,8 +3,8 @@ import { User } from "../model/user/User";
 import { Heading, Button, List, ListItem, Box } from "@chakra-ui/react";
 import { HabitController } from "../controllers/HabitController";
 import { useNavigate } from "react-router-dom";
-import {Habit} from "@/model/habit/Habit";
-import {UserController} from "@/controllers/UserController";
+import {Habit} from "../model/habit/Habit";
+import {UserController} from "../controllers/UserController";
 
 export function MainPage(props: { currentUser: User | undefined }) {
     const [habits, setHabits] = useState<Habit[]>([]);

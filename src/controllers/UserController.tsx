@@ -1,8 +1,8 @@
 import {BaseController} from "./BaseController";
 import {User} from "../model/user/User";
-import {Habits} from "@/model/habit/Habits";
-import {Habit} from "@/model/habit/Habit";
-import {HabitTemplate} from "@/model/habit/HabitTemplate";
+import {Habits} from "../model/habit/Habits";
+import {Habit} from "../model/habit/Habit";
+import {HabitTemplate} from "../model/habit/HabitTemplate";
 
 export class UserController extends BaseController {
 

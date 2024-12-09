@@ -16,7 +16,8 @@ import { Group } from "../model/group/Group";
 import { Habit } from "../model/habit/Habit";
 import { GroupHabitPersonal } from "../model/habit/GroupHabitPersonal";
 import { GroupController } from "../controllers/GroupController";
-import {ErrorResponse} from "@/controllers/BaseController";
+import {ErrorResponse} from "../controllers/BaseController";
+import {UserController} from "../controllers/UserController";
 
 export function GroupPage(props: { currentUser: User | undefined }) {
     const { groupId } = useParams<{ groupId: string }>();
@@ -99,6 +100,17 @@ export function GroupPage(props: { currentUser: User | undefined }) {
                             Удалить себя из группы
                         </Button>
                     </HStack>
+
+                    <Heading>
+                        Участники
+                    </Heading>
+                    <List spacing={3}>
+                        {group.participants.map((user) => (
+                            <ListItem key={user.userId}>
+                                <Text>{user.name}</Text>
+                            </ListItem>
+                        ))}
+                    </List>
 
                     <Flex mt={6} gap={6}>
                         {/* Общие привычки */}

@@ -15,7 +15,7 @@ export class BaseController {
             text = "{}"
         }
         return response.ok ? JSON.parse(text) as T :
-            new ErrorResponse(response.status, await response.text())
+            new ErrorResponse(response.status, response.statusText)
     }
 
     async request(url: string, body: any, method: string) {

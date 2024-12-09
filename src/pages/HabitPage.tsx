@@ -4,7 +4,7 @@ import { HabitController } from "../controllers/HabitController";
 import { Habit } from "../model/habit/Habit";
 import { List, ListItem, Text, Box, Heading, Input, Button, Checkbox } from "@chakra-ui/react";
 import { User } from "../model/user/User";
-import {UserController} from "@/controllers/UserController";
+import {UserController} from "../controllers/UserController";
 
 export function HabitPage(props: { currentUser: User | undefined }) {
     const { habitId } = useParams<{ habitId: string }>();

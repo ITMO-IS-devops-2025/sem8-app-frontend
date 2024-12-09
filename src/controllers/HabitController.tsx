@@ -1,7 +1,5 @@
 import {BaseController} from "../controllers/BaseController";
-import {Habit} from "../model/habit/Habit";
 import {HabitTemplate} from "../model/habit/HabitTemplate";
-import {Habits} from "@/model/habit/Habits";
 
 type Tag = {
     id: string;

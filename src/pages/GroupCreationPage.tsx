@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
 import { GroupController } from "../controllers/GroupController";
 import { UserController } from "../controllers/UserController";
 import {
@@ -14,15 +13,20 @@ import {
     Text,
 } from "@chakra-ui/react";
 import { User } from "../model/user/User";
+import {ErrorResponse} from "../controllers/BaseController";
+import {NavigateOnLogout} from "../utils/auth/NavigateOnLogin";
 
 export function GroupCreationPage(props: { currentUser: User | undefined }) {
+
+    let navigate = NavigateOnLogout(props.currentUser)
+
     const [groupName, setGroupName] = useState<string>("");
     const [participants, setParticipants] = useState<User[]>([]);
     const [newParticipantLogin, setNewParticipantLogin] = useState<string>("");
     const [addUserError, setAddUserError] = useState<string | null>(null);
     const [addUserSuccess, setAddUserSuccess] = useState<string | null>(null);
     const [error, setError] = useState<string | null>(null);
-    const navigate = useNavigate();
+
 
     const handleCreateGroup = async () => {
         if (!groupName) {
@@ -30,53 +34,45 @@ export function GroupCreationPage(props: { currentUser: User | undefined }) {
             return;
         }
 
-        try {
-            const groupController = new GroupController();
-            const response = await groupController.createGroup(groupName, []);
-
-            if (response instanceof Error || !("groupId" in response)) {
-                setError("Ошибка при создании группы");
-                return;
-            }
-
-            const groupId = response.groupId;
-
-            // Добавляем участников в группу
-            for (const participant of participants) {
-                await groupController.addUserToGroup(groupId as string, participant.id as string);
-            }
-
-            navigate(`/group/${groupId}`);
-        } catch (err) {
-            setError("Произошла ошибка при создании группы");
+        if (error != null) {
+            return
         }
+
+        const groupController = new GroupController();
+        const response = await groupController.createGroup(groupName, []);
+
+        if (response instanceof ErrorResponse) {
+            setError("Ошибка при создании группы");
+            return;
+        }
+
+        const participantIds = participants.map(it => it.id)
+        for (const participantId of participantIds) {
+            await groupController.addUserToGroup(response.id, participantId);
+            console.log(participantId)
+        }
+
+        navigate(`/group/${response.id}`);
     };
 
     const handleAddParticipant = async () => {
         if (!newParticipantLogin) return;
 
-        try {
-            const userController = new UserController();
+        const userController = new UserController();
 
-            // Ищем пользователя по логину
-            const userResponse = await userController.getUserByLogin(newParticipantLogin);
-
-            // Проверяем, что возвращено именно User
-            if (!("id" in userResponse)) {
-                setAddUserError("Пользователь с таким логином не найден.");
-                setAddUserSuccess(null);
-                return;
-            }
-
-            // Добавляем пользователя во временный список участников
-            setParticipants((prev) => [...prev, userResponse]);
-            setAddUserSuccess("Пользователь успешно добавлен!");
-            setAddUserError(null);
-            setNewParticipantLogin("");
-        } catch (err) {
-            setAddUserError("Произошла ошибка при добавлении пользователя.");
+        // Ищем пользователя по логину
+        const userResponse = await userController.getUserByLogin(newParticipantLogin);
+        if (userResponse instanceof ErrorResponse) {
+            setAddUserError("Пользователь с таким логином не найден.");
             setAddUserSuccess(null);
+            return;
         }
+
+        // Добавляем пользователя во временный список участников
+        setParticipants([...participants, userResponse]);
+        setAddUserSuccess(`Пользователь ${newParticipantLogin} успешно добавлен!`);
+        setAddUserError(null);
+        setNewParticipantLogin("");
     };
 
     return (

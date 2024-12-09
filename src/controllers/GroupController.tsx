@@ -1,7 +1,8 @@
 import {BaseController} from "../controllers/BaseController";
 import {Group} from "../model/group/Group";
-import {Habit} from "@/model/habit/Habit";
-import {GroupHabitPersonal} from "@/model/habit/GroupHabitPersonal";
+import {Habit} from "../model/habit/Habit";
+import {GroupHabitPersonal} from "../model/habit/GroupHabitPersonal";
+import {IdResponse} from "@/model/utils/response/IdResponse";
 
 export class GroupController extends BaseController {
     async getGroups (){
@@ -17,7 +18,7 @@ export class GroupController extends BaseController {
 
     async createGroup (name : string, participants : string[]) {
         let url = "groups";
-        return await this.api<Group>(url, {"name" : name, "participants" : participants}, "POST");
+        return await this.api<IdResponse>(url, {"name" : name, "participants" : participants}, "POST");
     }
 
     async addUserToGroup (groupId : string, userId : string ) {
