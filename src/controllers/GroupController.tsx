@@ -17,7 +17,7 @@ export class GroupController extends BaseController {
 
     async createGroup (name : string, participants : string[]) {
         let url = "groups";
-        return await this.api<string>(url, {"name" : name, "participants" : participants}, "POST");
+        return await this.api<Group>(url, {"name" : name, "participants" : participants}, "POST");
     }
 
     async addUserToGroup (groupId : string, userId : string ) {
