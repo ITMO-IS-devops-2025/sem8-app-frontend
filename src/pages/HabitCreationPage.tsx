@@ -4,6 +4,7 @@ import { HabitTemplate } from "../model/habit/HabitTemplate";
 import {Input, Button, Select, FormControl, FormLabel, Box, Heading, List, ListItem} from "@chakra-ui/react";
 import { useNavigate } from "react-router-dom";
 import {User} from "../model/user/User";
+import {UserController} from "@/controllers/UserController";
 
 export function HabitCreationPage(props: { currentUser: User | undefined }) {
     const [habitTemplates, setHabitTemplates] = useState<HabitTemplate[]>([]);
@@ -36,7 +37,7 @@ export function HabitCreationPage(props: { currentUser: User | undefined }) {
         }
 
         try {
-            const response = await new HabitController().createHabitFromTemplate(selectedTemplate);
+            const response = await new UserController().createHabitFromTemplate(selectedTemplate);
             if (response instanceof Error) {
                 setError(true);
             } else if ("habitId" in response){

@@ -4,6 +4,7 @@ import { HabitController } from "../controllers/HabitController";
 import { Habit } from "../model/habit/Habit";
 import { List, ListItem, Text, Box, Heading, Input, Button, Checkbox } from "@chakra-ui/react";
 import { User } from "../model/user/User";
+import {UserController} from "@/controllers/UserController";
 
 export function HabitPage(props: { currentUser: User | undefined }) {
     const { habitId } = useParams<{ habitId: string }>();
@@ -17,7 +18,7 @@ export function HabitPage(props: { currentUser: User | undefined }) {
             if (!habitId) return;
 
             try {
-                const response = await new HabitController().getHabitById(habitId);
+                const response = await new UserController().getHabitById(habitId);
                 if (response instanceof Error) {
                     setError(true);
                 } else if ("name" in response){
@@ -39,7 +40,7 @@ export function HabitPage(props: { currentUser: User | undefined }) {
 
         try {
             const newValue = markValues[markId];
-            await new HabitController().changeHabitMark(habitId, markId, String(newValue));
+            await new HabitController().changeHabitMark(habitId, markId, String(newValue), "");
             setHabit((prev) =>
                 prev? {
                         ...prev,
@@ -62,7 +63,7 @@ export function HabitPage(props: { currentUser: User | undefined }) {
             {habit && (
                 <Box px={6}>
                     <Heading as="h1">Привычка: {habit.name}</Heading>
-                    <Text fontSize="xl">Периодичность: {habit.periodicity}</Text>
+                    <Text fontSize="xl">Периодичность: {habit.periodicity.value}</Text>
                     <Text fontSize="xl">Цель: {habit.goal}</Text>
                     <Text fontSize="xl">Тип результата: {habit.resultType}</Text>
 

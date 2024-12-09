@@ -4,6 +4,7 @@ import { Heading, Button, List, ListItem, Box } from "@chakra-ui/react";
 import { HabitController } from "../controllers/HabitController";
 import { useNavigate } from "react-router-dom";
 import {Habit} from "@/model/habit/Habit";
+import {UserController} from "@/controllers/UserController";
 
 export function MainPage(props: { currentUser: User | undefined }) {
     const [habits, setHabits] = useState<Habit[]>([]);
@@ -12,7 +13,7 @@ export function MainPage(props: { currentUser: User | undefined }) {
 
     async function fetchHabits() {
         try {
-            const response = await new HabitController().getHabits();
+            const response = await new UserController().getHabits();
             if (response instanceof Error) {
                 setError(true);
             } else if ("habits" in response){
@@ -69,7 +70,6 @@ export function MainPage(props: { currentUser: User | undefined }) {
                             >
                                 <strong>{habit.name}</strong>
                                 <Box mt={1}>
-                                    <div>Периодичность: {habit.periodicity}</div>
                                     <div>Цель: {habit.goal}</div>
                                     <div>Тип результата: {habit.resultType}</div>
                                 </Box>
