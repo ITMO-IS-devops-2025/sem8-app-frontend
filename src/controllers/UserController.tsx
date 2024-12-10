@@ -46,7 +46,7 @@ export class UserController extends BaseController {
 
     async createHabitFromTemplate(templateId : string){
         let url = "users/habits?templateId=" + templateId;
-        return await this.api<HabitTemplate>(url, {}, "POST");
+        return await this.api<HabitTemplate>(url, "POST");
         /*return { habitId : "10" };*/
     }
 

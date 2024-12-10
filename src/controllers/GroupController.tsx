@@ -54,7 +54,7 @@ export class GroupController extends BaseController {
 
     async createCommonHabitFromTemplate(id : string, templateId : string){
         let url = "groups/" + id + "/common-habits?templateId=" + templateId;
-        return await this.api<Habit>(url, {}, "POST");
+        return await this.api<Habit>(url, "POST");
         /*return { habitId : "10" };*/
     }
 
