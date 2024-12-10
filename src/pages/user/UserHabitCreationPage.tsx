@@ -217,9 +217,9 @@ export function UserHabitCreationPage(props: { currentUser: User | undefined }) 
                             onChange={(e) => handlePeriodicityChange("type", e.target.value)}
                         >
                             <option value="">Выберите тип</option>
-                            <option value="days">Дни</option>
-                            <option value="weeks">Недели</option>
-                            <option value="months">Месяцы</option>
+                            <option value="Day">Дни</option>
+                            <option value="Week">Недели</option>
+                            <option value="Month">Месяцы</option>
                         </Select>
                     </FormControl>
 
