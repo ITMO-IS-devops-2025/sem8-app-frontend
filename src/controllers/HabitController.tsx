@@ -1,10 +1,5 @@
 import {BaseController} from "../controllers/BaseController";
-import {HabitTemplate} from "../model/habit/HabitTemplate";
-
-type Tag = {
-    id: string;
-    name: string
-};
+import {HabitTemplate, Tag} from "../model/habit/HabitTemplate";
 
 export class HabitController extends BaseController {
     async getHabitTemplates(){

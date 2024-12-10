@@ -5,11 +5,6 @@ import {GroupHabitPersonal} from "../model/habit/GroupHabitPersonal";
 import {IdResponse} from "@/model/utils/response/IdResponse";
 import {Statistic} from "@/model/habit/Statistics";
 
-type Periodicity = {
-    type : string,
-    value : number
-};
-
 export class GroupController extends BaseController {
     async getGroups (){
         let url = "groups";

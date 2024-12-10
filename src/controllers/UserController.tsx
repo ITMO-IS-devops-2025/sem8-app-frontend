@@ -1,13 +1,8 @@
 import {BaseController} from "./BaseController";
 import {User} from "../model/user/User";
 import {Habits} from "../model/habit/Habits";
-import {Habit} from "../model/habit/Habit";
+import {Habit, Periodicity} from "../model/habit/Habit";
 import {HabitTemplate} from "../model/habit/HabitTemplate";
-
-type Periodicity = {
-    type : string,
-    value : number
-};
 
 export class UserController extends BaseController {
 
