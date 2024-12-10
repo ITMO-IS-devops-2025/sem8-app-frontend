@@ -22,6 +22,7 @@ import {GroupController} from "../../../controllers/GroupController";
 import {User} from "../../../model/user/User";
 import {HabitTemplate} from "../../../model/habit/HabitTemplate";
 import {HabitController} from "../../../controllers/HabitController";
+import {ErrorResponse} from "../../../controllers/BaseController";
 
 export function GroupHabitCreationPage(props: { currentUser: User | undefined }) {
     const { groupId } = useParams<{ groupId: string }>();
@@ -49,7 +50,7 @@ export function GroupHabitCreationPage(props: { currentUser: User | undefined })
         async function fetchHabitTemplates() {
             try {
                 const response = await new HabitController().getHabitTemplates();
-                if (response instanceof Error) {
+                if (response instanceof ErrorResponse) {
                     setError(true);
                 } else if ("templates" in response) {
                     // @ts-ignore
@@ -75,7 +76,7 @@ export function GroupHabitCreationPage(props: { currentUser: User | undefined })
                     ? await groupController.createCommonHabitFromTemplate(groupId, selectedTemplate)
                     : await groupController.createPersonalHabitFromTemplate(groupId, selectedTemplate);
 
-            if (response instanceof Error) {
+            if (response instanceof ErrorResponse) {
                 setError(true);
             } else if ("id" in response) {
                 navigate(`/user-habit/${response.id}`);
@@ -109,7 +110,7 @@ export function GroupHabitCreationPage(props: { currentUser: User | undefined })
                         customHabit.goal,
                         customHabit.resultType
                     );
-            if (response instanceof Error) {
+            if (response instanceof ErrorResponse) {
                 setError(true);
             } else if ("id" in response) {
                 navigate(`/user-habit/${response.id}`);
@@ -181,7 +182,8 @@ export function GroupHabitCreationPage(props: { currentUser: User | undefined })
                                     >
                                         <strong>{template.name}</strong>
                                         <Box mt={1}>
-                                            <div>Периодичность: {template.periodicity}</div>
+                                            <div>Периодичность тип: {template.periodicity.type}</div>
+                                            <div>Периодичность значение: {template.periodicity.value}</div>
                                             <div>Цель: {template.goal}</div>
                                             <div>Тип результата: {template.resultType}</div>
                                         </Box>

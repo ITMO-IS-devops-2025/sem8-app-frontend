@@ -35,22 +35,28 @@ export function GroupPage(props: { currentUser: User | undefined }) {
 
                 // Загружаем данные группы
                 const groupResponse = await groupController.getGroupById(groupId);
-                if (!(groupResponse instanceof ErrorResponse)) {
-                    setGroup(groupResponse);
-                } else {
+                if (groupResponse instanceof ErrorResponse) {
                     setError(true);
+                } else {
+                    setGroup(groupResponse);
                 }
 
                 // Загружаем общие привычки
                 const commonHabitsResponse = await groupController.getGroupCommonHabits(groupId);
-                if (!(commonHabitsResponse instanceof ErrorResponse)) {
-                    setCommonHabits(commonHabitsResponse);
+                if (commonHabitsResponse instanceof ErrorResponse) {
+                    setError(true);
+                } else if ("habits" in commonHabitsResponse) {
+                    // @ts-ignore
+                    setCommonHabits(commonHabitsResponse.habits);
                 }
 
                 // Загружаем индивидуальные привычки
                 const personalHabitsResponse = await groupController.getGroupPersonalHabits(groupId);
-                if (!(personalHabitsResponse instanceof ErrorResponse)) {
-                    setPersonalHabits(personalHabitsResponse);
+                if (personalHabitsResponse instanceof ErrorResponse) {
+                    setError(true);
+                } else if ("habits" in personalHabitsResponse) {
+                    // @ts-ignore
+                    setPersonalHabits(personalHabitsResponse.habits);
                 }
             } catch {
                 setError(true);
@@ -58,7 +64,7 @@ export function GroupPage(props: { currentUser: User | undefined }) {
         }
 
         fetchGroupData();
-    }, [groupId]);
+    }, [commonHabits, groupId, personalHabits]);
 
     const handleLeaveGroup = async () => {
         if (!groupId) return;
@@ -104,7 +110,7 @@ export function GroupPage(props: { currentUser: User | undefined }) {
                         Участники
                     </Heading>
                     <List spacing={3}>
-                        {group.participants.map((user) => (
+                        {[...group.participants].map((user) => (
                             <ListItem key={user.userId}>
                                 <Text>{user.name}</Text>
                             </ListItem>
@@ -118,7 +124,7 @@ export function GroupPage(props: { currentUser: User | undefined }) {
                                 Общие привычки
                             </Heading>
                             <List spacing={3}>
-                                {commonHabits.map((habit) => (
+                                {[...commonHabits].map((habit) => (
                                     <ListItem
                                         key={habit.habitId}
                                         onClick={() => navigate(`/group-common-habit/${habit.habitId}`)}
@@ -135,7 +141,7 @@ export function GroupPage(props: { currentUser: User | undefined }) {
                                 Индивидуальные привычки
                             </Heading>
                             <List spacing={3}>
-                                {personalHabits.map((habit) => (
+                                {[...personalHabits].map((habit) => (
                                     <ListItem
                                         key={habit.habitId}
                                         onClick={() => navigate(`/group-personal-habit/${habit.habitId}`)}

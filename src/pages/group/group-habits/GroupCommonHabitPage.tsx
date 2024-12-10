@@ -8,6 +8,7 @@ import {UserController} from "@/controllers/UserController";
 import {GroupController} from "../../../controllers/GroupController";
 import {Textarea} from "@chakra-ui/icons";
 import {Statistic} from "../../../model/habit/Statistics";
+import {ErrorResponse} from "../../../controllers/BaseController";
 
 export function GroupCommonHabitPage(props: { currentUser: User | undefined }) {
     const { habitId, groupId } = useParams<{ habitId: string; groupId: string }>();
@@ -23,13 +24,13 @@ export function GroupCommonHabitPage(props: { currentUser: User | undefined }) {
 
             try {
                 const response = await new GroupController().getGroupCommonHabitById(groupId, habitId);
-                if (response instanceof Error) {
+                if (response instanceof ErrorResponse) {
                     setError(true);
                 } else if ("name" in response){
                     setHabit(response);
                     if (response.isTemplated) {
                         const statsResponse = await new GroupController().getCommonHabitStatistics(groupId, habitId);
-                        if (statsResponse instanceof Error) {
+                        if (statsResponse instanceof ErrorResponse) {
                             console.error("Ошибка при загрузке статистики:", statsResponse);
                         } else {
                             setStatistics(statsResponse as Statistic);

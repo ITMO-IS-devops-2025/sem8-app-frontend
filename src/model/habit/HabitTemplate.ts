@@ -1,3 +1,5 @@
+import {Periodicity} from "../habit/Habit";
+
 export type Tag = {
     id: string;
     name: string
@@ -8,11 +10,11 @@ export class HabitTemplate {
     name: string
     description : string
     tags : Tag[]
-    periodicity: string
+    periodicity: Periodicity
     goal: string
     resultType: string
 
-    constructor(templateId : string, name: string, periodicity: string, tags: Tag[], description : string,  goal: string, resultType: string) {
+    constructor(templateId : string, name: string, periodicity: Periodicity, tags: Tag[], description : string,  goal: string, resultType: string) {
         this.templateId = templateId
         this.name = name
         this.description = description

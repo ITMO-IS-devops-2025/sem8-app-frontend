@@ -5,12 +5,12 @@ type UserDto = {
 
 
 export class Group {
-    groupId: string;
+    id: string;
     name: string;
     participants: UserDto[];
 
     constructor(groupId: string, name: string, participants: UserDto[] = []) {
-        this.groupId = groupId;
+        this.id = groupId;
         this.name = name;
         this.participants = participants;
     }

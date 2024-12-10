@@ -4,6 +4,7 @@ import {Group} from "../../model/group/Group";
 import {List, ListItem, Button} from "@chakra-ui/react";
 import {Link} from "react-router-dom";
 import {User} from "../../model/user/User";
+import {ErrorResponse} from "../../controllers/BaseController";
 
 export function GroupListPage(props: { currentUser: User | undefined }) {
     const [groups, setGroups] = useState<Group[]>([]);
@@ -13,7 +14,7 @@ export function GroupListPage(props: { currentUser: User | undefined }) {
         async function fetchGroups() {
             try {
                 const response = await new GroupController().getGroups();
-                if (response instanceof Error) {
+                if (response instanceof ErrorResponse) {
                     setError(true);
                 } else if ("groups" in response) {
                     // @ts-ignore
@@ -34,8 +35,8 @@ export function GroupListPage(props: { currentUser: User | undefined }) {
 
             <List spacing={3}>
                 {groups.map((group) => (
-                    <ListItem key={group.groupId}>
-                        <Link to={`/group/${group.groupId}`}>
+                    <ListItem key={group.id}>
+                        <Link to={`/group/${group.id.toString()}`}>
                             {group.name}
                         </Link>
                     </ListItem>

@@ -21,6 +21,7 @@ import { useNavigate } from "react-router-dom";
 import { User } from "../../model/user/User";
 import { UserController } from "../../controllers/UserController";
 import {Periodicity} from "../../model/habit/Habit";
+import {ErrorResponse} from "../../controllers/BaseController";
 
 export function UserHabitCreationPage(props: { currentUser: User | undefined }) {
     const [habitTemplates, setHabitTemplates] = useState<HabitTemplate[]>([]);
@@ -46,7 +47,7 @@ export function UserHabitCreationPage(props: { currentUser: User | undefined }) 
         async function fetchHabitTemplates() {
             try {
                 const response = await new HabitController().getHabitTemplates();
-                if (response instanceof Error) {
+                if (response instanceof ErrorResponse) {
                     setError(true);
                 } else if ("templates" in response) {
                     // @ts-ignore
@@ -67,7 +68,7 @@ export function UserHabitCreationPage(props: { currentUser: User | undefined }) 
 
         try {
             const response = await new UserController().createHabitFromTemplate(selectedTemplate);
-            if (response instanceof Error) {
+            if (response instanceof ErrorResponse) {
                 setError(true);
             } else if ("id" in response) {
                 navigate(`/user-habit/${response.id}`);
@@ -86,7 +87,7 @@ export function UserHabitCreationPage(props: { currentUser: User | undefined }) 
                 customHabit.periodicity,
                 customHabit.goal,
                 customHabit.resultType);
-            if (response instanceof Error) {
+            if (response instanceof ErrorResponse) {
                 setError(true);
             } else if ("id" in response) {
                 navigate(`/user-habit/${response.id}`);
@@ -143,7 +144,8 @@ export function UserHabitCreationPage(props: { currentUser: User | undefined }) 
                                 >
                                     <strong>{template.name}</strong>
                                     <Box mt={1}>
-                                        <div>Периодичность: {template.periodicity}</div>
+                                        <div>Периодичность тип: {template.periodicity.type}</div>
+                                        <div>Периодичность значение: {template.periodicity.value}</div>
                                         <div>Цель: {template.goal}</div>
                                         <div>Тип результата: {template.resultType}</div>
                                     </Box>

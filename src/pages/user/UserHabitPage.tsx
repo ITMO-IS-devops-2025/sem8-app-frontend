@@ -23,7 +23,7 @@ export function UserHabitPage(props: { currentUser: User | undefined }) {
 
             try {
                 const response = await new UserController().getHabitById(habitId);
-                if (response instanceof Error) {
+                if (response instanceof ErrorResponse) {
                     setError(true);
                 } else if ("name" in response){
                     setHabit(response);

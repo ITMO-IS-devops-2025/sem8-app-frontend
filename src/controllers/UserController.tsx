@@ -24,12 +24,12 @@ export class UserController extends BaseController {
     }
 
     async getHabits(){
-        let url = "/users/habits";
+        let url = "users/habits";
         return await this.api<Habits[]>(url);
     }
 
     async getHabitById(id : string){
-        let url = "/users/habits/" + id;
+        let url = "users/habits/" + id;
         return await this.api<Habit>(url);
         /*return new Habit(
             "7",
@@ -45,19 +45,19 @@ export class UserController extends BaseController {
     }
 
     async createHabitFromTemplate(templateId : string){
-        let url = "/users/habits?templateId=" + templateId;
+        let url = "users/habits?templateId=" + templateId;
         return await this.api<HabitTemplate>(url, {}, "POST");
         /*return { habitId : "10" };*/
     }
 
     async createHabit( name : string, description : string, tags : string[], periodicity : Periodicity, goal : string, resultType : string){
-        let url = "/users/habits";
+        let url = "users/habits";
         return await this.api<Habit>(url, {"name" : name, "description" : description, "tags": tags, "periodicity" : periodicity, "goal" : goal, "resultType" : resultType }, "POST");
         /*return { habitId : "10" };*/
     }
 
     async getStatistics( habitId : string){
-        let url = "/users/habits" + habitId + "statistics";
+        let url = "users/habits" + habitId + "statistics";
         return await this.api<Statistic>(url);
     }
 

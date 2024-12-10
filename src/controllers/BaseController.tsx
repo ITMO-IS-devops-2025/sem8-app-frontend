@@ -34,7 +34,6 @@ export class BaseController {
         if (body !== null) {
             options.body = JSON.stringify(body);
         }
-        console.log(options.body);
         return await fetch(url, options);
     }
 

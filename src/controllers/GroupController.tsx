@@ -53,36 +53,36 @@ export class GroupController extends BaseController {
     }
 
     async createCommonHabitFromTemplate(id : string, templateId : string){
-        let url = "/groups/" + id + "/common-habits?templateId=" + templateId;
+        let url = "groups/" + id + "/common-habits?templateId=" + templateId;
         return await this.api<Habit>(url, {}, "POST");
         /*return { habitId : "10" };*/
     }
 
     async createCommonHabit(id : string, name : string, description : string, tags : string[], periodicity : Periodicity, goal : string, resultType : string){
-        let url = "/groups/" + id + "/common-habits";
+        let url = "groups/" + id + "/common-habits";
         return await this.api<Habit>(url, {"name" : name, "description" : description, "tags": tags, "periodicity" : periodicity, "goal" : goal, "resultType" : resultType }, "POST");
         /*return { habitId : "10" };*/
     }
 
     async createPersonalHabitFromTemplate(id : string, templateId : string){
-        let url = "/groups/" + id + "/personal-habits?templateId=" + templateId;
+        let url = "groups/" + id + "/personal-habits?templateId=" + templateId;
         return await this.api<GroupHabitPersonal>(url, {}, "POST");
         /*return { habitId : "10" };*/
     }
 
     async createPersonalHabit(id : string, name : string, description : string, tags : string[], periodicity : Periodicity, goal : string, resultType : string){
-        let url = "/groups/" + id + "/personal-habits";
+        let url = "groups/" + id + "/personal-habits";
         return await this.api<GroupHabitPersonal>(url, {"name" : name, "description" : description, "tags": tags, "periodicity" : periodicity, "goal" : goal, "resultType" : resultType }, "POST");
         /*return { habitId : "10" };*/
     }
 
     async getCommonHabitStatistics(id : string, habitId : string){
-        let url = "/groups/" + id + "common-habits/" + habitId + "statistics";
+        let url = "groups/" + id + "common-habits/" + habitId + "statistics";
         return await this.api<Statistic>(url);
     }
 
     async getPersonalHabitStatistics(id : string, habitId : string){
-        let url = "/groups/" + id + "personal-habits/" + habitId + "statistics";
+        let url = "groups/" + id + "personal-habits/" + habitId + "statistics";
         return await this.api<Statistic>(url);
     }
 
