@@ -173,12 +173,20 @@ export function GroupHabitCreationPage(props: { currentUser: User | undefined })
                             <List spacing={3}>
                                 {habitTemplates.map((template) => (
                                     <ListItem
-                                        key={template.templateId}
+                                        key={template.id}
                                         p={2}
-                                        bg={selectedTemplate === template.templateId ? "teal.100" : "white"}
+                                        bg={selectedTemplate === template.id ? "teal.100" : "white"}
                                         borderRadius="md"
                                         cursor="pointer"
-                                        onClick={() => setSelectedTemplate(template.templateId)}
+                                        onClick={() => {
+                                            console.log(selectedTemplate)
+                                            console.log(template.id)
+                                            if (selectedTemplate === template.id) {
+                                                setSelectedTemplate(null)
+                                            } else {
+                                                setSelectedTemplate(template.id)
+                                            }
+                                        }}
                                     >
                                         <strong>{template.name}</strong>
                                         <Box mt={1}>
