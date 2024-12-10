@@ -179,8 +179,6 @@ export function GroupHabitCreationPage(props: { currentUser: User | undefined })
                                         borderRadius="md"
                                         cursor="pointer"
                                         onClick={() => {
-                                            console.log(selectedTemplate)
-                                            console.log(template.id)
                                             if (selectedTemplate === template.id) {
                                                 setSelectedTemplate(null)
                                             } else {
