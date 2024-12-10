@@ -1,7 +1,7 @@
-import {useEffect, useState} from "react";
+import React, {useEffect, useState} from "react";
 import {GroupController} from "../../controllers/GroupController";
 import {Group} from "../../model/group/Group";
-import {List, ListItem, Button} from "@chakra-ui/react";
+import {List, ListItem, Button, Box, Heading} from "@chakra-ui/react";
 import {Link} from "react-router-dom";
 import {User} from "../../model/user/User";
 import {ErrorResponse} from "../../controllers/BaseController";
@@ -29,23 +29,28 @@ export function GroupListPage(props: { currentUser: User | undefined }) {
     }, []);
 
     return (
-        <div className="group-list-page">
-            <h1>Список ваших групп</h1>
-            {error && <div className="error-message">Произошла ошибка при загрузке данных групп.</div>}
+        <Box mt={4} px={6}>
+            <div className="group-list-page">
 
-            <List spacing={3}>
-                {groups.map((group) => (
-                    <ListItem key={group.id}>
-                        <Link to={`/group/${group.id.toString()}`}>
-                            {group.name}
-                        </Link>
-                    </ListItem>
-                ))}
-            </List>
+                <Heading as="h1" size="lg" mt={4}>
+                    Список ваших групп:
+                </Heading>
+                {error && <div className="error-message">Произошла ошибка при загрузке данных групп.</div>}
 
-            <Button colorScheme="teal" mt={4} as={Link} to="/group-creation">
-                Создать новую группу
-            </Button>
-        </div>
+                <List spacing={3} mt={4}>
+                    {groups.map((group) => (
+                        <ListItem key={group.id}>
+                            <Link to={`/group/${group.id.toString()}`}>
+                                {group.name}
+                            </Link>
+                        </ListItem>
+                    ))}
+                </List>
+
+                <Button colorScheme="teal" mt={4} as={Link} to="/group-creation">
+                    Создать новую группу
+                </Button>
+            </div>
+        </Box>
     );
 }

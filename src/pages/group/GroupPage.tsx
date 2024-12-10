@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import {
     Box,
@@ -9,7 +9,7 @@ import {
     Flex,
     VStack,
     HStack,
-    Text,
+    Text, FormControl, Input,
 } from "@chakra-ui/react";
 import { User } from "../../model/user/User";
 import { Group } from "../../model/group/Group";
@@ -17,6 +17,7 @@ import { Habit } from "../../model/habit/Habit";
 import { GroupHabitPersonal } from "../../model/habit/GroupHabitPersonal";
 import { GroupController } from "../../controllers/GroupController";
 import {ErrorResponse} from "../../controllers/BaseController";
+import {UserController} from "../../controllers/UserController";
 
 export function GroupPage(props: { currentUser: User | undefined }) {
     const { groupId } = useParams<{ groupId: string }>();
@@ -25,6 +26,11 @@ export function GroupPage(props: { currentUser: User | undefined }) {
     const [personalHabits, setPersonalHabits] = useState<GroupHabitPersonal[]>([]);
     const [error, setError] = useState(false);
     const navigate = useNavigate();
+    const [groupName, setGroupName] = useState<string>("");
+    const [participants, setParticipants] = useState<User[]>([]);
+    const [newParticipantLogin, setNewParticipantLogin] = useState<string>("");
+    const [addUserError, setAddUserError] = useState<string | null>(null);
+    const [addUserSuccess, setAddUserSuccess] = useState<string | null>(null);
 
     useEffect(() => {
         async function fetchGroupData() {
@@ -87,35 +93,59 @@ export function GroupPage(props: { currentUser: User | undefined }) {
         navigate(`/group/${groupId}/group-habit-creation`);
     };
 
+    const handleAddParticipant = async () => {
+        if (!newParticipantLogin) return;
+
+        const userController = new UserController();
+
+        // Ищем пользователя по логину
+        const userResponse = await userController.getUserByLogin(newParticipantLogin);
+        if (userResponse instanceof ErrorResponse) {
+            setAddUserError("Пользователь с таким логином не найден.");
+            setAddUserSuccess(null);
+            return;
+        }
+
+        // Добавляем пользователя во временный список участников
+        setParticipants([...participants, userResponse]);
+        setAddUserSuccess(`Пользователь ${newParticipantLogin} успешно добавлен!`);
+        setAddUserError(null);
+        setNewParticipantLogin("");
+    };
+
     return (
         <div className="group-page">
             {error && <div className="error-message">Произошла ошибка при загрузке данных группы.</div>}
 
             {group && (
                 <Box px={6}>
-                    <Heading as="h1" size="lg" mt={4}>
-                        Группа: {group.name}
+                    <Heading as="h1" size="xl" mt={4}>
+                        {group.name}
                     </Heading>
 
-                    <HStack spacing={4} mt={4}>
-                        <Button colorScheme="blue" onClick={handleAddHabit}>
-                            Добавить привычку
-                        </Button>
-                        <Button colorScheme="red" onClick={handleLeaveGroup}>
-                            Удалить себя из группы
-                        </Button>
-                    </HStack>
-
-                    <Heading>
-                        Участники
+                    <Heading as="h1" size="md" mt={4}>
+                        Участники:
                     </Heading>
-                    <List spacing={3}>
+
+                    <List>
                         {[...group.participants].map((user) => (
                             <ListItem key={user.userId}>
                                 <Text>{user.name}</Text>
                             </ListItem>
                         ))}
                     </List>
+
+                    <HStack spacing={4} mt={4}>
+                        <Button colorScheme="teal" onClick={handleAddHabit}>
+                            Создать привычку
+                        </Button>
+
+                        <Button colorScheme="red" onClick={handleLeaveGroup}>
+                            Выйти из группы
+                        </Button>
+                    </HStack>
+
+
 
                     <Flex mt={6} gap={6}>
                         {/* Общие привычки */}
@@ -126,8 +156,8 @@ export function GroupPage(props: { currentUser: User | undefined }) {
                             <List spacing={3}>
                                 {[...commonHabits].map((habit) => (
                                     <ListItem
-                                        key={habit.habitId}
-                                        onClick={() => navigate(`/group-common-habit/${habit.habitId}`)}
+                                        key={habit.id}
+                                        onClick={() => navigate(`/group/${groupId}/group-common-habit/${habit.id}`)}
                                     >
                                         <Text>{habit.name}</Text>
                                     </ListItem>
@@ -143,8 +173,8 @@ export function GroupPage(props: { currentUser: User | undefined }) {
                             <List spacing={3}>
                                 {[...personalHabits].map((habit) => (
                                     <ListItem
-                                        key={habit.habitId}
-                                        onClick={() => navigate(`/group-personal-habit/${habit.habitId}`)}
+                                        key={habit.id}
+                                        onClick={() => navigate(`/group/${groupId}/group-personal-habit/${habit.id}`)}
                                     >
                                         <Text>{habit.name}</Text>
                                     </ListItem>

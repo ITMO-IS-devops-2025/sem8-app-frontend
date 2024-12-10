@@ -1,5 +1,5 @@
 import {BaseController} from "../controllers/BaseController";
-import {HabitTemplate, Tag} from "../model/habit/HabitTemplate";
+import {HabitTemplate} from "../model/habit/HabitTemplate";
 
 export class HabitController extends BaseController {
     async getHabitTemplates(){
@@ -9,7 +9,7 @@ export class HabitController extends BaseController {
 
     async getHabitsTags(){
         let url = "habits/tags";
-        return await this.api<Tag[]>(url);
+        return await this.api<{id: string, name: string}[]>(url);
     }
 
     async getHabitTagById(tagId : string)  {

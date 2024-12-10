@@ -3,7 +3,7 @@ import {User} from "../model/user/User";
 import {Habits} from "../model/habit/Habits";
 import {Habit, Periodicity} from "../model/habit/Habit";
 import {HabitTemplate} from "../model/habit/HabitTemplate";
-import {Statistic} from "@/model/habit/Statistics";
+import {Statistic} from "../model/habit/Statistics";
 
 export class UserController extends BaseController {
 
@@ -46,7 +46,7 @@ export class UserController extends BaseController {
 
     async createHabitFromTemplate(templateId : string){
         let url = "users/habits?templateId=" + templateId;
-        return await this.api<HabitTemplate>(url, {}, "POST");
+        return await this.api<HabitTemplate>(url, null, "POST");
         /*return { habitId : "10" };*/
     }
 

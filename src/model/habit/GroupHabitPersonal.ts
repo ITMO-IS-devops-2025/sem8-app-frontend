@@ -1,6 +1,4 @@
-type Result = {
-    value: string | null;
-};
+import {Periodicity, Result} from "@/model/habit/Habit";
 
 type Mark = {
     timestamp: Date;
@@ -12,31 +10,21 @@ type PersonalMarks = {
     userId : string;
     result: Result;
     comment : string;
-}
-
-type Tag = {
-    id: string;
-    name: string;
-};
-
-type Periodicity = {
-    type : string;
-    value : number;
 };
 
 export class GroupHabitPersonal {
-    habitId : string
+    id : string
     name: string
     description : string
-    tags : Tag[]
+    tags : string[]
     periodicity: Periodicity
     goal: string
     isTemplated : boolean
     resultType: string
     marks?: Mark[];
 
-    constructor(habitId : string, name: string, periodicity: Periodicity, tags: Tag[], description : string, goal: string, resultType: string, isTemplated : boolean, marks: Mark[] = []) {
-        this.habitId = habitId
+    constructor(habitId : string, name: string, periodicity: Periodicity, tags: string[], description : string, goal: string, resultType: string, isTemplated : boolean, marks: Mark[] = []) {
+        this.id = habitId
         this.name = name
         this.description = description
         this.tags = tags
