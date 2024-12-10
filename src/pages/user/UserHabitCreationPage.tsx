@@ -19,8 +19,8 @@ import {
 } from "@chakra-ui/react";
 import { useNavigate } from "react-router-dom";
 import { User } from "../../model/user/User";
-import { UserController } from "@/controllers/UserController";
-import {Periodicity} from "@/model/habit/Habit";
+import { UserController } from "../../controllers/UserController";
+import {Periodicity} from "../../model/habit/Habit";
 
 export function UserHabitCreationPage(props: { currentUser: User | undefined }) {
     const [habitTemplates, setHabitTemplates] = useState<HabitTemplate[]>([]);
@@ -79,7 +79,7 @@ export function UserHabitCreationPage(props: { currentUser: User | undefined }) 
 
     const handleCreateCustomHabit = async () => {
         try {
-            const response = await new UserController().createCustomHabit(
+            const response = await new UserController().createHabit(
                 customHabit.name,
                 customHabit.description,
                 customHabit.tags,

@@ -2,13 +2,8 @@ import {BaseController} from "../controllers/BaseController";
 import {Group} from "../model/group/Group";
 import {Habit, Periodicity} from "../model/habit/Habit";
 import {GroupHabitPersonal} from "../model/habit/GroupHabitPersonal";
-import {IdResponse} from "@/model/utils/response/IdResponse";
-import {Statistic} from "@/model/habit/Statistics";
-
-type Periodicity = {
-    type : string,
-    value : number
-};
+import {IdResponse} from "../model/utils/response/IdResponse";
+import {Statistic} from "../model/habit/Statistics";
 
 export class GroupController extends BaseController {
     async getGroups (){

@@ -12,11 +12,11 @@ import {SignOutPage} from "./pages/auth/SignOutPage";
 import {GroupPage} from "./pages/group/GroupPage";
 import {GroupListPage} from "./pages/group/GroupListPage";
 import {GroupCreationPage} from "./pages/group/GroupCreationPage";
-import {UserHabitPage} from "@/pages/user/UserHabitPage";
-import {GroupPersonalHabitPage} from "@/pages/group/group-habits/GroupPersonalHabitPage";
-import {UserHabitCreationPage} from "@/pages/user/UserHabitCreationPage";
-import {GroupHabitCreationPage} from "@/pages/group/group-habits/GroupHabitCreationPage";
-import {GroupCommonHabitPage} from "@/pages/group/group-habits/GroupCommonHabitPage";
+import {UserHabitPage} from "./pages/user/UserHabitPage";
+import {GroupPersonalHabitPage} from "./pages/group/group-habits/GroupPersonalHabitPage";
+import {UserHabitCreationPage} from "./pages/user/UserHabitCreationPage";
+import {GroupHabitCreationPage} from "./pages/group/group-habits/GroupHabitCreationPage";
+import {GroupCommonHabitPage} from "./pages/group/group-habits/GroupCommonHabitPage";
 
 
 function App() {

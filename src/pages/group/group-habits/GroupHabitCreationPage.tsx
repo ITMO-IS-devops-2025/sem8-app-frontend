@@ -16,12 +16,12 @@ import {
     HStack,
 } from "@chakra-ui/react";
 import {useNavigate, useParams} from "react-router-dom";
-import { UserController } from "@/controllers/UserController";
-import {Periodicity} from "@/model/habit/Habit";
-import {GroupController} from "@/controllers/GroupController";
-import {User} from "@/model/user/User";
-import {HabitTemplate} from "@/model/habit/HabitTemplate";
-import {HabitController} from "@/controllers/HabitController";
+import { UserController } from "../../../controllers/UserController";
+import {Periodicity} from "../../../model/habit/Habit";
+import {GroupController} from "../../../controllers/GroupController";
+import {User} from "../../../model/user/User";
+import {HabitTemplate} from "../../../model/habit/HabitTemplate";
+import {HabitController} from "../../../controllers/HabitController";
 
 export function GroupHabitCreationPage(props: { currentUser: User | undefined }) {
     const { groupId } = useParams<{ groupId: string }>();

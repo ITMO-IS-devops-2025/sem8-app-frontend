@@ -4,7 +4,10 @@ import { HabitController } from "../../controllers/HabitController";
 import { Habit } from "../../model/habit/Habit";
 import { List, ListItem, Text, Box, Heading, Input, Button, Checkbox } from "@chakra-ui/react";
 import { User } from "../../model/user/User";
-import {UserController} from "../controllers/UserController";
+import {UserController} from "../../controllers/UserController";
+import {Statistic} from "../../model/habit/Statistics";
+import {Textarea} from "@chakra-ui/icons";
+import {ErrorResponse} from "../../controllers/BaseController";
 
 export function UserHabitPage(props: { currentUser: User | undefined }) {
     const { habitId } = useParams<{ habitId: string }>();
@@ -26,10 +29,10 @@ export function UserHabitPage(props: { currentUser: User | undefined }) {
                     setHabit(response);
                     if (response.isTemplated) {
                         const statsResponse = await new UserController().getStatistics(habitId);
-                        if (statsResponse instanceof Error) {
+                        if (statsResponse instanceof ErrorResponse) {
                             console.error("Ошибка при загрузке статистики:", statsResponse);
                         } else {
-                            setStatistics(statsResponse as Statistic);
+                            setStatistics(statsResponse);
                         }
                     }
                 }

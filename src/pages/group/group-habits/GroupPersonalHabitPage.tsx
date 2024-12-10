@@ -4,11 +4,11 @@ import {HabitController} from "../../../controllers/HabitController";
 import {Habit} from "../../../model/habit/Habit";
 import {List, ListItem, Text, Box, Heading, Input, Button, Checkbox} from "@chakra-ui/react";
 import {User} from "../../../model/user/User";
-import {UserController} from "@/controllers/UserController";
-import {GroupController} from "@/controllers/GroupController";
+import {UserController} from "../../../controllers/UserController";
+import {GroupController} from "../../../controllers/GroupController";
 import {Textarea} from "@chakra-ui/icons";
-import {GroupHabitPersonal} from "@/model/habit/GroupHabitPersonal";
-import {Statistic} from "@/model/habit/Statistics";
+import {GroupHabitPersonal} from "../../../model/habit/GroupHabitPersonal";
+import {Statistic} from "../../../model/habit/Statistics";
 
 export function GroupPersonalHabitPage(props: { currentUser: User | undefined }) {
     const {habitId, groupId} = useParams<{ habitId: string; groupId: string }>();

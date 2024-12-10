@@ -5,9 +5,9 @@ import { Habit } from "../../../model/habit/Habit";
 import { List, ListItem, Text, Box, Heading, Input, Button, Checkbox } from "@chakra-ui/react";
 import { User } from "../../../model/user/User";
 import {UserController} from "@/controllers/UserController";
-import {GroupController} from "@/controllers/GroupController";
+import {GroupController} from "../../../controllers/GroupController";
 import {Textarea} from "@chakra-ui/icons";
-import {Statistic} from "@/model/habit/Statistics";
+import {Statistic} from "../../../model/habit/Statistics";
 
 export function GroupCommonHabitPage(props: { currentUser: User | undefined }) {
     const { habitId, groupId } = useParams<{ habitId: string; groupId: string }>();

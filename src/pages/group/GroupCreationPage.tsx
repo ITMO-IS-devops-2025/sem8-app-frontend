@@ -13,8 +13,8 @@ import {
     Text,
 } from "@chakra-ui/react";
 import { User } from "../../model/user/User";
-import {ErrorResponse} from "../controllers/BaseController";
-import {NavigateOnLogout} from "../utils/auth/NavigateOnLogin";
+import {ErrorResponse} from "../../controllers/BaseController";
+import {NavigateOnLogout} from "../../utils/auth/NavigateOnLogin";
 
 export function GroupCreationPage(props: { currentUser: User | undefined }) {
 
