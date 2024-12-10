@@ -35,7 +35,7 @@ export function GroupHabitCreationPage(props: { currentUser: User | undefined })
     const [customHabit, setCustomHabit] = useState({
         name: "",
         description: "",
-        tags: [] as string[],
+        tags: [] as {id: string, name: string}[],
         periodicity: {
             value: "",
             type: 0,
@@ -44,7 +44,8 @@ export function GroupHabitCreationPage(props: { currentUser: User | undefined })
         resultType: "",
     });
 
-    const [tagInput, setTagInput] = useState(""); // Для добавления новых тегов
+    const [allTags, setTags] = useState<{id: string, name: string}[]>([]);
+
 
     useEffect(() => {
         async function fetchHabitTemplates() {
@@ -61,6 +62,23 @@ export function GroupHabitCreationPage(props: { currentUser: User | undefined })
             }
         }
         fetchHabitTemplates();
+    }, []);
+
+    useEffect(() => {
+        async function fetchTags() {
+            try {
+                const response = await new HabitController().getHabitsTags();
+                if (response instanceof ErrorResponse) {
+                    setError(true);
+                } else if ("tags" in response) {
+                    // @ts-ignore
+                    setTags(response.tags);
+                }
+            } catch (err) {
+                setError(true);
+            }
+        }
+        fetchTags();
     }, []);
 
     const handleCreateHabitFromTemplate = async () => {
@@ -93,19 +111,22 @@ export function GroupHabitCreationPage(props: { currentUser: User | undefined })
         }
 
         try {
+            if (customHabit.resultType == "Boolean") {
+                customHabit.goal = "True"
+            }
             const response =
                 habitType === "group"
                     ? await new GroupController().createCommonHabit( groupId,
                         customHabit.name,
                         customHabit.description,
-                        customHabit.tags,
+                        customHabit.tags.map(tag => tag.id),
                         customHabit.periodicity,
                         customHabit.goal,
                         customHabit.resultType)
                     : await new GroupController().createPersonalHabit( groupId,
                         customHabit.name,
                         customHabit.description,
-                        customHabit.tags,
+                        customHabit.tags.map(tag => tag.id),
                         customHabit.periodicity,
                         customHabit.goal,
                         customHabit.resultType
@@ -131,20 +152,17 @@ export function GroupHabitCreationPage(props: { currentUser: User | undefined })
         }));
     };
 
-    const handleAddTag = () => {
-        if (tagInput.trim()) {
-            setCustomHabit((prev) => ({
-                ...prev,
-                tags: [...prev.tags, tagInput.trim()],
-            }));
-            setTagInput("");
-        }
-    };
-
-    const handleRemoveTag = (tag: string) => {
+    const handleAddTag = (id: string, name: string) => {
         setCustomHabit((prev) => ({
             ...prev,
-            tags: prev.tags.filter((t) => t !== tag),
+            tags: [...prev.tags, {id, name}]
+        }));
+    };
+
+    const handleRemoveTag = (id: string, name: string) => {
+        setCustomHabit((prev) => ({
+            ...prev,
+            tags: prev.tags.filter((t) => t.id !== id),
         }));
     };
 
@@ -230,19 +248,20 @@ export function GroupHabitCreationPage(props: { currentUser: User | undefined })
 
                         <FormControl mb={4}>
                             <FormLabel>Теги</FormLabel>
-                            <HStack>
-                                <Input
-                                    placeholder="Добавить тег"
-                                    value={tagInput}
-                                    onChange={(e) => setTagInput(e.target.value)}
-                                />
-                                <Button onClick={handleAddTag}>Добавить</Button>
-                            </HStack>
+                            <List spacing={3} mt={4}>
+                                {allTags.map((tag) => (
+                                    <ListItem key={tag.id}
+                                              onClick={() => handleAddTag(tag.id, tag.name)}>
+                                        {tag.name}
+                                    </ListItem>
+                                ))}
+                            </List>
+
                             <HStack mt={2} wrap="wrap">
                                 {customHabit.tags.map((tag, index) => (
                                     <Tag key={index} size="md" colorScheme="teal" borderRadius="full">
-                                        <TagLabel>{tag}</TagLabel>
-                                        <TagCloseButton onClick={() => handleRemoveTag(tag)} />
+                                        <TagLabel>{tag.name}</TagLabel>
+                                        <TagCloseButton onClick={() => handleRemoveTag(tag.id, tag.name)} />
                                     </Tag>
                                 ))}
                             </HStack>
@@ -268,15 +287,6 @@ export function GroupHabitCreationPage(props: { currentUser: User | undefined })
                         </FormControl>
 
                         <FormControl mb={4}>
-                            <FormLabel>Цель</FormLabel>
-                            <Input
-                                placeholder="Введите цель"
-                                value={customHabit.goal}
-                                onChange={(e) => handleInputChange("goal", e.target.value)}
-                            />
-                        </FormControl>
-
-                        <FormControl mb={4}>
                             <FormLabel>Тип результата</FormLabel>
                             <Select
                                 value={customHabit.resultType}
@@ -286,6 +296,16 @@ export function GroupHabitCreationPage(props: { currentUser: User | undefined })
                                 <option value="Boolean">Да/Нет</option>
                                 <option value="Float">Числовой</option>
                             </Select>
+                        </FormControl>
+
+                        <FormControl mb={4}>
+                            <FormLabel>Цель</FormLabel>
+                            <Input
+                                placeholder="Введите цель"
+                                value={customHabit.goal}
+                                onChange={(e) => handleInputChange("goal", e.target.value)}
+                                isDisabled={customHabit.resultType !== "Float"}
+                            />
                         </FormControl>
 
                         <Button colorScheme="blue" onClick={handleCreateCustomHabit} isDisabled={!habitType}>
