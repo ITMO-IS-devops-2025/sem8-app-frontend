@@ -5,6 +5,7 @@ import {HabitController} from "../../controllers/HabitController";
 import {Link, useNavigate} from "react-router-dom";
 import {Habit} from "../../model/habit/Habit";
 import {UserController} from "../../controllers/UserController";
+import {ErrorResponse} from "../../controllers/BaseController";
 
 export function MainPage(props: { currentUser: User | undefined }) {
     const [habits, setHabits] = useState<Habit[]>([]);
@@ -14,7 +15,7 @@ export function MainPage(props: { currentUser: User | undefined }) {
     async function fetchHabits() {
         try {
             const response = await new UserController().getHabits();
-            if (response instanceof Error) {
+            if (response instanceof ErrorResponse) {
                 setError(true);
             } else if ("habits" in response) {
                 console.log("+", response)

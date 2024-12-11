@@ -1,15 +1,11 @@
-type UserDto = {
-    userId: string;
-    name: string;
-};
-
+import {User} from "@/model/user/User";
 
 export class Group {
     id: string;
     name: string;
-    participants: UserDto[];
+    participants: User[];
 
-    constructor(groupId: string, name: string, participants: UserDto[] = []) {
+    constructor(groupId: string, name: string, participants: User[] = []) {
         this.id = groupId;
         this.name = name;
         this.participants = participants;

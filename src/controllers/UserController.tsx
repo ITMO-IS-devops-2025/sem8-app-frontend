@@ -57,14 +57,19 @@ export class UserController extends BaseController {
     }
 
     async getStatistics( habitId : string){
-        let url = "users/habits" + habitId + "statistics";
+        let url = "users/habits/" + habitId + "/statistics";
         return await this.api<Statistic>(url);
     }
 
 
-    async changeUserPassword(id: string, prevPassword : string, newPassword : string) {
-        let url = "users/" + id + "/password";
-        return await this.api<User>(url, {prevPassword : prevPassword, newPassword : newPassword});
+    async changeUserPassword(prevPassword : string, newPassword : string) {
+        let url = "accounts/password";
+        return await this.api<any>(url, {prevPassword : prevPassword, newPassword : newPassword});
+    }
+
+    async changeUserName(newName: string) {
+        let url = "accounts/name";
+        return await this.api<any>(url, {newName : newName})
     }
 
     async getUsers (){

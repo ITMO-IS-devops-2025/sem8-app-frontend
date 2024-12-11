@@ -27,7 +27,7 @@ export function GroupPage(props: { currentUser: User | undefined }) {
     const [error, setError] = useState(false);
     const navigate = useNavigate();
     const [groupName, setGroupName] = useState<string>("");
-    const [participants, setParticipants] = useState<User[]>([]);
+    const [partLogins, setPartLogins] = useState<string[]>([]);
     const [newParticipantLogin, setNewParticipantLogin] = useState<string>("");
     const [addUserError, setAddUserError] = useState<string | null>(null);
     const [addUserSuccess, setAddUserSuccess] = useState<string | null>(null);
@@ -64,13 +64,16 @@ export function GroupPage(props: { currentUser: User | undefined }) {
                     // @ts-ignore
                     setPersonalHabits(personalHabitsResponse.habits);
                 }
+
             } catch {
                 setError(true);
             }
         }
 
         fetchGroupData();
-    }, [commonHabits, groupId, personalHabits]);
+        if (group) { setPartLogins(group.participants.map((it) => (it.login))) }
+
+    }, [groupId]);
 
     const handleLeaveGroup = async () => {
         if (!groupId) return;
@@ -106,11 +109,19 @@ export function GroupPage(props: { currentUser: User | undefined }) {
             return;
         }
 
+        if (userResponse.login in partLogins) {
+            setAddUserError("Такой пользователь уже есть.");
+            setAddUserSuccess(null);
+            return;
+        }
+
         // Добавляем пользователя во временный список участников
-        setParticipants([...participants, userResponse]);
+        setPartLogins([...partLogins, userResponse.login]);
         setAddUserSuccess(`Пользователь ${newParticipantLogin} успешно добавлен!`);
         setAddUserError(null);
         setNewParticipantLogin("");
+
+        await new GroupController().addUserToGroup(groupId!!, userResponse.id)
     };
 
     return (
@@ -128,12 +139,28 @@ export function GroupPage(props: { currentUser: User | undefined }) {
                     </Heading>
 
                     <List>
-                        {[...group.participants].map((user) => (
-                            <ListItem key={user.userId}>
-                                <Text>{user.name}</Text>
+                        {partLogins.map((user) => (
+                            <ListItem>
+                                <Text>user</Text>
                             </ListItem>
                         ))}
                     </List>
+
+                    <Heading size="sm" mt={4}>
+                        Добавить участников:
+                    </Heading>
+                    <FormControl mt={2}>
+                        <Input
+                            placeholder="Введите логин пользователя"
+                            value={newParticipantLogin}
+                            onChange={(e) => setNewParticipantLogin(e.target.value)}
+                        />
+                        <Button colorScheme="teal" mt={2} onClick={handleAddParticipant}>
+                            Добавить
+                        </Button>
+                        {addUserError && <Text color="red.500" mt={2}>{addUserError}</Text>}
+                        {addUserSuccess && <Text color="green.500" mt={2}>{addUserSuccess}</Text>}
+                    </FormControl>
 
                     <HStack spacing={4} mt={4}>
                         <Button colorScheme="teal" onClick={handleAddHabit}>
