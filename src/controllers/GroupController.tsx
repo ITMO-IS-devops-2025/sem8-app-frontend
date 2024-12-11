@@ -43,12 +43,12 @@ export class GroupController extends BaseController {
     }
 
     async getGroupCommonHabitById (groupId : string, habitId : string ){
-        let url = "groups/" + groupId + "/common-habits" + habitId;
+        let url = "groups/" + groupId + "/common-habits/" + habitId;
         return await this.api<Habit>(url);
     }
 
     async getGroupPersonalHabitById (groupId : string, habitId : string ){
-        let url = "groups/" + groupId + "/personal-habits" + habitId;
+        let url = "groups/" + groupId + "/personal-habits/" + habitId;
         return await this.api<GroupHabitPersonal>(url);
     }
 
