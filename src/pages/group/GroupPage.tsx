@@ -98,6 +98,11 @@ export function GroupPage(props: { currentUser: User | undefined }) {
 
     const handleAddParticipant = async () => {
         if (!newParticipantLogin) return;
+        if (newParticipantLogin in partLogins) {
+            setAddUserError("Такой пользователь уже есть.");
+            setAddUserSuccess(null);
+            return;
+        }
 
         const userController = new UserController();
 
@@ -109,14 +114,8 @@ export function GroupPage(props: { currentUser: User | undefined }) {
             return;
         }
 
-        if (userResponse.login in partLogins) {
-            setAddUserError("Такой пользователь уже есть.");
-            setAddUserSuccess(null);
-            return;
-        }
-
         // Добавляем пользователя во временный список участников
-        setPartLogins([...partLogins, userResponse.login]);
+        setPartLogins([...partLogins, newParticipantLogin]);
         setAddUserSuccess(`Пользователь ${newParticipantLogin} успешно добавлен!`);
         setAddUserError(null);
         setNewParticipantLogin("");
