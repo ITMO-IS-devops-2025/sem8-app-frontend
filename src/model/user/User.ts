@@ -1,9 +1,11 @@
 export class User {
-    id?: string
+    id: string
     login: string
+    name: string
 
-    constructor(id: string | undefined, login: string) {
+    constructor(id: string, login: string, name: string = "") {
         this.id = id
         this.login = login
+        this.name = name
     }
 }

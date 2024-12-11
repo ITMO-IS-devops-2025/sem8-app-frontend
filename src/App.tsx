@@ -5,15 +5,19 @@ import {User} from "./model/user/User";
 import {ChakraProvider, Spinner} from "@chakra-ui/react";
 import {Header} from "./components/Header";
 import {Footer} from "./components/Footer";
-import {MainPage} from "./pages/MainPage";
-import {SignInPage} from "./pages/SignInPage";
-import {SignUpPage} from "./pages/SignUpPage";
-import {SignOutPage} from "./pages/SignOutPage";
-import {GroupPage} from "./pages/GroupPage";
-import {GroupListPage} from "./pages/GroupListPage";
-import {GroupCreationPage} from "./pages/GroupCreationPage";
-import {HabitPage} from "./pages/HabitPage";
-import {HabitCreationPage} from "./pages/HabitCreationPage";
+import {MainPage} from "./pages/user/MainPage";
+import {SignInPage} from "./pages/auth/SignInPage";
+import {SignUpPage} from "./pages/auth/SignUpPage";
+import {SignOutPage} from "./pages/auth/SignOutPage";
+import {GroupPage} from "./pages/group/GroupPage";
+import {GroupListPage} from "./pages/group/GroupListPage";
+import {GroupCreationPage} from "./pages/group/GroupCreationPage";
+import {UserHabitPage} from "./pages/user/UserHabitPage";
+import {GroupPersonalHabitPage} from "./pages/group/group-habits/GroupPersonalHabitPage";
+import {UserHabitCreationPage} from "./pages/user/UserHabitCreationPage";
+import {GroupHabitCreationPage} from "./pages/group/group-habits/GroupHabitCreationPage";
+import {GroupCommonHabitPage} from "./pages/group/group-habits/GroupCommonHabitPage";
+
 
 function App() {
   // let [loading, setLoading] = useState(true)
@@ -58,13 +62,25 @@ function App() {
           element: <GroupCreationPage currentUser={currentUser} />,
         },
         {
-          path: "/habit/:habitId",
-          element: <HabitPage currentUser={currentUser} />,
+          path: "/user-habit/:habitId",
+          element: <UserHabitPage currentUser={currentUser} />,
         },
         {
-          path: "/habit-creation",
-          element: <HabitCreationPage currentUser={currentUser} />,
+          path: "/group/:groupId/group-common-habit/:habitId",
+          element: <GroupCommonHabitPage currentUser={currentUser} />,
         },
+        {
+          path: "/group/:groupId/group-personal-habit/:habitId",
+          element: <GroupPersonalHabitPage currentUser={currentUser} />,
+        },
+        {
+          path: "/user-habit-creation",
+          element: <UserHabitCreationPage currentUser={currentUser} />,
+        },
+        {
+          path: "/group/:groupId/group-habit-creation",
+          element: <GroupHabitCreationPage currentUser={currentUser} />,
+        }
       ]
     },
   ]);

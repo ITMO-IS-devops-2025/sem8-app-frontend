@@ -9,13 +9,13 @@ export class ErrorResponse {
 export class BaseController {
 
     async api<T>(url: string, body: any = null, method: string = "GET"): Promise<T | ErrorResponse> {
-        let response = await this.request("/api/v1/" + url, body, method)
+        let response = await this.request("/api/v1.1/" + url, body, method)
         let text = await response.text();
         if (text == ""){
             text = "{}"
         }
         return response.ok ? JSON.parse(text) as T :
-            new ErrorResponse(response.status, await response.text())
+            new ErrorResponse(response.status, response.statusText)
     }
 
     async request(url: string, body: any, method: string) {
@@ -34,7 +34,6 @@ export class BaseController {
         if (body !== null) {
             options.body = JSON.stringify(body);
         }
-        console.log(options.body);
         return await fetch(url, options);
     }
 
