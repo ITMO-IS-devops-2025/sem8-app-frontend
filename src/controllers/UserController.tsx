@@ -57,7 +57,7 @@ export class UserController extends BaseController {
     }
 
     async getStatistics( habitId : string){
-        let url = "users/habits" + habitId + "statistics";
+        let url = "users/habits/" + habitId + "/statistics";
         return await this.api<Statistic>(url);
     }
 

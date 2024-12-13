@@ -22,6 +22,7 @@ export function GroupCreationPage(props: { currentUser: User | undefined }) {
 
     const [groupName, setGroupName] = useState<string>("");
     const [participants, setParticipants] = useState<User[]>([]);
+    const [partLogins, setPartLogins] = useState<string[]>([])
     const [newParticipantLogin, setNewParticipantLogin] = useState<string>("");
     const [addUserError, setAddUserError] = useState<string | null>(null);
     const [addUserSuccess, setAddUserSuccess] = useState<string | null>(null);
@@ -49,7 +50,6 @@ export function GroupCreationPage(props: { currentUser: User | undefined }) {
         const participantIds = participants.map(it => it.id)
         for (const participantId of participantIds) {
             await groupController.addUserToGroup(response.id, participantId);
-            console.log(participantId)
         }
 
         navigate(`/group/${response.id}`);
@@ -57,6 +57,11 @@ export function GroupCreationPage(props: { currentUser: User | undefined }) {
 
     const handleAddParticipant = async () => {
         if (!newParticipantLogin) return;
+        if (newParticipantLogin in partLogins) {
+            setAddUserError("Такой пользователь уже есть.");
+            setAddUserSuccess(null);
+            return;
+        }
 
         const userController = new UserController();
 
@@ -70,6 +75,7 @@ export function GroupCreationPage(props: { currentUser: User | undefined }) {
 
         // Добавляем пользователя во временный список участников
         setParticipants([...participants, userResponse]);
+        setPartLogins([...partLogins, newParticipantLogin])
         setAddUserSuccess(`Пользователь ${newParticipantLogin} успешно добавлен!`);
         setAddUserError(null);
         setNewParticipantLogin("");
@@ -112,7 +118,7 @@ export function GroupCreationPage(props: { currentUser: User | undefined }) {
                 </Heading>
                 <List spacing={3} mt={2}>
                     {participants.map((participant) => (
-                        <ListItem key={participant.id}>{participant.login}</ListItem>
+                        <ListItem key={participant.id}>{participant.name}</ListItem>
                     ))}
                 </List>
 

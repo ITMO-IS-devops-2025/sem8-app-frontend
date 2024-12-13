@@ -96,8 +96,10 @@ export function GroupHabitCreationPage(props: { currentUser: User | undefined })
 
             if (response instanceof ErrorResponse) {
                 setError(true);
-            } else if ("id" in response) {
-                navigate(`/user-habit/${response.id}`);
+            } else if ("id" in response && response.resultType == 'personal') {
+                navigate(`/group/${groupId}/group-personal-habit/${response.id}`);
+            } else if ("id" in response && response.resultType == 'group') {
+                navigate(`/group/${groupId}/group-common-habit/${response.id}`);
             }
         } catch (err) {
             setError(true);
@@ -133,8 +135,10 @@ export function GroupHabitCreationPage(props: { currentUser: User | undefined })
                     );
             if (response instanceof ErrorResponse) {
                 setError(true);
-            } else if ("id" in response) {
-                navigate(`/user-habit/${response.id}`);
+            } else if ("id" in response && response.resultType == 'personal') {
+                navigate(`/group/${groupId}/group-personal-habit/${response.id}`);
+            } else if ("id" in response && response.resultType == 'group') {
+                navigate(`/group/${groupId}/group-common-habit/${response.id}`);
             }
         } catch (err) {
             setError(true);

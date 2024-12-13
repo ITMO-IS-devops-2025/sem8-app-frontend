@@ -42,7 +42,7 @@ export function GroupPersonalHabitPage(props: { currentUser: User | undefined })
         }
 
         fetchHabitData();
-    }, [habitId]);
+    }, [groupId, habitId]);
 
     const handleValueChange = (markId: string, value: string | null) => {
         setMarkValues((prev) => ({...prev, [markId]: value}));
