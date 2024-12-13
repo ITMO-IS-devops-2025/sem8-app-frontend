@@ -20,6 +20,7 @@ export function SignUpPage(props: { currentUser: User | undefined; setCurrentUse
 
         let response = await new AuthController().signUp(signUpRequest)
         if (response instanceof ErrorResponse) {
+            console.log(response.text)
             setError(true)
         } else {
             navigate('/signIn')

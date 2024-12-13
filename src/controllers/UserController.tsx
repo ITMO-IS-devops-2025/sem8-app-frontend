@@ -62,9 +62,14 @@ export class UserController extends BaseController {
     }
 
 
-    async changeUserPassword(id: string, prevPassword : string, newPassword : string) {
-        let url = "users/" + id + "/password";
-        return await this.api<User>(url, {prevPassword : prevPassword, newPassword : newPassword});
+    async changeUserPassword(prevPassword : string, newPassword : string) {
+        let url = "accounts/password";
+        return await this.api<any>(url, {prevPassword : prevPassword, newPassword : newPassword}, "POST");
+    }
+
+    async changeUserName(newName: string) {
+        let url = "accounts/name";
+        return await this.api<any>(url, {newName : newName}, "PUT")
     }
 
     async getUsers (){

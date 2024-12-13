@@ -13,6 +13,7 @@ import {
     InputGroup,
     InputRightElement
 } from "@chakra-ui/react";
+import {UserController} from "../../controllers/UserController";
 
 export function SignInPage(props: { currentUser: User | undefined; setCurrentUser: (newPersonData: User) => void; }) {
     let [error, setError] = useState(false)
@@ -33,12 +34,19 @@ export function SignInPage(props: { currentUser: User | undefined; setCurrentUse
 
         let response = await new AuthController().signIn(signInRequest)
         if (response instanceof ErrorResponse) {
-            setError(true)
+            setError(true);
         } else {
-            let user = new User(response.userId, signInRequest.login)
-            props.setCurrentUser(user)
-            // localStorage.setItem("token", response.token)
-            navigate('/')
+            //console.log(response.userId)
+            let user = await new UserController().getUserById(response.id);
+            if (user instanceof ErrorResponse){
+                setError(true);
+            }
+            else {
+                user.id = response.id;
+                props.setCurrentUser(user);
+                // localStorage.setItem("token", response.token)
+                navigate('/');
+            }
         }
 
     }
