@@ -17,6 +17,7 @@ import {GroupPersonalHabitPage} from "./pages/group/group-habits/GroupPersonalHa
 import {UserHabitCreationPage} from "./pages/user/UserHabitCreationPage";
 import {GroupHabitCreationPage} from "./pages/group/group-habits/GroupHabitCreationPage";
 import {GroupCommonHabitPage} from "./pages/group/group-habits/GroupCommonHabitPage";
+import {AccountPage} from "./pages/user/AccountPage";
 
 
 function App() {
@@ -48,6 +49,10 @@ function App() {
         {
           path: "/signOut",
           element: <SignOutPage currentUser={currentUser} setCurrentUser={setCurrentUser}/>,
+        },
+        {
+          path: "/account",
+          element: <AccountPage currentUser={currentUser}/>,
         },
         {
           path: "/group/:groupId",

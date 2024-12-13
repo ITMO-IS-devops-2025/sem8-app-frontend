@@ -42,6 +42,7 @@ export function Header(props: { currentUser: User | undefined }) {
                     <NavLink to={"/groups"}><Button color='#D53F8C'>Группы</Button></NavLink>
                 </ButtonGroup>
                 <ButtonGroup gap='4'>
+                    <NavLink to={"/account"}><Button color='#D53F8C'>{props.currentUser.name}</Button></NavLink>
                     <NavLink to={"/signOut"}><Button color='#D53F8C'>Выйти</Button></NavLink>
                 </ButtonGroup>
             </Box>
