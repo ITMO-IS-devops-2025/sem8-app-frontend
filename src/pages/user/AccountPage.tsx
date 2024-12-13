@@ -90,7 +90,7 @@ export function AccountPage(props: { currentUser: User | undefined }) {
                 <Heading size="md" mt={4}>
                     Поменять имя
                 </Heading>
-                <FormControl mb={4}>
+                <FormControl mb={4} width={'30%'}>
                     <FormLabel>Новое имя</FormLabel>
                     <Input
                         placeholder="Введите новое имя"
@@ -106,7 +106,7 @@ export function AccountPage(props: { currentUser: User | undefined }) {
                 <Heading size="md" mt={8}>
                     Поменять пароль
                 </Heading>
-                <FormControl mb={4}>
+                <FormControl mb={4} width={'30%'}>
                     <FormLabel>Старый пароль</FormLabel>
                     <InputGroup size='md'>
                         <Input
@@ -122,7 +122,7 @@ export function AccountPage(props: { currentUser: User | undefined }) {
                         </InputRightElement>
                     </InputGroup>
                 </FormControl>
-                <FormControl mb={4}>
+                <FormControl mb={4} width={'30%'}>
                     <FormLabel>Новый пароль</FormLabel>
                     <InputGroup size='md'>
                         <Input

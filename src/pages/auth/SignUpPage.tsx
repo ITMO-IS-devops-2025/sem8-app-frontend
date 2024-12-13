@@ -30,15 +30,15 @@ export function SignUpPage(props: { currentUser: User | undefined; setCurrentUse
     return <div className="form">
         <Box mt={4} px={6}>
             <Form onSubmit={handleForm}>
-                <FormControl isRequired>
+                <FormControl isRequired width={'30%'}>
                     <FormLabel>Введите ваше имя: </FormLabel>
                     <Input type='text' name="name"/>
                 </FormControl>
-                <FormControl isRequired mt={4}>
+                <FormControl isRequired mt={4} width={'30%'}>
                     <FormLabel>Введите ваш юзернейм: </FormLabel>
                     <Input type='text' name="login"/>
                 </FormControl>
-                <FormControl isRequired mt={4}>
+                <FormControl isRequired mt={4} width={'30%'}>
                     <FormLabel>Введите ваш пароль: </FormLabel>
                     <Input type='text' name="password"/>
                 </FormControl>

@@ -147,10 +147,10 @@ export function GroupPage(props: { currentUser: User | undefined }) {
                         ))}
                     </List>
 
-                    <Heading size="sm" mt={4}>
+                    <Heading size="sm" mt={2}>
                         Добавить участников:
                     </Heading>
-                    <FormControl mt={2}>
+                    <FormControl mt={2} width={'30%'}>
                         <Input
                             placeholder="Введите логин пользователя"
                             value={newParticipantLogin}
@@ -168,13 +168,13 @@ export function GroupPage(props: { currentUser: User | undefined }) {
                         {addUserSuccess && <Text color="green.500" mt={2}>{addUserSuccess}</Text>}
                     </FormControl>
 
-                    <Flex mt={6} gap={6}>
+                    <Box mt = {4} display="flex" gap={8}>
                         {/* Общие привычки */}
-                        <VStack align="start" w="50%">
+                        <Box flex="1">
                             <Heading as="h2" size="md">
                                 Общие привычки
                             </Heading>
-                            <List spacing={3}>
+                            <List spacing={3} mt = {4}>
                                 {[...commonHabits].map((habit) => (
                                     <ListItem
                                         key={habit.id}
@@ -195,14 +195,14 @@ export function GroupPage(props: { currentUser: User | undefined }) {
                                     </ListItem>
                                 ))}
                             </List>
-                        </VStack>
+                        </Box>
 
                         {/* Индивидуальные привычки */}
-                        <VStack align="start" w="50%">
+                        <Box flex="1">
                             <Heading as="h2" size="md">
                                 Индивидуальные привычки
                             </Heading>
-                            <List spacing={3}>
+                            <List spacing={3} mt = {4}>
                                 {[...personalHabits].map((habit) => (
                                     <ListItem
                                         key={habit.id}
@@ -223,8 +223,8 @@ export function GroupPage(props: { currentUser: User | undefined }) {
                                     </ListItem>
                                 ))}
                             </List>
-                        </VStack>
-                    </Flex>
+                        </Box>
+                    </Box>
 
                     <Button colorScheme="teal" onClick={handleAddHabit} mt={4}>
                         Создать привычку

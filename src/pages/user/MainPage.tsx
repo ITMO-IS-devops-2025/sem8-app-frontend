@@ -61,6 +61,7 @@ export function MainPage(props: { currentUser: User | undefined }) {
                         <List spacing={3} mt={4}>
                             {habits.map((habit) => (
                                 <ListItem
+                                    width={'30%'}
                                     key={habit.id}
                                     p={2}
                                     bg="gray.50"

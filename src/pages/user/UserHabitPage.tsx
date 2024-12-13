@@ -81,14 +81,14 @@ export function UserHabitPage(props: { currentUser: User | undefined }) {
 
             {habit && (
                 <Box px={6}>
-                    <Heading as="h1">Привычка: {habit.name}</Heading>
+                    <Heading as="h1">{habit.name}</Heading>
                     <Text fontSize="xl">Периодичность: {habit.periodicity.value} {habit.periodicity.type}</Text>
                     <Text fontSize="xl">Цель: {habit.goal}</Text>
                     <Text fontSize="xl">Тип результата: {habit.resultType}</Text>
                     {habit.isTemplated && statistics !== null && (
-                        <Box mt={4} p={4} borderWidth="1px" borderRadius="lg">
+                        <Box mt={4} p={4}>
                             <Heading as="h2" size="md">Статистика:</Heading>
-                            <Text fontSize="lg">Доля (чего-то я хз): {statistics.value}</Text>
+                            <Text fontSize="lg">Вы справляетесть успешнее, чем {statistics.value}% пользователей!</Text>
                         </Box>
                     )}
                     <Heading as="h2" size="mt" mt={4}>Оценки:</Heading>
