@@ -5,7 +5,7 @@ import {SignUpRequest} from "../../model/user/auth/SignUpRequest";
 import {AuthController} from "../../controllers/AuthController";
 import {ErrorResponse} from "../../controllers/BaseController";
 import {Form} from "react-router-dom";
-import {Button, FormControl, FormLabel, Input} from "@chakra-ui/react";
+import {Box, Button, FormControl, FormLabel, Input} from "@chakra-ui/react";
 
 export function SignUpPage(props: { currentUser: User | undefined; setCurrentUser: (newPersonData: User) => void; }) {
     let [error, setError] = useState(false)
@@ -27,24 +27,26 @@ export function SignUpPage(props: { currentUser: User | undefined; setCurrentUse
         }
     }
 
-    return <div className="form" >
-        <Form onSubmit={handleForm}>
-            <FormControl isRequired >
-                <FormLabel >Введите ваше имя: </FormLabel>
-                <Input type='text' name="name"/>
-            </FormControl>
-            <FormControl isRequired>
-                <FormLabel>Введите ваш юзернейм: </FormLabel>
-                <Input type='text' name="login"/>
-            </FormControl>
-            <FormControl isRequired>
-                <FormLabel>Введите ваш пароль: </FormLabel>
-                <Input type='text' name="password"/>
-            </FormControl>
-            <Button colorScheme="pink" type={"submit"} >Зарегистрироваться</Button>
-            { error? <div className="errorMessage">
-                Пользователь с таким юзернеймом уже есть! извините!!
-            </div> : ""}
-        </Form>
+    return <div className="form">
+        <Box mt={4} px={6}>
+            <Form onSubmit={handleForm}>
+                <FormControl isRequired>
+                    <FormLabel>Введите ваше имя: </FormLabel>
+                    <Input type='text' name="name"/>
+                </FormControl>
+                <FormControl isRequired mt={4}>
+                    <FormLabel>Введите ваш юзернейм: </FormLabel>
+                    <Input type='text' name="login"/>
+                </FormControl>
+                <FormControl isRequired mt={4}>
+                    <FormLabel>Введите ваш пароль: </FormLabel>
+                    <Input type='text' name="password"/>
+                </FormControl>
+                <Button colorScheme="pink" type={"submit"} mt={4}>Зарегистрироваться</Button>
+                {error ? <div className="errorMessage">
+                    Пользователь с таким юзернеймом уже есть! извините!!
+                </div> : ""}
+            </Form>
+        </Box>
     </div>
 }

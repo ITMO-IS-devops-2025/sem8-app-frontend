@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from "react";
-import { useParams, useNavigate } from "react-router-dom";
+import React, {useState, useEffect} from "react";
+import {useParams, useNavigate, Link} from "react-router-dom";
 import {
     Box,
     Heading,
@@ -11,16 +11,16 @@ import {
     HStack,
     Text, FormControl, Input,
 } from "@chakra-ui/react";
-import { User } from "../../model/user/User";
-import { Group } from "../../model/group/Group";
-import { Habit } from "../../model/habit/Habit";
-import { GroupHabitPersonal } from "../../model/habit/GroupHabitPersonal";
-import { GroupController } from "../../controllers/GroupController";
+import {User} from "../../model/user/User";
+import {Group} from "../../model/group/Group";
+import {Habit} from "../../model/habit/Habit";
+import {GroupHabitPersonal} from "../../model/habit/GroupHabitPersonal";
+import {GroupController} from "../../controllers/GroupController";
 import {ErrorResponse} from "../../controllers/BaseController";
 import {UserController} from "../../controllers/UserController";
 
 export function GroupPage(props: { currentUser: User | undefined }) {
-    const { groupId } = useParams<{ groupId: string }>();
+    const {groupId} = useParams<{ groupId: string }>();
     const [group, setGroup] = useState<Group | null>(null);
     const [commonHabits, setCommonHabits] = useState<Habit[]>([]);
     const [personalHabits, setPersonalHabits] = useState<GroupHabitPersonal[]>([]);
@@ -71,7 +71,9 @@ export function GroupPage(props: { currentUser: User | undefined }) {
         }
 
         fetchGroupData();
-        if (group) { setPartLogins(group.participants.map((it) => (it.login))) }
+        if (group) {
+            setPartLogins(group.participants.map((it) => (it.login)))
+        }
 
     }, [groupId]);
 
@@ -154,24 +156,17 @@ export function GroupPage(props: { currentUser: User | undefined }) {
                             value={newParticipantLogin}
                             onChange={(e) => setNewParticipantLogin(e.target.value)}
                         />
-                        <Button colorScheme="teal" mt={2} onClick={handleAddParticipant}>
-                            Добавить
-                        </Button>
+                        <HStack spacing={4} mt={4}>
+                            <Button colorScheme="teal" onClick={handleAddParticipant}>
+                                Добавить
+                            </Button>
+                            <Button colorScheme="red" onClick={handleLeaveGroup}>
+                                Выйти из группы
+                            </Button>
+                        </HStack>
                         {addUserError && <Text color="red.500" mt={2}>{addUserError}</Text>}
                         {addUserSuccess && <Text color="green.500" mt={2}>{addUserSuccess}</Text>}
                     </FormControl>
-
-                    <HStack spacing={4} mt={4}>
-                        <Button colorScheme="teal" onClick={handleAddHabit}>
-                            Создать привычку
-                        </Button>
-
-                        <Button colorScheme="red" onClick={handleLeaveGroup}>
-                            Выйти из группы
-                        </Button>
-                    </HStack>
-
-
 
                     <Flex mt={6} gap={6}>
                         {/* Общие привычки */}
@@ -183,9 +178,20 @@ export function GroupPage(props: { currentUser: User | undefined }) {
                                 {[...commonHabits].map((habit) => (
                                     <ListItem
                                         key={habit.id}
+                                        p={2}
+                                        bg="gray.50"
+                                        borderRadius="md"
+                                        cursor="pointer"
                                         onClick={() => navigate(`/group/${groupId}/group-common-habit/${habit.id}`)}
                                     >
-                                        <Text>{habit.name}</Text>
+                                        <strong>{habit.name}</strong>
+                                        <Link to={`/group/${habit.id.toString()}`}>
+                                            <Box mt={1}>
+                                                <div>Периодичность: {habit.periodicity.value} {habit.periodicity.type}</div>
+                                                <div>Цель: {habit.goal}</div>
+                                                <div>Тип результата: {habit.resultType}</div>
+                                            </Box>
+                                        </Link>
                                     </ListItem>
                                 ))}
                             </List>
@@ -200,14 +206,29 @@ export function GroupPage(props: { currentUser: User | undefined }) {
                                 {[...personalHabits].map((habit) => (
                                     <ListItem
                                         key={habit.id}
+                                        p={2}
+                                        bg="gray.50"
+                                        borderRadius="md"
+                                        cursor="pointer"
                                         onClick={() => navigate(`/group/${groupId}/group-personal-habit/${habit.id}`)}
                                     >
-                                        <Text>{habit.name}</Text>
+                                        <strong>{habit.name}</strong>
+                                        <Link to={`/group/${habit.id.toString()}`}>
+                                            <Box mt={1}>
+                                                <div>Периодичность: {habit.periodicity.value} {habit.periodicity.type}</div>
+                                                <div>Цель: {habit.goal}</div>
+                                                <div>Тип результата: {habit.resultType}</div>
+                                            </Box>
+                                        </Link>
                                     </ListItem>
                                 ))}
                             </List>
                         </VStack>
                     </Flex>
+
+                    <Button colorScheme="teal" onClick={handleAddHabit} mt={4}>
+                        Создать привычку
+                    </Button>
                 </Box>
             )}
         </div>

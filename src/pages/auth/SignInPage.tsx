@@ -6,6 +6,7 @@ import {AuthController} from "../../controllers/AuthController";
 import {ErrorResponse} from "../../controllers/BaseController";
 import {Form} from "react-router-dom";
 import {
+    Box,
     Button,
     FormControl,
     FormLabel,
@@ -38,10 +39,9 @@ export function SignInPage(props: { currentUser: User | undefined; setCurrentUse
         } else {
             //console.log(response.userId)
             let user = await new UserController().getUserById(response.id);
-            if (user instanceof ErrorResponse){
+            if (user instanceof ErrorResponse) {
                 setError(true);
-            }
-            else {
+            } else {
                 user.id = response.id;
                 props.setCurrentUser(user);
                 // localStorage.setItem("token", response.token)
@@ -52,30 +52,32 @@ export function SignInPage(props: { currentUser: User | undefined; setCurrentUse
     }
 
     return <div>
-        <Form onSubmit={handleForm}>
-            <FormControl isRequired>
-                <FormLabel>Введите ваш юзернейм: </FormLabel>
-                <Input type='text' name="login"/>
-            </FormControl>
-            <FormControl isRequired>
-                <FormLabel>Введите ваш пароль: </FormLabel>
-                <InputGroup size='md'>
-                    <Input
-                        pr='4.5rem'
-                        type={show ? 'text' : 'password'}
-                        name="password"
-                    />
-                    <InputRightElement width='4.5rem'>
-                        <Button h='1.75rem' size='sm' onClick={handleClick}>
-                            {show ? 'Hide' : 'Show'}
-                        </Button>
-                    </InputRightElement>
-                </InputGroup>
-            </FormControl>
-            <Button colorScheme="pink" type={"submit"}>Войти</Button>
-            { error? <div className="errorMessage">
-                Неправильное имя пользователя или пароль!!
-            </div> : ""}
-        </Form>
+        <Box mt={4} px={6}>
+            <Form onSubmit={handleForm}>
+                <FormControl isRequired>
+                    <FormLabel>Введите ваш юзернейм: </FormLabel>
+                    <Input type='text' name="login"/>
+                </FormControl>
+                <FormControl isRequired mt={4}>
+                    <FormLabel>Введите ваш пароль: </FormLabel>
+                    <InputGroup size='md'>
+                        <Input
+                            pr='4.5rem'
+                            type={show ? 'text' : 'password'}
+                            name="password"
+                        />
+                        <InputRightElement width='4.5rem'>
+                            <Button h='1.75rem' size='sm' onClick={handleClick}>
+                                {show ? 'Hide' : 'Show'}
+                            </Button>
+                        </InputRightElement>
+                    </InputGroup>
+                </FormControl>
+                <Button colorScheme="pink" type={"submit"} mt={4}>Войти</Button>
+                {error ? <div className="errorMessage">
+                    Неправильное имя пользователя или пароль!!
+                </div> : ""}
+            </Form>
+        </Box>
     </div>
 }
