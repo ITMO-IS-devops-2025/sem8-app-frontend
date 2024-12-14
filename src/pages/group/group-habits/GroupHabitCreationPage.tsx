@@ -96,9 +96,9 @@ export function GroupHabitCreationPage(props: { currentUser: User | undefined })
 
             if (response instanceof ErrorResponse) {
                 setError(true);
-            } else if ("id" in response && response.resultType == 'personal') {
+            } else if (habitType == 'personal') {
                 navigate(`/group/${groupId}/group-personal-habit/${response.id}`);
-            } else if ("id" in response && response.resultType == 'group') {
+            } else if (habitType == 'group') {
                 navigate(`/group/${groupId}/group-common-habit/${response.id}`);
             }
         } catch (err) {
@@ -135,9 +135,9 @@ export function GroupHabitCreationPage(props: { currentUser: User | undefined })
                     );
             if (response instanceof ErrorResponse) {
                 setError(true);
-            } else if ("id" in response && response.resultType == 'personal') {
+            } else if (habitType == 'personal') {
                 navigate(`/group/${groupId}/group-personal-habit/${response.id}`);
-            } else if ("id" in response && response.resultType == 'group') {
+            } else if (habitType == 'group') {
                 navigate(`/group/${groupId}/group-common-habit/${response.id}`);
             }
         } catch (err) {

@@ -43,7 +43,7 @@ export function MainPage(props: { currentUser: User | undefined }) {
     if (props.currentUser === undefined) {
         return (
             <div>
-                <Heading>Регистрируйся и присоединяйся к панпипе!</Heading>
+                <Heading px={6}>Регистрируйся и присоединяйся к панпипе!</Heading>
             </div>
         );
     }
