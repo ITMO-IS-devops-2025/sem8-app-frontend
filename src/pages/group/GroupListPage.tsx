@@ -10,23 +10,33 @@ export function GroupListPage(props: { currentUser: User | undefined }) {
     const [groups, setGroups] = useState<Group[]>([]);
     const [error, setError] = useState(false);
 
-    useEffect(() => {
-        async function fetchGroups() {
-            try {
-                const response = await new GroupController().getGroups();
-                if (response instanceof ErrorResponse) {
-                    setError(true);
-                } else if ("groups" in response) {
-                    // @ts-ignore
-                    setGroups(response.groups);
-                }
-            } catch (err) {
+    async function fetchGroups() {
+        try {
+            const response = await new GroupController().getGroups();
+            if (response instanceof ErrorResponse) {
                 setError(true);
+            } else if ("groups" in response) {
+                // @ts-ignore
+                setGroups(response.groups);
             }
+        } catch (err) {
+            setError(true);
         }
+    }
 
-        fetchGroups();
-    }, []);
+    useEffect(() => {
+        if (props.currentUser) {
+            fetchGroups();
+        }
+    }, [props.currentUser]);
+
+    if (props.currentUser === undefined) {
+        return (
+            <div>
+                <Heading px={6}>Регистрируйся и присоединяйся к панпипе!</Heading>
+            </div>
+        );
+    }
 
     return (
         <Box mt={4} px={6}>
