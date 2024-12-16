@@ -33,50 +33,45 @@ export function GroupPage(props: { currentUser: User | undefined }) {
     const [addUserError, setAddUserError] = useState<string | null>(null);
     const [addUserSuccess, setAddUserSuccess] = useState<string | null>(null);
 
-    useEffect(() => {
-        async function fetchGroupData() {
-            if (!groupId) return;
+    async function fetchGroupData() {
+        if (!groupId) return;
 
-            try {
-                const groupController = new GroupController();
+        try {
+            const groupController = new GroupController();
 
-                // Загружаем данные группы
-                const groupResponse = await groupController.getGroupById(groupId);
-                if (groupResponse instanceof ErrorResponse) {
-                    setError(true);
-                } else {
-                    setGroup(groupResponse);
-                }
-
-                // Загружаем общие привычки
-                const commonHabitsResponse = await groupController.getGroupCommonHabits(groupId);
-                if (commonHabitsResponse instanceof ErrorResponse) {
-                    setError(true);
-                } else if ("habits" in commonHabitsResponse) {
-                    // @ts-ignore
-                    setCommonHabits(commonHabitsResponse.habits);
-                }
-
-                // Загружаем индивидуальные привычки
-                const personalHabitsResponse = await groupController.getGroupPersonalHabits(groupId);
-                if (personalHabitsResponse instanceof ErrorResponse) {
-                    setError(true);
-                } else if ("habits" in personalHabitsResponse) {
-                    // @ts-ignore
-                    setPersonalHabits(personalHabitsResponse.habits);
-                }
-
-            } catch {
+            // Загружаем данные группы
+            const groupResponse = await groupController.getGroupById(groupId);
+            if (groupResponse instanceof ErrorResponse) {
                 setError(true);
+            } else {
+                setGroup(groupResponse);
             }
-        }
 
+            // Загружаем общие привычки
+            const commonHabitsResponse = await groupController.getGroupCommonHabits(groupId);
+            if (commonHabitsResponse instanceof ErrorResponse) {
+                setError(true);
+            } else if ("habits" in commonHabitsResponse) {
+                // @ts-ignore
+                setCommonHabits(commonHabitsResponse.habits);
+            }
+
+            // Загружаем индивидуальные привычки
+            const personalHabitsResponse = await groupController.getGroupPersonalHabits(groupId);
+            if (personalHabitsResponse instanceof ErrorResponse) {
+                setError(true);
+            } else if ("habits" in personalHabitsResponse) {
+                // @ts-ignore
+                setPersonalHabits(personalHabitsResponse.habits);
+            }
+
+        } catch {
+            setError(true);
+        }
+    }
+
+    useEffect(() => {
         fetchGroupData();
-
-        if (group) {
-            setParticipant(group.participants)
-        }
-
     }, [groupId]);
 
     const handleLeaveGroup = async () => {
@@ -141,9 +136,16 @@ export function GroupPage(props: { currentUser: User | undefined }) {
                     </Heading>
 
                     <List>
+                        {group.participants.map((participant) => (
+                            <ListItem>
+                                <Text>{participant.login}</Text>
+                            </ListItem>
+                        ))}
+                    </List>
+                    <List>
                         {participants.map((participant) => (
                             <ListItem>
-                                <Text>{participant.name}</Text>
+                                <Text>{participant.login}</Text>
                             </ListItem>
                         ))}
                     </List>
