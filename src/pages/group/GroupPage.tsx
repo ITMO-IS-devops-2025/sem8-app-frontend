@@ -18,6 +18,7 @@ import {GroupHabitPersonal} from "../../model/habit/GroupHabitPersonal";
 import {GroupController} from "../../controllers/GroupController";
 import {ErrorResponse} from "../../controllers/BaseController";
 import {UserController} from "../../controllers/UserController";
+import {NavigateOnLogout} from "../../utils/auth/NavigateOnLogin";
 
 export function GroupPage(props: { currentUser: User | undefined }) {
     const {groupId} = useParams<{ groupId: string }>();
@@ -25,7 +26,7 @@ export function GroupPage(props: { currentUser: User | undefined }) {
     const [commonHabits, setCommonHabits] = useState<Habit[]>([]);
     const [personalHabits, setPersonalHabits] = useState<GroupHabitPersonal[]>([]);
     const [error, setError] = useState(false);
-    const navigate = useNavigate();
+    let navigate = NavigateOnLogout(props.currentUser)
     const [groupName, setGroupName] = useState<string>("");
     const [participants, setParticipant] = useState<User[]>([]);
     const [newParticipantLogin, setNewParticipantLogin] = useState<string>("");

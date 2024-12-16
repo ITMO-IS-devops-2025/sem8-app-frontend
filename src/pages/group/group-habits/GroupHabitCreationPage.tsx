@@ -23,13 +23,14 @@ import {User} from "../../../model/user/User";
 import {HabitTemplate} from "../../../model/habit/HabitTemplate";
 import {HabitController} from "../../../controllers/HabitController";
 import {ErrorResponse} from "../../../controllers/BaseController";
+import {NavigateOnLogout} from "../../../utils/auth/NavigateOnLogin";
 
 export function GroupHabitCreationPage(props: { currentUser: User | undefined }) {
     const { groupId } = useParams<{ groupId: string }>();
     const [habitTemplates, setHabitTemplates] = useState<HabitTemplate[]>([]);
     const [selectedTemplate, setSelectedTemplate] = useState<string | null>(null);
     const [error, setError] = useState(false);
-    const navigate = useNavigate();
+    let navigate = NavigateOnLogout(props.currentUser)
     const [habitType, setHabitType] = useState<"personal" | "group" | "">("");
     // State для кастомной привычки
     const [customHabit, setCustomHabit] = useState({

@@ -18,11 +18,12 @@ import {Habit} from "../../model/habit/Habit";
 import {UserController} from "../../controllers/UserController";
 import {ErrorResponse} from "../../controllers/BaseController";
 import {useToast} from "@chakra-ui/icons";
+import {NavigateOnLogout} from "../../utils/auth/NavigateOnLogin";
 
 export function AccountPage(props: { currentUser: User | undefined }) {
     const [habits, setHabits] = useState<Habit[]>([]);
     const [error, setError] = useState(false);
-    const navigate = useNavigate();
+    let navigate = NavigateOnLogout(props.currentUser)
     const [newName, setNewName] = useState<string>();
     const [prevPassword, setPrevPassword] = useState<string>();
     const [newPassword, setNewPassword] = useState<string>();
