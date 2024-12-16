@@ -17,7 +17,7 @@ export class GroupController extends BaseController {
         /*return new Group(id, "Пупы", [{userId : "1"}]);*/
     }
 
-    async createGroup (name : string, participants : string[]) {
+    async createGroup (name : string, participants : {"userId": string}[]) {
         let url = "groups";
         return await this.api<IdResponse>(url, {"name" : name, "participants" : participants}, "POST");
     }
