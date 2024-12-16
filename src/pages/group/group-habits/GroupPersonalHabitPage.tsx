@@ -116,11 +116,11 @@ export function GroupPersonalHabitPage(props: { currentUser: User | undefined })
     };
 
     return (
-        <div className="habit-page">
+        <div className="page">
             {error && <div className="error-message">Произошла ошибка при загрузке данных привычки.</div>}
 
             {habit && (
-                <Box px={6}>
+                <Box px={6} width={ '60%' }>
                     <Heading as="h1">Привычка: {habit.name}</Heading>
                     <Text fontSize="xl">Описание: {habit.description}</Text>
                     <Text fontSize="xl">Тэги: </Text>
@@ -140,10 +140,10 @@ export function GroupPersonalHabitPage(props: { currentUser: User | undefined })
                             <Text fontSize="lg">Доля (чего-то я хз): {statistics.value}</Text>
                         </Box>
                     )}
-                    <Heading as="h2" size="mt" mt={4}>Оценки:</Heading>
+                    <Heading as="h2" size="mt" mt={10}>Оценки:</Heading>
                     <List spacing={3}>
                         {habit.marks?.map((mark, index) => (
-                            <ListItem key={index}>
+                            <ListItem key={index} mb={20}>
                                 <Text>Дата: {new Date(mark.timestamp).toLocaleString("ru-RU", {
                                     timeZone: "UTC",
                                     day: "2-digit",

@@ -39,7 +39,7 @@ export function GroupListPage(props: { currentUser: User | undefined }) {
     }
 
     return (
-        <Box mt={4} px={6}>
+        <Box mt={4} px={6} className="page">
             <div className="group-list-page">
 
                 <Heading as="h1" size="lg" mt={4}>

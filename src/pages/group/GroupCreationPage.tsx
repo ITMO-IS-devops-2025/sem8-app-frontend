@@ -86,13 +86,13 @@ export function GroupCreationPage(props: { currentUser: User | undefined }) {
     };
 
     return (
-        <div className="group-creation-page">
-            <Box px={6}>
+        <div className="page">
+            <Box px={6} className="page-box">
                 <Heading size="md" mb={3}>
                     Создать новую группу
                 </Heading>
                 {error && <Text color="red.500" mb={3}>{error}</Text>}
-                <FormControl mb={4} width={'30%'}>
+                <FormControl mb={4}>
                     <FormLabel>Название группы</FormLabel>
                     <Input
                         placeholder="Введите название группы"
@@ -104,7 +104,7 @@ export function GroupCreationPage(props: { currentUser: User | undefined }) {
                 <Heading size="sm" mt={4}>
                     Добавить участников:
                 </Heading>
-                <FormControl mt={2} width={'30%'}>
+                <FormControl mt={2}>
                     <Input
                         placeholder="Введите логин пользователя"
                         value={newParticipantLogin}

@@ -153,7 +153,7 @@ export function UserHabitCreationPage(props: { currentUser: User | undefined }) 
 
     return (
         <div className="habit-creation-page">
-            <Box px={6} display="flex" gap={8}>
+            <Box px={6} display="flex" gap={8} className="page">
                 {/* Боковая панель с шаблонами */}
                 <Box flex="1">
                     <FormControl mb={4}>
@@ -215,6 +215,7 @@ export function UserHabitCreationPage(props: { currentUser: User | undefined }) 
                         <List spacing={3} mt={4}>
                             {allTags.map((tag) => (
                                 <ListItem key={tag.id}
+                                          cursor="pointer"
                                           onClick={() => handleAddTag(tag.id, tag.name)}>
                                     {tag.name}
                                 </ListItem>
@@ -223,7 +224,7 @@ export function UserHabitCreationPage(props: { currentUser: User | undefined }) 
 
                         <HStack mt={2} wrap="wrap">
                             {customHabit.tags.map((tag, index) => (
-                                <Tag key={index} size="md" colorScheme="teal" borderRadius="full">
+                                <Tag key={index} size="md" colorScheme="teal" borderRadius="full" cursor="pointer">
                                     <TagLabel>{tag.name}</TagLabel>
                                     <TagCloseButton onClick={() => handleRemoveTag(tag.id, tag.name)} />
                                 </Tag>

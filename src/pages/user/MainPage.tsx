@@ -49,7 +49,7 @@ export function MainPage(props: { currentUser: User | undefined }) {
     }
 
     return (
-        <Box mt={4} px={6}>
+        <Box mt={4} px={6} className="page">
             <div>
                 <Heading as="h1" size="lg" mt={4}>
                     Список ваших привычек:
@@ -61,7 +61,6 @@ export function MainPage(props: { currentUser: User | undefined }) {
                         <List spacing={3} mt={4}>
                             {habits.map((habit) => (
                                 <ListItem
-                                    width={'30%'}
                                     key={habit.id}
                                     p={2}
                                     bg="gray.50"
