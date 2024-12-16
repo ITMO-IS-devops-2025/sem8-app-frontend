@@ -104,7 +104,14 @@ export function GroupCommonHabitPage(props: { currentUser: User | undefined }) {
                     <List spacing={3} >
                         {habit.marks?.map((mark, index) => (
                             <ListItem key={index}>
-                                <Text>Дата: {mark.timestamp.toLocaleString()}</Text>
+                                <Text>Дата: {new Date(mark.timestamp).toLocaleString("ru-RU", {
+                                    timeZone: "UTC",
+                                    day: "2-digit",
+                                    month: "2-digit",
+                                    year: "numeric",
+                                    hour: "2-digit",
+                                    minute: "2-digit",
+                                })}</Text>
                                 {mark.result === null ? (
                                     <>
                                         {habit.resultType === "Boolean" && (
