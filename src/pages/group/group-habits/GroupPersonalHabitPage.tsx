@@ -57,10 +57,9 @@ export function GroupPersonalHabitPage(props: { currentUser: User | undefined })
                 if (!userNames[userId]) {
                     try {
                         const response = await new UserController().getUserById(userId);
-                        if (response instanceof ErrorResponse){
+                        if (response instanceof ErrorResponse) {
                             setError(true);
-                        }
-                        else  if ("name" in response) {
+                        } else if ("name" in response) {
                             setUserNames((prev) => ({...prev, [userId]: response.name}));
                         }
                     } catch (err) {
@@ -148,13 +147,9 @@ export function GroupPersonalHabitPage(props: { currentUser: User | undefined })
                                 <Text>Дата: {mark.timestamp.toLocaleString()}</Text>
                                 {mark.personalMarks?.map((personalMark, index1) => (
                                     <ListItem key={index1}>
-                                        {mark.personalMarks?.map((personalMark, index1) => (
-                                            <ListItem key={index1}>
-                                                <Text>
-                                                    Пользователь: {userNames[personalMark.userId] || "Загрузка..."}
-                                                </Text>
-                                            </ListItem>
-                                        ))}
+                                        <Text>
+                                            Пользователь: {userNames[personalMark.userId] || "Загрузка..."}
+                                        </Text>
                                         {personalMark.result === null ? (
                                             <>
                                                 {habit.resultType === "Boolean" && (
