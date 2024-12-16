@@ -122,7 +122,7 @@ export function GroupPage(props: { currentUser: User | undefined }) {
     };
 
     return (
-        <div className="group-page">
+        <div className="page">
             {error && <div className="error-message">Произошла ошибка при загрузке данных группы.</div>}
 
             {group && (
@@ -153,7 +153,7 @@ export function GroupPage(props: { currentUser: User | undefined }) {
                     <Heading size="sm" mt={2}>
                         Добавить участников:
                     </Heading>
-                    <FormControl mt={2} width={'30%'}>
+                    <FormControl mt={2}>
                         <Input
                             placeholder="Введите логин пользователя"
                             value={newParticipantLogin}

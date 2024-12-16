@@ -11,7 +11,7 @@ export function SignOutPage(props: { currentUser: User | undefined; setCurrentUs
         navigate('/')
     }
 
-    return <div>
+    return <div className="out-button">
         <button onClick={clickHandler}>Выйти реально??</button>
     </div>
 }

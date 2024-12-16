@@ -84,63 +84,65 @@ export function AccountPage(props: { currentUser: User | undefined }) {
     }
 
     return (
-        <Box mt={4} px={6}>
-            <Heading>{props.currentUser.name}</Heading>
-            <div>
-                <Heading size="md" mt={4}>
-                    Поменять имя
-                </Heading>
-                <FormControl mb={4} width={'30%'}>
-                    <FormLabel>Новое имя</FormLabel>
-                    <Input
-                        placeholder="Введите новое имя"
-                        value={newName}
-                        onChange={(e) => setNewName(e.target.value)}
-                    />
-                </FormControl>
-                <Button colorScheme="teal" onClick={handleNameChange}>
-                    Сохранить
-                </Button>
-            </div>
-            <div>
-                <Heading size="md" mt={8}>
-                    Поменять пароль
-                </Heading>
-                <FormControl mb={4} width={'30%'}>
-                    <FormLabel>Старый пароль</FormLabel>
-                    <InputGroup size='md'>
+        <Box mt={4} className="page">
+            <div className="page-box">
+                <Heading>{props.currentUser.name}</Heading>
+                <div>
+                    <Heading size="md" mt={4}>
+                        Поменять имя
+                    </Heading>
+                    <FormControl mb={4}>
+                        <FormLabel>Новое имя</FormLabel>
                         <Input
-                            placeholder="Введите старый пароль"
-                            value={prevPassword}
-                            type={show ? 'text' : 'password'}
-                            onChange={(e) => setPrevPassword(e.target.value)}
+                            placeholder="Введите новое имя"
+                            value={newName}
+                            onChange={(e) => setNewName(e.target.value)}
                         />
-                        <InputRightElement width='4.5rem'>
-                            <Button h='1.75rem' size='sm' onClick={handleClick}>
-                                {show ? 'Hide' : 'Show'}
-                            </Button>
-                        </InputRightElement>
-                    </InputGroup>
-                </FormControl>
-                <FormControl mb={4} width={'30%'}>
-                    <FormLabel>Новый пароль</FormLabel>
-                    <InputGroup size='md'>
-                        <Input
-                            placeholder="Введите новый пароль"
-                            value={newPassword}
-                            type={show ? 'text' : 'password'}
-                            onChange={(e) => setNewPassword(e.target.value)}
-                        />
-                        <InputRightElement width='4.5rem'>
-                            <Button h='1.75rem' size='sm' onClick={handleClick}>
-                                {show ? 'Hide' : 'Show'}
-                            </Button>
-                        </InputRightElement>
-                    </InputGroup>
-                </FormControl>
-                <Button colorScheme="teal" onClick={handlePasswordChange}>
-                    Сохранить
-                </Button>
+                    </FormControl>
+                    <Button colorScheme="teal" onClick={handleNameChange}>
+                        Сохранить
+                    </Button>
+                </div>
+                <div>
+                    <Heading size="md" mt={8}>
+                        Поменять пароль
+                    </Heading>
+                    <FormControl mb={4}>
+                        <FormLabel>Старый пароль</FormLabel>
+                        <InputGroup size='md'>
+                            <Input
+                                placeholder="Введите старый пароль"
+                                value={prevPassword}
+                                type={show ? 'text' : 'password'}
+                                onChange={(e) => setPrevPassword(e.target.value)}
+                            />
+                            <InputRightElement width='4.5rem'>
+                                <Button h='1.75rem' size='sm' onClick={handleClick}>
+                                    {show ? 'Hide' : 'Show'}
+                                </Button>
+                            </InputRightElement>
+                        </InputGroup>
+                    </FormControl>
+                    <FormControl mb={4}>
+                        <FormLabel>Новый пароль</FormLabel>
+                        <InputGroup size='md'>
+                            <Input
+                                placeholder="Введите новый пароль"
+                                value={newPassword}
+                                type={show ? 'text' : 'password'}
+                                onChange={(e) => setNewPassword(e.target.value)}
+                            />
+                            <InputRightElement width='4.5rem'>
+                                <Button h='1.75rem' size='sm' onClick={handleClick}>
+                                    {show ? 'Hide' : 'Show'}
+                                </Button>
+                            </InputRightElement>
+                        </InputGroup>
+                    </FormControl>
+                    <Button colorScheme="teal" onClick={handlePasswordChange}>
+                        Сохранить
+                    </Button>
+                </div>
             </div>
         </Box>
     );
