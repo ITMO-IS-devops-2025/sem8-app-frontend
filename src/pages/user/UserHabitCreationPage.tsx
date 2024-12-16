@@ -25,12 +25,13 @@ import { User } from "../../model/user/User";
 import { UserController } from "../../controllers/UserController";
 import {Habit, Periodicity} from "../../model/habit/Habit";
 import {ErrorResponse} from "../../controllers/BaseController";
+import {NavigateOnLogout} from "@/utils/auth/NavigateOnLogin";
 
 export function UserHabitCreationPage(props: { currentUser: User | undefined }) {
     const [habitTemplates, setHabitTemplates] = useState<HabitTemplate[]>([]);
     const [selectedTemplate, setSelectedTemplate] = useState<string | null>(null);
     const [error, setError] = useState(false);
-    const navigate = useNavigate();
+    let navigate = NavigateOnLogout(props.currentUser)
     // State для кастомной привычки
     const [customHabit, setCustomHabit] = useState({
         name: "",

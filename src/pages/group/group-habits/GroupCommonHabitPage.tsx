@@ -9,6 +9,7 @@ import {GroupController} from "../../../controllers/GroupController";
 import {Textarea} from "@chakra-ui/icons";
 import {Statistic} from "../../../model/habit/Statistics";
 import {ErrorResponse} from "../../../controllers/BaseController";
+import {NavigateOnLogout} from "@/utils/auth/NavigateOnLogin";
 
 export function GroupCommonHabitPage(props: { currentUser: User | undefined }) {
     const { habitId, groupId } = useParams<{ habitId: string; groupId: string }>();
@@ -17,6 +18,7 @@ export function GroupCommonHabitPage(props: { currentUser: User | undefined }) {
     const [markValues, setMarkValues] = useState<{ [key: string]: string | null }>({});
     const [comments, setComments] = useState<{ [key: string]: string }>({});
     const [statistics, setStatistics] = useState<Statistic| null>(null);
+    NavigateOnLogout(props.currentUser)
 
     useEffect(() => {
         async function fetchHabitData() {

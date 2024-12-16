@@ -10,6 +10,7 @@ import {Textarea} from "@chakra-ui/icons";
 import {GroupHabitPersonal} from "../../../model/habit/GroupHabitPersonal";
 import {Statistic} from "../../../model/habit/Statistics";
 import {ErrorResponse} from "../../../controllers/BaseController";
+import {NavigateOnLogout} from "@/utils/auth/NavigateOnLogin";
 
 export function GroupPersonalHabitPage(props: { currentUser: User | undefined }) {
     const {habitId, groupId} = useParams<{ habitId: string; groupId: string }>();
@@ -19,6 +20,7 @@ export function GroupPersonalHabitPage(props: { currentUser: User | undefined })
     const [comments, setComments] = useState<{ [key: string]: string }>({});
     const [statistics, setStatistics] = useState<Statistic | null>(null);
     const [userNames, setUserNames] = useState<{ [userId: string]: string }>({});
+    NavigateOnLogout(props.currentUser)
 
     useEffect(() => {
         async function fetchHabitData() {
