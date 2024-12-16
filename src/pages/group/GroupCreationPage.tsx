@@ -39,7 +39,7 @@ export function GroupCreationPage(props: { currentUser: User | undefined }) {
         }
 
         const groupController = new GroupController();
-        const response = await groupController.createGroup(groupName, participants.map(part => ({ userId: part.userId })));
+        const response = await groupController.createGroup(groupName, participants.map(part => ({userId: part.userId})));
 
 
         if (response instanceof ErrorResponse) {
