@@ -23,12 +23,12 @@ export class GroupController extends BaseController {
     }
 
     async addUserToGroup (groupId : string, userId : string ) {
-        let url = "groups/" + groupId + "/participants/";
+        let url = "groups/" + groupId + "/participants";
         return await this.api<any>(url, {userId : userId}, "POST");
     }
 
     async LeaveGroup (groupId : string) {
-        let url = "groups/" + groupId + "/participants/";
+        let url = "groups/" + groupId + "/participants";
         return await this.api<any>(url, {}, "DELETE");
     }
 

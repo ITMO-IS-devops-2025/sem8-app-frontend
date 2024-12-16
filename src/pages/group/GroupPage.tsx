@@ -27,8 +27,9 @@ export function GroupPage(props: { currentUser: User | undefined }) {
     const [error, setError] = useState(false);
     const navigate = useNavigate();
     const [groupName, setGroupName] = useState<string>("");
-    const [partLogins, setPartLogins] = useState<string[]>([]);
+    const [participants, setParticipant] = useState<User[]>([]);
     const [newParticipantLogin, setNewParticipantLogin] = useState<string>("");
+    const [newParticipant, setNewParticipant] = useState<User>();
     const [addUserError, setAddUserError] = useState<string | null>(null);
     const [addUserSuccess, setAddUserSuccess] = useState<string | null>(null);
 
@@ -71,8 +72,9 @@ export function GroupPage(props: { currentUser: User | undefined }) {
         }
 
         fetchGroupData();
+
         if (group) {
-            setPartLogins(group.participants.map((it) => (it.login)))
+            setParticipant(group.participants)
         }
 
     }, [groupId]);
@@ -100,11 +102,6 @@ export function GroupPage(props: { currentUser: User | undefined }) {
 
     const handleAddParticipant = async () => {
         if (!newParticipantLogin) return;
-        if (newParticipantLogin in partLogins) {
-            setAddUserError("Такой пользователь уже есть.");
-            setAddUserSuccess(null);
-            return;
-        }
 
         const userController = new UserController();
 
@@ -116,13 +113,17 @@ export function GroupPage(props: { currentUser: User | undefined }) {
             return;
         }
 
-        // Добавляем пользователя во временный список участников
-        setPartLogins([...partLogins, newParticipantLogin]);
+        if (userResponse.userId in participants.map(participant => participant.userId)) {
+            setAddUserError("Такой пользователь уже есть.");
+            setAddUserSuccess(null);
+            return;
+        }
+
+        setParticipant([...participants, {userId: userResponse.userId, name: userResponse.name, login: newParticipantLogin}]);
         setAddUserSuccess(`Пользователь ${newParticipantLogin} успешно добавлен!`);
         setAddUserError(null);
-        setNewParticipantLogin("");
 
-        await new GroupController().addUserToGroup(groupId!!, userResponse.id)
+        await new GroupController().addUserToGroup(groupId!!, userResponse.userId)
     };
 
     return (
@@ -140,9 +141,9 @@ export function GroupPage(props: { currentUser: User | undefined }) {
                     </Heading>
 
                     <List>
-                        {partLogins.map((user) => (
+                        {participants.map((participant) => (
                             <ListItem>
-                                <Text>user</Text>
+                                <Text>{participant.name}</Text>
                             </ListItem>
                         ))}
                     </List>

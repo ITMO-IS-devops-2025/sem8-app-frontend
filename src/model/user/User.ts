@@ -1,10 +1,10 @@
 export class User {
-    id: string
+    userId: string
     login: string
     name: string
 
-    constructor(id: string, login: string, name: string = "") {
-        this.id = id
+    constructor(userId: string, login: string, name: string = "") {
+        this.userId = userId
         this.login = login
         this.name = name
     }

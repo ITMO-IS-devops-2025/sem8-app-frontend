@@ -22,7 +22,6 @@ export function GroupCreationPage(props: { currentUser: User | undefined }) {
 
     const [groupName, setGroupName] = useState<string>("");
     const [participants, setParticipants] = useState<User[]>([]);
-    const [partLogins, setPartLogins] = useState<string[]>([])
     const [newParticipantLogin, setNewParticipantLogin] = useState<string>("");
     const [addUserError, setAddUserError] = useState<string | null>(null);
     const [addUserSuccess, setAddUserSuccess] = useState<string | null>(null);
@@ -40,16 +39,11 @@ export function GroupCreationPage(props: { currentUser: User | undefined }) {
         }
 
         const groupController = new GroupController();
-        const response = await groupController.createGroup(groupName, []);
+        const response = await groupController.createGroup(groupName, participants.map(part => part.userId));
 
         if (response instanceof ErrorResponse) {
             setError("Ошибка при создании группы");
             return;
-        }
-
-        const participantIds = participants.map(it => it.id)
-        for (const participantId of participantIds) {
-            await groupController.addUserToGroup(response.id, participantId);
         }
 
         navigate(`/group/${response.id}`);
@@ -57,8 +51,9 @@ export function GroupCreationPage(props: { currentUser: User | undefined }) {
 
     const handleAddParticipant = async () => {
         if (!newParticipantLogin) return;
-        if (newParticipantLogin in partLogins) {
-            setAddUserError("Такой пользователь уже есть.");
+
+        if (newParticipantLogin == props.currentUser?.login) {
+            setAddUserError("Нельзя добавить себя повторно");
             setAddUserSuccess(null);
             return;
         }
@@ -73,12 +68,17 @@ export function GroupCreationPage(props: { currentUser: User | undefined }) {
             return;
         }
 
-        // Добавляем пользователя во временный список участников
-        setParticipants([...participants, userResponse]);
-        setPartLogins([...partLogins, newParticipantLogin])
+        if (userResponse.userId in participants.map(participant => participant.userId)) {
+            setAddUserError("Такой пользователь уже есть.");
+            setAddUserSuccess(null);
+            return;
+        }
+
+
+
+        setParticipants([...participants, {userId: userResponse.userId, name: userResponse.name, login: newParticipantLogin}]);
         setAddUserSuccess(`Пользователь ${newParticipantLogin} успешно добавлен!`);
         setAddUserError(null);
-        setNewParticipantLogin("");
     };
 
     return (
@@ -116,9 +116,15 @@ export function GroupCreationPage(props: { currentUser: User | undefined }) {
                 <Heading size="sm" mt={4}>
                     Список участников:
                 </Heading>
-                <List spacing={3} mt={2}>
+
+                <List>
+                    <ListItem>
+                        <Text>{props.currentUser?.login}</Text>
+                    </ListItem>
                     {participants.map((participant) => (
-                        <ListItem key={participant.id}>{participant.name}</ListItem>
+                        <ListItem>
+                            <Text>{participant.login}</Text>
+                        </ListItem>
                     ))}
                 </List>
 

@@ -42,7 +42,7 @@ export function SignInPage(props: { currentUser: User | undefined; setCurrentUse
             if (user instanceof ErrorResponse) {
                 setError(true);
             } else {
-                user.id = response.id;
+                user.userId = response.id;
                 props.setCurrentUser(user);
                 // localStorage.setItem("token", response.token)
                 navigate('/');
