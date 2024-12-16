@@ -127,7 +127,7 @@ export function GroupCreationPage(props: { currentUser: User | undefined }) {
                     </ListItem>
                     {participants.map((participant) => (
                         <ListItem>
-                            <Text>{participant.login}</Text>
+                            <Text>{participant.login}, {participant.userId}</Text>
                         </ListItem>
                     ))}
                 </List>
