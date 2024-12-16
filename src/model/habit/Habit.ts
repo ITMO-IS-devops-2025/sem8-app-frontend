@@ -1,12 +1,12 @@
 export type Result = {
     value: string | null;
+    comment : string;
 };
 
 export type Mark = {
     id: string;
     timestamp: Date;
     result: Result;
-    comment : string;
 };
 
 export type Periodicity = {

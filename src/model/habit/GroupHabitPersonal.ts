@@ -9,7 +9,6 @@ type PersonalMarks = {
     id: string;
     userId : string;
     result: Result;
-    comment : string;
 };
 
 export class GroupHabitPersonal {

@@ -1,8 +1,8 @@
-import {useState, useEffect} from "react";
+import React, {useState, useEffect} from "react";
 import {useParams} from "react-router-dom";
 import {HabitController} from "../../../controllers/HabitController";
 import {Habit} from "../../../model/habit/Habit";
-import {List, ListItem, Text, Box, Heading, Input, Button, Checkbox} from "@chakra-ui/react";
+import {List, ListItem, Text, Box, Heading, Input, Button, Checkbox, HStack, Tag, TagLabel} from "@chakra-ui/react";
 import {User} from "../../../model/user/User";
 import {UserController} from "../../../controllers/UserController";
 import {GroupController} from "../../../controllers/GroupController";
@@ -18,6 +18,7 @@ export function GroupPersonalHabitPage(props: { currentUser: User | undefined })
     const [markValues, setMarkValues] = useState<{ [key: string]: string | null }>({});
     const [comments, setComments] = useState<{ [key: string]: string }>({});
     const [statistics, setStatistics] = useState<Statistic | null>(null);
+    const [userNames, setUserNames] = useState<{ [userId: string]: string }>({});
 
     useEffect(() => {
         async function fetchHabitData() {
@@ -43,6 +44,34 @@ export function GroupPersonalHabitPage(props: { currentUser: User | undefined })
 
         fetchHabitData();
     }, [groupId, habitId]);
+
+    useEffect(() => {
+        async function fetchUserNames() {
+            if (!habit?.marks) return;
+
+            const uniqueUserIds = new Set(
+                habit.marks.flatMap((mark) => mark.personalMarks?.map((personalMark) => personalMark.userId) || [])
+            );
+
+            for (const userId of Array.from(uniqueUserIds)) {
+                if (!userNames[userId]) {
+                    try {
+                        const response = await new UserController().getUserById(userId);
+                        if (response instanceof ErrorResponse){
+                            setError(true);
+                        }
+                        else  if ("name" in response) {
+                            setUserNames((prev) => ({...prev, [userId]: response.name}));
+                        }
+                    } catch (err) {
+                        console.error(`Ошибка при загрузке имени пользователя с id ${userId}:`, err);
+                    }
+                }
+            }
+        }
+
+        fetchUserNames();
+    }, [habit, userNames]);
 
     const handleValueChange = (markId: string, value: string | null) => {
         setMarkValues((prev) => ({...prev, [markId]: value}));
@@ -94,6 +123,15 @@ export function GroupPersonalHabitPage(props: { currentUser: User | undefined })
             {habit && (
                 <Box px={6}>
                     <Heading as="h1">Привычка: {habit.name}</Heading>
+                    <Text fontSize="xl">Описание: {habit.description}</Text>
+                    <Text fontSize="xl">Тэги: </Text>
+                    <HStack mt={2} wrap="wrap">
+                        {habit.tags.map((tag, index) => (
+                            <Tag key={index} size="md" colorScheme="teal" borderRadius="full">
+                                <TagLabel fontSize="l">{tag}</TagLabel>
+                            </Tag>
+                        ))}
+                    </HStack>
                     <Text fontSize="xl">Периодичность: {habit.periodicity.value} {habit.periodicity.type}</Text>
                     <Text fontSize="xl">Цель: {habit.goal}</Text>
                     <Text fontSize="xl">Тип результата: {habit.resultType}</Text>
@@ -110,7 +148,13 @@ export function GroupPersonalHabitPage(props: { currentUser: User | undefined })
                                 <Text>Дата: {mark.timestamp.toLocaleString()}</Text>
                                 {mark.personalMarks?.map((personalMark, index1) => (
                                     <ListItem key={index1}>
-                                        <Text>Пользователь: {personalMark.userId}</Text>
+                                        {mark.personalMarks?.map((personalMark, index1) => (
+                                            <ListItem key={index1}>
+                                                <Text>
+                                                    Пользователь: {userNames[personalMark.userId] || "Загрузка..."}
+                                                </Text>
+                                            </ListItem>
+                                        ))}
                                         {personalMark.result === null ? (
                                             <>
                                                 {habit.resultType === "Boolean" && (
@@ -151,7 +195,7 @@ export function GroupPersonalHabitPage(props: { currentUser: User | undefined })
                                         ) : (
                                             <div>
                                                 <Text>Результат: {personalMark.result.value}</Text>
-                                                <Text>Комментарий: {personalMark.comment}</Text>
+                                                <Text>Комментарий: {personalMark.result.comment}</Text>
                                             </div>
                                         )}
                                     </ListItem>

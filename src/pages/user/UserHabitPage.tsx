@@ -1,8 +1,20 @@
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { HabitController } from "../../controllers/HabitController";
 import { Habit } from "../../model/habit/Habit";
-import { List, ListItem, Text, Box, Heading, Input, Button, Checkbox } from "@chakra-ui/react";
+import {
+    List,
+    ListItem,
+    Text,
+    Box,
+    Heading,
+    Input,
+    Button,
+    Checkbox,
+    Tag,
+    TagLabel,
+    TagCloseButton, HStack
+} from "@chakra-ui/react";
 import { User } from "../../model/user/User";
 import {UserController} from "../../controllers/UserController";
 import {Statistic} from "../../model/habit/Statistics";
@@ -82,6 +94,15 @@ export function UserHabitPage(props: { currentUser: User | undefined }) {
             {habit && (
                 <Box px={6}>
                     <Heading as="h1">{habit.name}</Heading>
+                    <Text fontSize="xl">Описание: {habit.description}</Text>
+                    <Text fontSize="xl">Тэги: </Text>
+                    <HStack mt={2} wrap="wrap">
+                        {habit.tags.map((tag, index) => (
+                            <Tag key={index} size="md" colorScheme="teal" borderRadius="full">
+                                <TagLabel fontSize="l">{tag}</TagLabel>
+                            </Tag>
+                        ))}
+                    </HStack>
                     <Text fontSize="xl">Периодичность: {habit.periodicity.value} {habit.periodicity.type}</Text>
                     <Text fontSize="xl">Цель: {habit.goal}</Text>
                     <Text fontSize="xl">Тип результата: {habit.resultType}</Text>
@@ -136,13 +157,12 @@ export function UserHabitPage(props: { currentUser: User | undefined }) {
                                 ) : (
                                     <div>
                                         <Text>Результат: {mark.result.value}</Text>
-                                        <Text>Комментарий: {mark.comment}</Text>
+                                        <Text>Комментарий: {mark.result.comment}</Text>
                                     </div>
                                 )}
                             </ListItem>
                         ))}
                     </List>
-
                 </Box>
             )}
         </div>
