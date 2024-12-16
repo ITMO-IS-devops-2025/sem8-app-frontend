@@ -32,7 +32,7 @@ export function GroupPersonalHabitPage(props: { currentUser: User | undefined })
                     setError(true);
                 } else if ("name" in response) {
                     setHabit(response);
-                    const statsResponse = await new GroupController().getCommonHabitStatistics(groupId, habitId);
+                    const statsResponse = await new GroupController().getPersonalHabitStatistics(groupId, habitId);
                     if (statsResponse instanceof ErrorResponse) {
                         console.error("Ошибка при загрузке статистики:", statsResponse);
                     } else {
