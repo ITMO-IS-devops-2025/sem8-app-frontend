@@ -108,17 +108,17 @@ export function GroupPage(props: { currentUser: User | undefined }) {
             return;
         }
 
-        if (userResponse.userId in participants.map(participant => participant.userId)) {
+        if (userResponse.id in participants.map(participant => participant.userId)) {
             setAddUserError("Такой пользователь уже есть.");
             setAddUserSuccess(null);
             return;
         }
 
-        setParticipant([...participants, {userId: userResponse.userId, name: userResponse.name, login: newParticipantLogin}]);
+        setParticipant([...participants, {userId: userResponse.id, name: userResponse.name, login: newParticipantLogin}]);
         setAddUserSuccess(`Пользователь ${newParticipantLogin} успешно добавлен!`);
         setAddUserError(null);
 
-        await new GroupController().addUserToGroup(groupId!!, userResponse.userId)
+        await new GroupController().addUserToGroup(groupId!!, userResponse.id)
     };
 
     return (

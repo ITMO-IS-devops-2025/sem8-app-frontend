@@ -20,7 +20,7 @@ export class UserController extends BaseController {
 
     async getUserByLogin(login: string) {
         let url = "users?login=" + login;
-        return await this.api<User>(url);
+        return await this.api<{id : string, name : string}>(url);
     }
 
     async getHabits(){
