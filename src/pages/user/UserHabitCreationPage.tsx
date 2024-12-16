@@ -14,7 +14,11 @@ import {
     Textarea,
     TagCloseButton,
     TagLabel,
-    HStack, Tag, Text,
+    HStack, Tag, Text,   NumberInput,
+    NumberInputField,
+    NumberInputStepper,
+    NumberIncrementStepper,
+    NumberDecrementStepper,
 } from "@chakra-ui/react";
 import {Link, useNavigate} from "react-router-dom";
 import { User } from "../../model/user/User";
@@ -128,11 +132,17 @@ export function UserHabitCreationPage(props: { currentUser: User | undefined }) 
     };
 
     const handleAddTag = (id: string, name: string) => {
-        setCustomHabit((prev) => ({
-            ...prev,
-            tags: [...prev.tags, {id, name}]
-        }));
+        setCustomHabit((prev) => {
+            if (prev.tags.some(tag => tag.id === id)) {
+                return prev; // Если тег уже есть, возвращаем текущее состояние
+            }
+            return {
+                ...prev,
+                tags: [...prev.tags, { id, name }]
+            };
+        });
     };
+
 
     const handleRemoveTag = (id: string, name: string) => {
         setCustomHabit((prev) => ({
@@ -223,11 +233,16 @@ export function UserHabitCreationPage(props: { currentUser: User | undefined }) 
 
                     <FormControl mb={4}>
                         <FormLabel>Периодичность</FormLabel>
-                        <Input
-                            placeholder="Значение (например, 3)"
+                        <NumberInput
+                            defaultValue={2.5}
                             value={customHabit.periodicity.value}
-                            onChange={(e) => handlePeriodicityChange("value", e.target.value)}
-                        />
+                            onChange={(e) => handlePeriodicityChange("value", e)}>
+                            <NumberInputField />
+                            <NumberInputStepper>
+                                <NumberIncrementStepper />
+                                <NumberDecrementStepper />
+                            </NumberInputStepper>
+                        </NumberInput>
                         <Select
                             mt={2}
                             value={customHabit.periodicity.type}
@@ -248,19 +263,23 @@ export function UserHabitCreationPage(props: { currentUser: User | undefined }) 
                         >
                             <option value="">Выберите тип результата</option>
                             <option value="Boolean">Да/Нет</option>
-                            <option value="Float">Числовой</option>
+                            <option value="Float">Число</option>
                         </Select>
                     </FormControl>
 
                     <FormControl mb={4}>
                         <FormLabel>Цель</FormLabel>
-                        <Input
-                            placeholder="Введите цель"
-                            value={customHabit.goal}
-                            onChange={(e) => handleInputChange("goal", e.target.value)}
-                            isDisabled={customHabit.resultType !== "Float"}
-                        />
+                        <NumberInput value={customHabit.goal}
+                                     onChange={(e) => handleInputChange("goal", e)}
+                                     isDisabled={customHabit.resultType !== "Float"}>
+                            <NumberInputField />
+                            <NumberInputStepper>
+                                <NumberIncrementStepper />
+                                <NumberDecrementStepper />
+                            </NumberInputStepper>
+                        </NumberInput>
                     </FormControl>
+
 
 
                     <Button colorScheme="blue" onClick={handleCreateCustomHabit}>
