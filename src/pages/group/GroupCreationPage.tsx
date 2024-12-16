@@ -75,6 +75,10 @@ export function GroupCreationPage(props: { currentUser: User | undefined }) {
             return;
         }
 
+        if (!userResponse.id) {
+            setAddUserError("id пользователя null");
+            return;
+        }
 
         setParticipants([...participants, {userId: userResponse.id, name: userResponse.name, login: newParticipantLogin}]);
         setAddUserSuccess(`Пользователь ${newParticipantLogin} успешно добавлен!`);
