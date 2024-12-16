@@ -23,7 +23,7 @@ import {User} from "../../../model/user/User";
 import {HabitTemplate} from "../../../model/habit/HabitTemplate";
 import {HabitController} from "../../../controllers/HabitController";
 import {ErrorResponse} from "../../../controllers/BaseController";
-import {NavigateOnLogout} from "@/utils/auth/NavigateOnLogin";
+import {NavigateOnLogout} from "../../../utils/auth/NavigateOnLogin";
 
 export function GroupHabitCreationPage(props: { currentUser: User | undefined }) {
     const { groupId } = useParams<{ groupId: string }>();

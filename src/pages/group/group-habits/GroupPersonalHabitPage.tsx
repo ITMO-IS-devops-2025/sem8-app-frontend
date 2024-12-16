@@ -10,7 +10,7 @@ import {Textarea} from "@chakra-ui/icons";
 import {GroupHabitPersonal} from "../../../model/habit/GroupHabitPersonal";
 import {Statistic} from "../../../model/habit/Statistics";
 import {ErrorResponse} from "../../../controllers/BaseController";
-import {NavigateOnLogout} from "@/utils/auth/NavigateOnLogin";
+import {NavigateOnLogout} from "../../../utils/auth/NavigateOnLogin";
 
 export function GroupPersonalHabitPage(props: { currentUser: User | undefined }) {
     const {habitId, groupId} = useParams<{ habitId: string; groupId: string }>();

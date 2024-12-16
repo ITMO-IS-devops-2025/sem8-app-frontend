@@ -18,7 +18,7 @@ import {GroupHabitPersonal} from "../../model/habit/GroupHabitPersonal";
 import {GroupController} from "../../controllers/GroupController";
 import {ErrorResponse} from "../../controllers/BaseController";
 import {UserController} from "../../controllers/UserController";
-import {NavigateOnLogout} from "@/utils/auth/NavigateOnLogin";
+import {NavigateOnLogout} from "../../utils/auth/NavigateOnLogin";
 
 export function GroupPage(props: { currentUser: User | undefined }) {
     const {groupId} = useParams<{ groupId: string }>();

@@ -25,7 +25,7 @@ import { User } from "../../model/user/User";
 import { UserController } from "../../controllers/UserController";
 import {Habit, Periodicity} from "../../model/habit/Habit";
 import {ErrorResponse} from "../../controllers/BaseController";
-import {NavigateOnLogout} from "@/utils/auth/NavigateOnLogin";
+import {NavigateOnLogout} from "../../utils/auth/NavigateOnLogin";
 
 export function UserHabitCreationPage(props: { currentUser: User | undefined }) {
     const [habitTemplates, setHabitTemplates] = useState<HabitTemplate[]>([]);

@@ -9,7 +9,7 @@ import {GroupController} from "../../../controllers/GroupController";
 import {Textarea} from "@chakra-ui/icons";
 import {Statistic} from "../../../model/habit/Statistics";
 import {ErrorResponse} from "../../../controllers/BaseController";
-import {NavigateOnLogout} from "@/utils/auth/NavigateOnLogin";
+import {NavigateOnLogout} from "../../../utils/auth/NavigateOnLogin";
 
 export function GroupCommonHabitPage(props: { currentUser: User | undefined }) {
     const { habitId, groupId } = useParams<{ habitId: string; groupId: string }>();

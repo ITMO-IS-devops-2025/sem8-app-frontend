@@ -5,7 +5,7 @@ import {List, ListItem, Button, Box, Heading} from "@chakra-ui/react";
 import {Link} from "react-router-dom";
 import {User} from "../../model/user/User";
 import {ErrorResponse} from "../../controllers/BaseController";
-import {NavigateOnLogout} from "@/utils/auth/NavigateOnLogin";
+import {NavigateOnLogout} from "../../utils/auth/NavigateOnLogin";
 
 export function GroupListPage(props: { currentUser: User | undefined }) {
     const [groups, setGroups] = useState<Group[]>([]);

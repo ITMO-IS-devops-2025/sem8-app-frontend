@@ -20,7 +20,7 @@ import {UserController} from "../../controllers/UserController";
 import {Statistic} from "../../model/habit/Statistics";
 import {Textarea} from "@chakra-ui/icons";
 import {ErrorResponse} from "../../controllers/BaseController";
-import {NavigateOnLogout} from "@/utils/auth/NavigateOnLogin";
+import {NavigateOnLogout} from "../../utils/auth/NavigateOnLogin";
 
 export function UserHabitPage(props: { currentUser: User | undefined }) {
     const { habitId } = useParams<{ habitId: string }>();
