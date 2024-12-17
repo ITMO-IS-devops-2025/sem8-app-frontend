@@ -69,18 +69,18 @@ export function GroupCreationPage(props: { currentUser: User | undefined }) {
             return;
         }
 
-        if (userResponse.id in participants.map(participant => participant.userId)) {
+        if (userResponse.userId in participants.map(participant => participant.userId)) {
             setAddUserError("Такой пользователь уже есть.");
             setAddUserSuccess(null);
             return;
         }
 
-        if (!userResponse.id) {
+        if (!userResponse.userId) {
             setAddUserError("id пользователя null");
             return;
         }
 
-        setParticipants([...participants, {userId: userResponse.id, name: userResponse.name, login: newParticipantLogin}]);
+        setParticipants([...participants, userResponse]);
         setAddUserSuccess(`Пользователь ${newParticipantLogin} успешно добавлен!`);
         setAddUserError(null);
     };
