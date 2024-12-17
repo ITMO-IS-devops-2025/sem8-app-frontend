@@ -81,6 +81,9 @@ export function AccountPage(props: { currentUser: User | undefined; setCurrentUs
             const response = await new UserController().getCurrentUser();
             if (response instanceof ErrorResponse) {
                 console.log(response)
+                if (response.code == 401) {
+                    navigate('/signIn')
+                }
             } else  {
                 console.log("Запрашиваем пользвователя", response)
                 // @ts-ignore
@@ -90,7 +93,6 @@ export function AccountPage(props: { currentUser: User | undefined; setCurrentUs
             if (props.currentUser === undefined) navigate('/signIn')
         }
     }
-
     useEffect(() => {
         if (props.currentUser === undefined) {
             fetchCurrentUser()

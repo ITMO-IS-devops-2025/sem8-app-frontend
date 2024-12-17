@@ -25,6 +25,9 @@ export function GroupCommonHabitPage(props: { currentUser: User | undefined; set
             const response = await new UserController().getCurrentUser();
             if (response instanceof ErrorResponse) {
                 console.log(response)
+                if (response.code == 401) {
+                    navigate('/signIn')
+                }
             } else  {
                 console.log("Запрашиваем пользвователя", response)
                 // @ts-ignore
