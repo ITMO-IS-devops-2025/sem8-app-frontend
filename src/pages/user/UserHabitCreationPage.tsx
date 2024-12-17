@@ -27,7 +27,7 @@ import {Habit, Periodicity} from "../../model/habit/Habit";
 import {ErrorResponse} from "../../controllers/BaseController";
 import {NavigateOnLogout} from "../../utils/auth/NavigateOnLogin";
 
-export function UserHabitCreationPage(props: { currentUser: User | undefined }) {
+export function UserHabitCreationPage(props: { currentUser: User | undefined; setCurrentUser: (newPersonData: User) => void; }) {
     const [habitTemplates, setHabitTemplates] = useState<HabitTemplate[]>([]);
     const [selectedTemplate, setSelectedTemplate] = useState<string | null>(null);
     const [error, setError] = useState(false);
@@ -80,6 +80,27 @@ export function UserHabitCreationPage(props: { currentUser: User | undefined }) 
         }
         fetchTags();
     }, []);
+
+    async function fetchCurrentUser() {
+        try {
+            const response = await new UserController().getCurrentUser();
+            if (response instanceof ErrorResponse) {
+                console.log(response)
+            } else  {
+                console.log("Запрашиваем пользвователя", response)
+                // @ts-ignore
+                props.setCurrentUser(response)
+            }
+        } catch (err) {
+            if (props.currentUser === undefined) navigate('/signIn')
+        }
+    }
+
+    useEffect(() => {
+        if (props.currentUser === undefined) {
+            fetchCurrentUser()
+        }
+    }, [props.currentUser]);
 
     const handleCreateHabitFromTemplate = async () => {
         if (!selectedTemplate) {

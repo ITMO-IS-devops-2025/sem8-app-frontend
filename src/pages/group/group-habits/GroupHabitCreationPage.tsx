@@ -25,12 +25,11 @@ import {HabitController} from "../../../controllers/HabitController";
 import {ErrorResponse} from "../../../controllers/BaseController";
 import {NavigateOnLogout} from "../../../utils/auth/NavigateOnLogin";
 
-export function GroupHabitCreationPage(props: { currentUser: User | undefined }) {
+export function GroupHabitCreationPage(props: { currentUser: User | undefined;setCurrentUser: (newPersonData: User) => void; }) {
     const { groupId } = useParams<{ groupId: string }>();
     const [habitTemplates, setHabitTemplates] = useState<HabitTemplate[]>([]);
     const [selectedTemplate, setSelectedTemplate] = useState<string | null>(null);
     const [error, setError] = useState(false);
-    let navigate = NavigateOnLogout(props.currentUser)
     const [habitType, setHabitType] = useState<"personal" | "group" | "">("");
     // State для кастомной привычки
     const [customHabit, setCustomHabit] = useState({
@@ -46,7 +45,28 @@ export function GroupHabitCreationPage(props: { currentUser: User | undefined })
     });
 
     const [allTags, setTags] = useState<{id: string, name: string}[]>([]);
+    const navigate = useNavigate();
 
+    async function fetchCurrentUser() {
+        try {
+            const response = await new UserController().getCurrentUser();
+            if (response instanceof ErrorResponse) {
+                console.log(response)
+            } else  {
+                console.log("Запрашиваем пользвователя", response)
+                // @ts-ignore
+                props.setCurrentUser(response)
+            }
+        } catch (err) {
+            if (props.currentUser === undefined) navigate('/signIn')
+        }
+    }
+
+    useEffect(() => {
+        if (props.currentUser === undefined) {
+            fetchCurrentUser()
+        }
+    }, [props.currentUser]);
 
     useEffect(() => {
         async function fetchHabitTemplates() {

@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from "react";
-import {useParams} from "react-router-dom";
+import {useNavigate, useParams} from "react-router-dom";
 import {HabitController} from "../../../controllers/HabitController";
 import {Habit} from "../../../model/habit/Habit";
 import {List, ListItem, Text, Box, Heading, Input, Button, Checkbox, HStack, Tag, TagLabel} from "@chakra-ui/react";
@@ -12,7 +12,7 @@ import {Statistic} from "../../../model/habit/Statistics";
 import {ErrorResponse} from "../../../controllers/BaseController";
 import {NavigateOnLogout} from "../../../utils/auth/NavigateOnLogin";
 
-export function GroupPersonalHabitPage(props: { currentUser: User | undefined }) {
+export function GroupPersonalHabitPage(props: { currentUser: User | undefined; setCurrentUser: (newPersonData: User) => void; }) {
     const {habitId, groupId} = useParams<{ habitId: string; groupId: string }>();
     const [habit, setHabit] = useState<GroupHabitPersonal>();
     const [error, setError] = useState(false);
@@ -20,7 +20,28 @@ export function GroupPersonalHabitPage(props: { currentUser: User | undefined })
     const [comments, setComments] = useState<{ [key: string]: string }>({});
     const [statistics, setStatistics] = useState<Statistic | null>(null);
     const [userNames, setUserNames] = useState<{ [userId: string]: string }>({});
-    NavigateOnLogout(props.currentUser)
+    const navigate = useNavigate();
+
+    async function fetchCurrentUser() {
+        try {
+            const response = await new UserController().getCurrentUser();
+            if (response instanceof ErrorResponse) {
+                console.log(response)
+            } else  {
+                console.log("Запрашиваем пользвователя", response)
+                // @ts-ignore
+                props.setCurrentUser(response)
+            }
+        } catch (err) {
+            if (props.currentUser === undefined) navigate('/signIn')
+        }
+    }
+
+    useEffect(() => {
+        if (props.currentUser === undefined) {
+            fetchCurrentUser()
+        }
+    }, [props.currentUser]);
 
     useEffect(() => {
         async function fetchHabitData() {

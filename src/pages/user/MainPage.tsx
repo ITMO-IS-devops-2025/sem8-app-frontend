@@ -7,8 +7,9 @@ import {Habit} from "../../model/habit/Habit";
 import {UserController} from "../../controllers/UserController";
 import {ErrorResponse} from "../../controllers/BaseController";
 import {useToast} from "@chakra-ui/icons";
+import {NavigateOnLogout} from "../../utils/auth/NavigateOnLogin";
 
-export function MainPage(props: { currentUser: User | undefined }) {
+export function MainPage(props: { currentUser: User | undefined; setCurrentUser: (newPersonData: User) => void; }) {
     const [habits, setHabits] = useState<Habit[]>([]);
     const [error, setError] = useState(false);
     const navigate = useNavigate();
@@ -34,19 +35,31 @@ export function MainPage(props: { currentUser: User | undefined }) {
         }
     }
 
+    async function fetchCurrentUser() {
+        try {
+            const response = await new UserController().getCurrentUser();
+            if (response instanceof ErrorResponse) {
+                console.log(response)
+            } else  {
+                console.log("Запрашиваем пользвователя", response)
+                // @ts-ignore
+                props.setCurrentUser(response)
+            }
+        } catch (err) {
+            if (props.currentUser === undefined) navigate('/signIn')
+        }
+    }
+
     useEffect(() => {
+        if (props.currentUser == undefined) {
+            fetchCurrentUser()
+        }
         if (props.currentUser) {
             fetchHabits();
         }
     }, [props.currentUser]);
 
-    if (props.currentUser === undefined) {
-        return (
-            <div>
-                <Heading p={10}>Регистрируйся и присоединяйся к панпипе!</Heading>
-            </div>
-        );
-    }
+
 
     return (
         <Box mt={4} px={6} className="page">
@@ -69,13 +82,11 @@ export function MainPage(props: { currentUser: User | undefined }) {
                                     onClick={() => navigate(`/user-habit/${habit.id}`)}
                                 >
                                     <strong>{habit.name}</strong>
-                                    <Link to={`/group/${habit.id.toString()}`}>
                                         <Box mt={1}>
                                             <div>Периодичность: {habit.periodicity.value} {habit.periodicity.type}</div>
                                             <div>Цель: {habit.goal}</div>
                                             <div>Тип результата: {habit.resultType}</div>
                                         </Box>
-                                    </Link>
                                 </ListItem>
                             ))}
                         </List>

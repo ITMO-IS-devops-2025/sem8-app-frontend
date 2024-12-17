@@ -7,10 +7,9 @@ import {Statistic} from "../model/habit/Statistics";
 
 export class UserController extends BaseController {
 
-    // это по токену. не делаем токены -- не используем эту функцию
     async getCurrentUser() {
         let url = "users";
-        return await this.api<User>("url")
+        return await this.api<User>(url)
     }
 
     async getUserById(id: string) {

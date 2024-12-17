@@ -20,19 +20,40 @@ import {ErrorResponse} from "../../controllers/BaseController";
 import {UserController} from "../../controllers/UserController";
 import {NavigateOnLogout} from "../../utils/auth/NavigateOnLogin";
 
-export function GroupPage(props: { currentUser: User | undefined }) {
+export function GroupPage(props: { currentUser: User | undefined; setCurrentUser: (newPersonData: User) => void; }) {
     const {groupId} = useParams<{ groupId: string }>();
     const [group, setGroup] = useState<Group | null>(null);
     const [commonHabits, setCommonHabits] = useState<Habit[]>([]);
     const [personalHabits, setPersonalHabits] = useState<GroupHabitPersonal[]>([]);
     const [error, setError] = useState(false);
-    let navigate = NavigateOnLogout(props.currentUser)
+    let navigate = useNavigate();
     const [groupName, setGroupName] = useState<string>("");
     const [participants, setParticipant] = useState<User[]>([]);
     const [newParticipantLogin, setNewParticipantLogin] = useState<string>("");
     const [newParticipant, setNewParticipant] = useState<User>();
     const [addUserError, setAddUserError] = useState<string | null>(null);
     const [addUserSuccess, setAddUserSuccess] = useState<string | null>(null);
+
+    async function fetchCurrentUser() {
+        try {
+            const response = await new UserController().getCurrentUser();
+            if (response instanceof ErrorResponse) {
+                console.log(response)
+            } else  {
+                console.log("Запрашиваем пользвователя", response)
+                // @ts-ignore
+                props.setCurrentUser(response)
+            }
+        } catch (err) {
+            if (props.currentUser === undefined) navigate('/signIn')
+        }
+    }
+
+    useEffect(() => {
+        if (props.currentUser === undefined) {
+            fetchCurrentUser()
+        }
+    }, [props.currentUser]);
 
     async function fetchGroupData() {
         if (!groupId) return;

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useParams } from "react-router-dom";
+import {useNavigate, useParams} from "react-router-dom";
 import { HabitController } from "../../controllers/HabitController";
 import { Habit } from "../../model/habit/Habit";
 import {
@@ -22,14 +22,35 @@ import {Textarea} from "@chakra-ui/icons";
 import {ErrorResponse} from "../../controllers/BaseController";
 import {NavigateOnLogout} from "../../utils/auth/NavigateOnLogin";
 
-export function UserHabitPage(props: { currentUser: User | undefined }) {
+export function UserHabitPage(props: { currentUser: User | undefined; setCurrentUser: (newPersonData: User) => void; }) {
     const { habitId } = useParams<{ habitId: string }>();
     const [habit, setHabit] = useState<Habit>();
     const [error, setError] = useState(false);
+    const navigate = useNavigate();
     const [markValues, setMarkValues] = useState<{ [key: string]: string | null }>({});
     const [comments, setComments] = useState<{ [key: string]: string }>({});
     const [statistics, setStatistics] = useState<Statistic | null>(null);
-    NavigateOnLogout(props.currentUser)
+
+    async function fetchCurrentUser() {
+        try {
+            const response = await new UserController().getCurrentUser();
+            if (response instanceof ErrorResponse) {
+                console.log(response)
+            } else  {
+                console.log("Запрашиваем пользвователя", response)
+                // @ts-ignore
+                props.setCurrentUser(response)
+            }
+        } catch (err) {
+            if (props.currentUser === undefined) navigate('/signIn')
+        }
+    }
+
+    useEffect(() => {
+        if (props.currentUser === undefined) {
+            fetchCurrentUser()
+        }
+    }, [props.currentUser]);
 
     useEffect(() => {
         async function fetchHabitData() {

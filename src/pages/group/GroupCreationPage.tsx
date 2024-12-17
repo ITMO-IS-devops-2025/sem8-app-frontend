@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, {useEffect, useState} from "react";
 import { GroupController } from "../../controllers/GroupController";
 import { UserController } from "../../controllers/UserController";
 import {
@@ -15,11 +15,11 @@ import {
 import { User } from "../../model/user/User";
 import {ErrorResponse} from "../../controllers/BaseController";
 import {NavigateOnLogout} from "../../utils/auth/NavigateOnLogin";
+import {Navigate, useNavigate} from "react-router-dom";
 
-export function GroupCreationPage(props: { currentUser: User | undefined }) {
+export function GroupCreationPage(props: { currentUser: User | undefined; setCurrentUser: (newPersonData: User) => void; }) {
 
-    let navigate = NavigateOnLogout(props.currentUser)
-
+    const navigate = useNavigate();
     const [groupName, setGroupName] = useState<string>("");
     const [participants, setParticipants] = useState<User[]>([]);
     const [newParticipantLogin, setNewParticipantLogin] = useState<string>("");
@@ -27,6 +27,27 @@ export function GroupCreationPage(props: { currentUser: User | undefined }) {
     const [addUserSuccess, setAddUserSuccess] = useState<string | null>(null);
     const [error, setError] = useState<string | null>(null);
 
+
+    async function fetchCurrentUser() {
+        try {
+            const response = await new UserController().getCurrentUser();
+            if (response instanceof ErrorResponse) {
+                console.log(response)
+            } else  {
+                console.log("Запрашиваем пользвователя", response)
+                // @ts-ignore
+                props.setCurrentUser(response)
+            }
+        } catch (err) {
+            if (props.currentUser === undefined) navigate('/signIn')
+        }
+    }
+
+    useEffect(() => {
+        if (props.currentUser === undefined) {
+            fetchCurrentUser()
+        }
+    }, [props.currentUser]);
 
     const handleCreateGroup = async () => {
         if (!groupName) {

@@ -20,10 +20,10 @@ import {ErrorResponse} from "../../controllers/BaseController";
 import {useToast} from "@chakra-ui/icons";
 import {NavigateOnLogout} from "../../utils/auth/NavigateOnLogin";
 
-export function AccountPage(props: { currentUser: User | undefined }) {
+export function AccountPage(props: { currentUser: User | undefined; setCurrentUser: (newPersonData: User) => void; }) {
     const [habits, setHabits] = useState<Habit[]>([]);
     const [error, setError] = useState(false);
-    let navigate = NavigateOnLogout(props.currentUser)
+    let navigate = useNavigate();
     const [newName, setNewName] = useState<string>();
     const [prevPassword, setPrevPassword] = useState<string>();
     const [newPassword, setNewPassword] = useState<string>();
@@ -76,18 +76,31 @@ export function AccountPage(props: { currentUser: User | undefined }) {
         }
     }
 
-    if (props.currentUser === undefined) {
-        return (
-            <div>
-                <Heading>Регистрируйся и присоединяйся к панпипе!</Heading>
-            </div>
-        );
+    async function fetchCurrentUser() {
+        try {
+            const response = await new UserController().getCurrentUser();
+            if (response instanceof ErrorResponse) {
+                console.log(response)
+            } else  {
+                console.log("Запрашиваем пользвователя", response)
+                // @ts-ignore
+                props.setCurrentUser(response)
+            }
+        } catch (err) {
+            if (props.currentUser === undefined) navigate('/signIn')
+        }
     }
+
+    useEffect(() => {
+        if (props.currentUser === undefined) {
+            fetchCurrentUser()
+        }
+    }, [props.currentUser]);
 
     return (
         <Box mt={4} className="page">
             <div className="page-box">
-                <Heading>{props.currentUser.name}</Heading>
+                <Heading>{props.currentUser?.name}</Heading>
                 <div>
                     <Heading size="md" mt={4}>
                         Поменять имя
