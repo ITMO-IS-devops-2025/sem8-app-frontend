@@ -115,7 +115,11 @@ export function GroupPage(props: { currentUser: User | undefined }) {
             return;
         }
 
-        setParticipant([...participants, {userId: userResponse.id, name: userResponse.name, login: newParticipantLogin}]);
+        setParticipant([...participants, {
+            userId: userResponse.id,
+            name: userResponse.name,
+            login: newParticipantLogin
+        }]);
         setAddUserSuccess(`Пользователь ${newParticipantLogin} успешно добавлен!`);
         setAddUserError(null);
 
@@ -172,13 +176,13 @@ export function GroupPage(props: { currentUser: User | undefined }) {
                         {addUserSuccess && <Text color="green.500" mt={2}>{addUserSuccess}</Text>}
                     </FormControl>
 
-                    <Box mt = {4} display="flex" gap={8}>
+                    <Box mt={4} display="flex" gap={8}>
                         {/* Общие привычки */}
                         <Box flex="1">
                             <Heading as="h2" size="md">
                                 Общие привычки
                             </Heading>
-                            <List spacing={3} mt = {4}>
+                            <List spacing={3} mt={4}>
                                 {[...commonHabits].map((habit) => (
                                     <ListItem
                                         key={habit.id}
@@ -189,13 +193,11 @@ export function GroupPage(props: { currentUser: User | undefined }) {
                                         onClick={() => navigate(`/group/${groupId}/group-common-habit/${habit.id}`)}
                                     >
                                         <strong>{habit.name}</strong>
-                                        <Link to={`/group/${habit.id.toString()}`}>
-                                            <Box mt={1}>
-                                                <div>Периодичность: {habit.periodicity.value} {habit.periodicity.type}</div>
-                                                <div>Цель: {habit.goal}</div>
-                                                <div>Тип результата: {habit.resultType}</div>
-                                            </Box>
-                                        </Link>
+                                        <Box mt={1}>
+                                            <div>Периодичность: {habit.periodicity.value} {habit.periodicity.type}</div>
+                                            <div>Цель: {habit.goal}</div>
+                                            <div>Тип результата: {habit.resultType}</div>
+                                        </Box>
                                     </ListItem>
                                 ))}
                             </List>
@@ -206,7 +208,7 @@ export function GroupPage(props: { currentUser: User | undefined }) {
                             <Heading as="h2" size="md">
                                 Индивидуальные привычки
                             </Heading>
-                            <List spacing={3} mt = {4}>
+                            <List spacing={3} mt={4}>
                                 {[...personalHabits].map((habit) => (
                                     <ListItem
                                         key={habit.id}
@@ -217,13 +219,11 @@ export function GroupPage(props: { currentUser: User | undefined }) {
                                         onClick={() => navigate(`/group/${groupId}/group-personal-habit/${habit.id}`)}
                                     >
                                         <strong>{habit.name}</strong>
-                                        <Link to={`/group/${habit.id.toString()}`}>
-                                            <Box mt={1}>
-                                                <div>Периодичность: {habit.periodicity.value} {habit.periodicity.type}</div>
-                                                <div>Цель: {habit.goal}</div>
-                                                <div>Тип результата: {habit.resultType}</div>
-                                            </Box>
-                                        </Link>
+                                        <Box mt={1}>
+                                            <div>Периодичность: {habit.periodicity.value} {habit.periodicity.type}</div>
+                                            <div>Цель: {habit.goal}</div>
+                                            <div>Тип результата: {habit.resultType}</div>
+                                        </Box>
                                     </ListItem>
                                 ))}
                             </List>
