@@ -19,6 +19,7 @@ export function GroupCommonHabitPage(props: { currentUser: User | undefined; set
     const [comments, setComments] = useState<{ [key: string]: string }>({});
     const [statistics, setStatistics] = useState<Statistic| null>(null);
     const navigate = useNavigate();
+    const [editingMarks, setEditingMarks] = useState<{ [key: string]: boolean }>({});
 
     async function fetchCurrentUser() {
         try {
@@ -79,10 +80,20 @@ export function GroupCommonHabitPage(props: { currentUser: User | undefined; set
     };
 
     const handleSubmit = async (markId: string) => {
-        if (!habitId || !markValues[markId]) return;
+        if (!habitId) return;
 
         try {
-            const newValue = markValues[markId];
+            var newValue = "";
+            if (!markValues[markId]){
+                // @ts-ignore
+                if(habit.resultType == "Boolean"){
+                    newValue ="false";
+                }
+            }
+            else {
+                // @ts-ignore
+                newValue = markValues[markId];
+            }
             const comment = comments[markId] || "";
             await new HabitController().changeHabitMark(habitId, markId, String(newValue), comment);
             setHabit((prev) =>
@@ -138,7 +149,7 @@ export function GroupCommonHabitPage(props: { currentUser: User | undefined; set
                                     hour: "2-digit",
                                     minute: "2-digit",
                                 })}</Text>
-                                {mark.result === null ? (
+                                {mark.result === null || editingMarks[mark.id] ? (
                                     <>
                                         {habit.resultType === "Boolean" && (
                                             <Checkbox
@@ -170,15 +181,36 @@ export function GroupCommonHabitPage(props: { currentUser: User | undefined; set
                                         <Button
                                             mt={2}
                                             colorScheme="blue"
-                                            onClick={() => handleSubmit(mark.id)}
+                                            onClick={() => {
+                                                handleSubmit(mark.id);
+                                                setEditingMarks((prev) => ({ ...prev, [mark.id]: false }));
+                                            }}
                                         >
                                             Сохранить
+                                        </Button>
+                                        <Button
+                                            mt={2}
+                                            ml={2}
+                                            onClick={() =>
+                                                setEditingMarks((prev) => ({ ...prev, [mark.id]: false }))
+                                            }
+                                        >
+                                            Отмена
                                         </Button>
                                     </>
                                 ) : (
                                     <div>
                                         <Text>Результат: {mark.result.value}</Text>
                                         <Text>Комментарий: {mark.result.comment}</Text>
+                                        <Button
+                                            mt={2}
+                                            colorScheme="blue"
+                                            onClick={() =>
+                                                setEditingMarks((prev) => ({ ...prev, [mark.id]: true }))
+                                            }
+                                        >
+                                            Редактировать
+                                        </Button>
                                     </div>
                                 )}
                             </ListItem>

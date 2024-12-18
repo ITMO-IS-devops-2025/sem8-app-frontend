@@ -98,7 +98,10 @@ export function UserHabitPage(props: { currentUser: User | undefined; setCurrent
             if (!markValues[markId]){
                 // @ts-ignore
                 if(habit.resultType == "Boolean"){
-                    newValue ="False";
+                    newValue ="false";
+                }
+                else if(habit?.resultType == "Float"){
+                    newValue = "0";
                 }
             }
             else {

@@ -21,6 +21,7 @@ export function GroupPersonalHabitPage(props: { currentUser: User | undefined; s
     const [statistics, setStatistics] = useState<Statistic | null>(null);
     const [userNames, setUserNames] = useState<{ [userId: string]: string }>({});
     const navigate = useNavigate();
+    const [editingMarks, setEditingMarks] = useState<{ [key: string]: boolean }>({});
 
     async function fetchCurrentUser() {
         try {
@@ -107,35 +108,53 @@ export function GroupPersonalHabitPage(props: { currentUser: User | undefined; s
     };
 
     const handleSubmit = async (markId: string, timestamp: Date) => {
-        if (!habitId || !markValues[markId]) return;
+        if (!habitId) return;
 
         try {
-            const newValue = markValues[markId];
+            var newValue = "";
+            if (!markValues[markId]){
+                // @ts-ignore
+                if(habit.resultType == "Boolean"){
+                    newValue ="false";
+                }
+                else if(habit?.resultType == "Float"){
+                    newValue = "0";
+                }
+            }
+            else {
+                // @ts-ignore
+                newValue = markValues[markId];
+            }
             const comment = comments[markId] || "";
-            await new HabitController().changeHabitMark(habitId, markId, String(newValue), comment);
-            setHabit((prev) =>
-                prev ? {
-                        ...prev,
-                        marks: prev.marks?.map((mark) =>
-                            mark.timestamp === timestamp ?
-                                {
-                                    ...mark,
-                                    personalMarks: mark.personalMarks?.map((personalMark) =>
-                                        personalMark.id == markId ?
-                                            {
-                                                ...personalMark,
-                                                result: {value: newValue, comment: comment}
-                                            }
-                                            : personalMark
-                                    ),
-                                }
-                                : mark
-                        ),
-                    }
-                    : prev
-            );
-            setMarkValues((prev) => ({...prev, [markId]: null}));
-            setComments((prev) => ({...prev, [markId]: ""}));
+            const response = await new HabitController().changeHabitMark(habitId, markId, String(newValue), comment);
+            if (response instanceof ErrorResponse) {
+                setError(true);
+            }
+            else {
+                setHabit((prev) =>
+                    prev ? {
+                            ...prev,
+                            marks: prev.marks?.map((mark) =>
+                                mark.timestamp === timestamp ?
+                                    {
+                                        ...mark,
+                                        personalMarks: mark.personalMarks?.map((personalMark) =>
+                                            personalMark.id == markId ?
+                                                {
+                                                    ...personalMark,
+                                                    result: {value: newValue, comment: comment}
+                                                }
+                                                : personalMark
+                                        ),
+                                    }
+                                    : mark
+                            ),
+                        }
+                        : prev
+                );
+                setMarkValues((prev) => ({...prev, [markId]: null}));
+                setComments((prev) => ({...prev, [markId]: ""}));
+            }
         } catch (err) {
             console.error("Ошибка при обновлении отметки:", err);
         }
@@ -215,15 +234,36 @@ export function GroupPersonalHabitPage(props: { currentUser: User | undefined; s
                                                 <Button
                                                     mt={2}
                                                     colorScheme="blue"
-                                                    onClick={() => handleSubmit(personalMark.id, mark.timestamp)}
+                                                    onClick={() => {
+                                                        handleSubmit(personalMark.id, mark.timestamp);
+                                                        setEditingMarks((prev) => ({ ...prev, [personalMark.id]: false }));
+                                                    }}
                                                 >
                                                     Сохранить
+                                                </Button>
+                                                <Button
+                                                    mt={2}
+                                                    ml={2}
+                                                    onClick={() =>
+                                                        setEditingMarks((prev) => ({ ...prev, [personalMark.id]: false }))
+                                                    }
+                                                >
+                                                    Отмена
                                                 </Button>
                                             </>
                                         ) : (
                                             <div>
                                                 <Text>Результат: {personalMark.result.value}</Text>
                                                 <Text>Комментарий: {personalMark.result.comment}</Text>
+                                                <Button
+                                                    mt={2}
+                                                    colorScheme="blue"
+                                                    onClick={() =>
+                                                        setEditingMarks((prev) => ({ ...prev, [personalMark.id]: true }))
+                                                    }
+                                                >
+                                                    Редактировать
+                                                </Button>
                                             </div>
                                         )}
                                     </ListItem>
