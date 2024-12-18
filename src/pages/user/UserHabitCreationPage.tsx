@@ -217,7 +217,7 @@ export function UserHabitCreationPage(props: { currentUser: User | undefined; se
                 {/* Форма для кастомной привычки */}
                 <Box flex="1">
                     <Heading size="md" mt={6}>Создать кастомную привычку</Heading>
-                    <FormControl mb={4}>
+                    <FormControl mb={4} isRequired>
                         <FormLabel>Название привычки</FormLabel>
                         <Input
                             placeholder="Введите название"
