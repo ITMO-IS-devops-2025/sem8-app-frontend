@@ -158,7 +158,6 @@ export function GroupCommonHabitPage(props: { currentUser: User | undefined }) {
                             </ListItem>
                         ))}
                     </List>
-
                 </Box>
             )}
         </div>

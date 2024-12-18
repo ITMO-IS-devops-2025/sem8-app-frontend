@@ -28,6 +28,7 @@ export function UserHabitPage(props: { currentUser: User | undefined }) {
     const [markValues, setMarkValues] = useState<{ [key: string]: string | null }>({});
     const [comments, setComments] = useState<{ [key: string]: string }>({});
     const [statistics, setStatistics] = useState<Statistic | null>(null);
+    const [editingMarks, setEditingMarks] = useState<{ [key: string]: boolean }>({});
 
     useEffect(() => {
         async function fetchHabitData() {
@@ -64,10 +65,20 @@ export function UserHabitPage(props: { currentUser: User | undefined }) {
     };
 
     const handleSubmit = async (markId: string) => {
-        if (!habitId || !markValues[markId]) return;
+        if (!habitId) return;
 
         try {
-            const newValue = markValues[markId];
+            var newValue = "";
+            if (!markValues[markId]){
+                // @ts-ignore
+                if(habit.resultType == "Boolean"){
+                    newValue ="False";
+                }
+            }
+            else {
+                // @ts-ignore
+                newValue = markValues[markId];
+            }
             const comment = comments[markId] || "";
             await new HabitController().changeHabitMark(habitId, markId, String(newValue), comment);
             setHabit((prev) =>
@@ -124,7 +135,7 @@ export function UserHabitPage(props: { currentUser: User | undefined }) {
                                     hour: "2-digit",
                                     minute: "2-digit",
                                 })}</Text>
-                                {mark.result === null ? (
+                                {mark.result === null || editingMarks[mark.id] ? (
                                     <>
                                         {habit.resultType === "Boolean" && (
                                             <Checkbox
@@ -156,16 +167,37 @@ export function UserHabitPage(props: { currentUser: User | undefined }) {
                                         <Button
                                             mt={2}
                                             colorScheme="blue"
-                                            onClick={() => handleSubmit(mark.id)}
+                                            onClick={() => {
+                                                handleSubmit(mark.id);
+                                                setEditingMarks((prev) => ({ ...prev, [mark.id]: false }));
+                                            }}
                                         >
                                             Сохранить
                                         </Button>
+                                        <Button
+                                            mt={2}
+                                            ml={2}
+                                            onClick={() =>
+                                                setEditingMarks((prev) => ({ ...prev, [mark.id]: false }))
+                                            }
+                                        >
+                                            Отмена
+                                        </Button>
                                     </>
                                 ) : (
-                                    <div>
+                                    <Box>
                                         <Text>Результат: {mark.result.value}</Text>
                                         <Text>Комментарий: {mark.result.comment}</Text>
-                                    </div>
+                                        <Button
+                                            mt={2}
+                                            colorScheme="blue"
+                                            onClick={() =>
+                                                setEditingMarks((prev) => ({ ...prev, [mark.id]: true }))
+                                            }
+                                        >
+                                            Редактировать
+                                        </Button>
+                                    </Box>
                                 )}
                             </ListItem>
                         ))}
