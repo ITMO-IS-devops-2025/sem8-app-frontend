@@ -149,7 +149,7 @@ export function UserHabitPage(props: { currentUser: User | undefined; setCurrent
                     {habit.isTemplated && statistics !== null && (
                         <Box mt={4} p={4}>
                             <Heading as="h2" size="md">Статистика:</Heading>
-                            <Text fontSize="lg">Вы справляетесть успешнее, чем {statistics.value}% пользователей!</Text>
+                            <Text fontSize="lg">Вы справляетесть успешнее, чем {statistics.value * 100}% пользователей!</Text>
                         </Box>
                     )}
                     <Heading as="h2" size="mt" mt={10}>Оценки:</Heading>
