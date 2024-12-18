@@ -1,22 +1,48 @@
 import React, { useState, useEffect } from "react";
-import { useParams } from "react-router-dom";
+import {useNavigate, useParams} from "react-router-dom";
 import { HabitController } from "../../../controllers/HabitController";
 import { Habit } from "../../../model/habit/Habit";
 import {List, ListItem, Text, Box, Heading, Input, Button, Checkbox, HStack, Tag, TagLabel} from "@chakra-ui/react";
 import { User } from "../../../model/user/User";
-import {UserController} from "@/controllers/UserController";
+import {UserController} from "../../../controllers/UserController";
 import {GroupController} from "../../../controllers/GroupController";
 import {Textarea} from "@chakra-ui/icons";
 import {Statistic} from "../../../model/habit/Statistics";
 import {ErrorResponse} from "../../../controllers/BaseController";
+import {NavigateOnLogout} from "../../../utils/auth/NavigateOnLogin";
 
-export function GroupCommonHabitPage(props: { currentUser: User | undefined }) {
+export function GroupCommonHabitPage(props: { currentUser: User | undefined; setCurrentUser: (newPersonData: User) => void; }) {
     const { habitId, groupId } = useParams<{ habitId: string; groupId: string }>();
     const [habit, setHabit] = useState<Habit>();
     const [error, setError] = useState(false);
     const [markValues, setMarkValues] = useState<{ [key: string]: string | null }>({});
     const [comments, setComments] = useState<{ [key: string]: string }>({});
     const [statistics, setStatistics] = useState<Statistic| null>(null);
+    const navigate = useNavigate();
+
+    async function fetchCurrentUser() {
+        try {
+            const response = await new UserController().getCurrentUser();
+            if (response instanceof ErrorResponse) {
+                console.log(response)
+                if (response.code == 401) {
+                    navigate('/signIn')
+                }
+            } else  {
+                console.log("Запрашиваем пользвователя", response)
+                // @ts-ignore
+                props.setCurrentUser(response)
+            }
+        } catch (err) {
+            if (props.currentUser === undefined) navigate('/signIn')
+        }
+    }
+
+    useEffect(() => {
+        if (props.currentUser === undefined) {
+            fetchCurrentUser()
+        }
+    }, [props.currentUser]);
 
     useEffect(() => {
         async function fetchHabitData() {
@@ -76,11 +102,11 @@ export function GroupCommonHabitPage(props: { currentUser: User | undefined }) {
     };
 
     return (
-        <div className="habit-page">
+        <div className="page">
             {error && <div className="error-message">Произошла ошибка при загрузке данных привычки.</div>}
 
             {habit && (
-                <Box px={6}>
+                <Box px={6} width={ '60%' }>
                     <Heading as="h1">Привычка: {habit.name}</Heading>
                     <Text fontSize="xl">Описание: {habit.description}</Text>
                     <Text fontSize="xl">Тэги: </Text>
@@ -100,10 +126,10 @@ export function GroupCommonHabitPage(props: { currentUser: User | undefined }) {
                             <Text fontSize="lg">Доля (чего-то я хз): {statistics.value}</Text>
                         </Box>
                     )}
-                    <Heading as="h2" size="mt" mt={4}>Оценки:</Heading>
+                    <Heading as="h2" size="mt" mt={10}>Оценки:</Heading>
                     <List spacing={3} >
                         {habit.marks?.map((mark, index) => (
-                            <ListItem key={index}>
+                            <ListItem key={index} mb={20}>
                                 <Text>Дата: {new Date(mark.timestamp).toLocaleString("ru-RU", {
                                     timeZone: "UTC",
                                     day: "2-digit",

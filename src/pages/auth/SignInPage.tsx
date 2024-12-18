@@ -52,13 +52,13 @@ export function SignInPage(props: { currentUser: User | undefined; setCurrentUse
     }
 
     return <div>
-        <Box mt={4} px={6}>
-            <Form onSubmit={handleForm}>
-                <FormControl isRequired width={'30%'}>
+        <Box mt={4} className="page">
+            <Form onSubmit={handleForm} className="auth-form">
+                <FormControl isRequired>
                     <FormLabel>Введите ваш юзернейм: </FormLabel>
                     <Input type='text' name="login"/>
                 </FormControl>
-                <FormControl isRequired mt={4} width={'30%'}>
+                <FormControl isRequired mt={4}>
                     <FormLabel>Введите ваш пароль: </FormLabel>
                     <InputGroup size='md'>
                         <Input

@@ -2,13 +2,39 @@ import React, {useEffect, useState} from "react";
 import {GroupController} from "../../controllers/GroupController";
 import {Group} from "../../model/group/Group";
 import {List, ListItem, Button, Box, Heading} from "@chakra-ui/react";
-import {Link} from "react-router-dom";
+import {Link, useNavigate} from "react-router-dom";
 import {User} from "../../model/user/User";
 import {ErrorResponse} from "../../controllers/BaseController";
+import {UserController} from "../../controllers/UserController";
 
-export function GroupListPage(props: { currentUser: User | undefined }) {
+export function GroupListPage(props: { currentUser: User | undefined; setCurrentUser: (newPersonData: User) => void; }) {
     const [groups, setGroups] = useState<Group[]>([]);
     const [error, setError] = useState(false);
+    const navigate = useNavigate();
+
+    async function fetchCurrentUser() {
+        try {
+            const response = await new UserController().getCurrentUser();
+            if (response instanceof ErrorResponse) {
+                console.log(response)
+                if (response.code == 401) {
+                    navigate('/signIn')
+                }
+            } else  {
+                console.log("Запрашиваем пользвователя", response)
+                // @ts-ignore
+                props.setCurrentUser(response)
+            }
+        } catch (err) {
+            if (props.currentUser === undefined) navigate('/signIn')
+        }
+    }
+
+    useEffect(() => {
+        if (props.currentUser === undefined) {
+            fetchCurrentUser()
+        }
+    }, [props.currentUser]);
 
     async function fetchGroups() {
         try {
@@ -30,16 +56,8 @@ export function GroupListPage(props: { currentUser: User | undefined }) {
         }
     }, [props.currentUser]);
 
-    if (props.currentUser === undefined) {
-        return (
-            <div>
-                <Heading px={6}>Регистрируйся и присоединяйся к панпипе!</Heading>
-            </div>
-        );
-    }
-
     return (
-        <Box mt={4} px={6}>
+        <Box mt={4} px={6} className="page">
             <div className="group-list-page">
 
                 <Heading as="h1" size="lg" mt={4}>

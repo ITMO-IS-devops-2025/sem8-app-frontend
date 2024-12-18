@@ -47,17 +47,17 @@ export function SignUpPage(props: { currentUser: User | undefined; setCurrentUse
     }
 
     return <div className="form">
-        <Box mt={4} px={6}>
-            <Form onSubmit={handleForm}>
-                <FormControl isRequired width={'30%'}>
+        <Box mt={4} className="page">
+            <Form onSubmit={handleForm} className="auth-form">
+                <FormControl isRequired>
                     <FormLabel>Введите ваше имя:</FormLabel>
                     <Input type='text' name="name"/>
                 </FormControl>
-                <FormControl isRequired mt={4} width={'30%'}>
+                <FormControl isRequired mt={4}>
                     <FormLabel>Введите ваш юзернейм:</FormLabel>
                     <Input type='text' name="login"/>
                 </FormControl>
-                <FormControl isRequired mt={4} width={'30%'}>
+                <FormControl isRequired mt={4}>
                     <FormLabel>Введите ваш пароль:</FormLabel>
                     <InputGroup size='md'>
                         <Input
@@ -72,7 +72,7 @@ export function SignUpPage(props: { currentUser: User | undefined; setCurrentUse
                         </InputRightElement>
                     </InputGroup>
                 </FormControl>
-                <FormControl isRequired mt={4} width={'30%'}>
+                <FormControl isRequired mt={4}>
                     <FormLabel>Повторите ваш пароль:</FormLabel>
                     <InputGroup size='md'>
                         <Input

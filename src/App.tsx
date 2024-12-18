@@ -36,7 +36,7 @@ function App() {
       children: [
         {
           index: true,
-          element: <MainPage currentUser={currentUser}/>
+          element: <MainPage currentUser={currentUser} setCurrentUser={setCurrentUser}/>
         },
         {
           path: "/signIn",
@@ -52,39 +52,39 @@ function App() {
         },
         {
           path: "/account",
-          element: <AccountPage currentUser={currentUser}/>,
+          element: <AccountPage currentUser={currentUser} setCurrentUser={setCurrentUser}/>,
         },
         {
           path: "/group/:groupId",
-          element: <GroupPage currentUser={currentUser} />,
+          element: <GroupPage currentUser={currentUser} setCurrentUser={setCurrentUser}/>,
         },
         {
           path: "/groups",
-          element: <GroupListPage currentUser={currentUser} />,
+          element: <GroupListPage currentUser={currentUser} setCurrentUser={setCurrentUser}/>,
         },
         {
           path: "/group-creation",
-          element: <GroupCreationPage currentUser={currentUser} />,
+          element: <GroupCreationPage currentUser={currentUser} setCurrentUser={setCurrentUser}/>,
         },
         {
           path: "/user-habit/:habitId",
-          element: <UserHabitPage currentUser={currentUser} />,
+          element: <UserHabitPage currentUser={currentUser} setCurrentUser={setCurrentUser}/>,
         },
         {
           path: "/group/:groupId/group-common-habit/:habitId",
-          element: <GroupCommonHabitPage currentUser={currentUser} />,
+          element: <GroupCommonHabitPage currentUser={currentUser} setCurrentUser={setCurrentUser}/>,
         },
         {
           path: "/group/:groupId/group-personal-habit/:habitId",
-          element: <GroupPersonalHabitPage currentUser={currentUser} />,
+          element: <GroupPersonalHabitPage currentUser={currentUser} setCurrentUser={setCurrentUser}/>,
         },
         {
           path: "/user-habit-creation",
-          element: <UserHabitCreationPage currentUser={currentUser} />,
+          element: <UserHabitCreationPage currentUser={currentUser} setCurrentUser={setCurrentUser}/>,
         },
         {
           path: "/group/:groupId/group-habit-creation",
-          element: <GroupHabitCreationPage currentUser={currentUser} />,
+          element: <GroupHabitCreationPage currentUser={currentUser} setCurrentUser={setCurrentUser}/>,
         }
       ]
     },

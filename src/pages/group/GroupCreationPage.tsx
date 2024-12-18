@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, {useEffect, useState} from "react";
 import { GroupController } from "../../controllers/GroupController";
 import { UserController } from "../../controllers/UserController";
 import {
@@ -15,11 +15,11 @@ import {
 import { User } from "../../model/user/User";
 import {ErrorResponse} from "../../controllers/BaseController";
 import {NavigateOnLogout} from "../../utils/auth/NavigateOnLogin";
+import {Navigate, useNavigate} from "react-router-dom";
 
-export function GroupCreationPage(props: { currentUser: User | undefined }) {
+export function GroupCreationPage(props: { currentUser: User | undefined; setCurrentUser: (newPersonData: User) => void; }) {
 
-    let navigate = NavigateOnLogout(props.currentUser)
-
+    const navigate = useNavigate();
     const [groupName, setGroupName] = useState<string>("");
     const [participants, setParticipants] = useState<User[]>([]);
     const [newParticipantLogin, setNewParticipantLogin] = useState<string>("");
@@ -27,6 +27,30 @@ export function GroupCreationPage(props: { currentUser: User | undefined }) {
     const [addUserSuccess, setAddUserSuccess] = useState<string | null>(null);
     const [error, setError] = useState<string | null>(null);
 
+
+    async function fetchCurrentUser() {
+        try {
+            const response = await new UserController().getCurrentUser();
+            if (response instanceof ErrorResponse) {
+                console.log(response)
+                if (response.code == 401) {
+                    navigate('/signIn')
+                }
+            } else  {
+                console.log("Запрашиваем пользвователя", response)
+                // @ts-ignore
+                props.setCurrentUser(response)
+            }
+        } catch (err) {
+            if (props.currentUser === undefined) navigate('/signIn')
+        }
+    }
+
+    useEffect(() => {
+        if (props.currentUser === undefined) {
+            fetchCurrentUser()
+        }
+    }, [props.currentUser]);
 
     const handleCreateGroup = async () => {
         if (!groupName) {
@@ -69,26 +93,30 @@ export function GroupCreationPage(props: { currentUser: User | undefined }) {
             return;
         }
 
-        if (userResponse.id in participants.map(participant => participant.userId)) {
+        if (userResponse.userId in participants.map(participant => participant.userId)) {
             setAddUserError("Такой пользователь уже есть.");
             setAddUserSuccess(null);
             return;
         }
 
+        if (!userResponse.userId) {
+            setAddUserError("id пользователя null");
+            return;
+        }
 
-        setParticipants([...participants, {userId: userResponse.id, name: userResponse.name, login: newParticipantLogin}]);
+        setParticipants([...participants, userResponse]);
         setAddUserSuccess(`Пользователь ${newParticipantLogin} успешно добавлен!`);
         setAddUserError(null);
     };
 
     return (
-        <div className="group-creation-page">
-            <Box px={6}>
+        <div className="page">
+            <Box px={6} className="page-box">
                 <Heading size="md" mb={3}>
                     Создать новую группу
                 </Heading>
                 {error && <Text color="red.500" mb={3}>{error}</Text>}
-                <FormControl mb={4} width={'30%'}>
+                <FormControl mb={4}>
                     <FormLabel>Название группы</FormLabel>
                     <Input
                         placeholder="Введите название группы"
@@ -100,7 +128,7 @@ export function GroupCreationPage(props: { currentUser: User | undefined }) {
                 <Heading size="sm" mt={4}>
                     Добавить участников:
                 </Heading>
-                <FormControl mt={2} width={'30%'}>
+                <FormControl mt={2}>
                     <Input
                         placeholder="Введите логин пользователя"
                         value={newParticipantLogin}

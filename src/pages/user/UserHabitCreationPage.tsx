@@ -25,12 +25,13 @@ import { User } from "../../model/user/User";
 import { UserController } from "../../controllers/UserController";
 import {Habit, Periodicity} from "../../model/habit/Habit";
 import {ErrorResponse} from "../../controllers/BaseController";
+import {NavigateOnLogout} from "../../utils/auth/NavigateOnLogin";
 
-export function UserHabitCreationPage(props: { currentUser: User | undefined }) {
+export function UserHabitCreationPage(props: { currentUser: User | undefined; setCurrentUser: (newPersonData: User) => void; }) {
     const [habitTemplates, setHabitTemplates] = useState<HabitTemplate[]>([]);
     const [selectedTemplate, setSelectedTemplate] = useState<string | null>(null);
     const [error, setError] = useState(false);
-    const navigate = useNavigate();
+    let navigate = NavigateOnLogout(props.currentUser)
     // State для кастомной привычки
     const [customHabit, setCustomHabit] = useState({
         name: "",
@@ -79,6 +80,30 @@ export function UserHabitCreationPage(props: { currentUser: User | undefined }) 
         }
         fetchTags();
     }, []);
+
+    async function fetchCurrentUser() {
+        try {
+            const response = await new UserController().getCurrentUser();
+            if (response instanceof ErrorResponse) {
+                console.log(response)
+                if (response.code == 401) {
+                    navigate('/signIn')
+                }
+            } else  {
+                console.log("Запрашиваем пользвователя", response)
+                // @ts-ignore
+                props.setCurrentUser(response)
+            }
+        } catch (err) {
+            if (props.currentUser === undefined) navigate('/signIn')
+        }
+    }
+
+    useEffect(() => {
+        if (props.currentUser === undefined) {
+            fetchCurrentUser()
+        }
+    }, [props.currentUser]);
 
     const handleCreateHabitFromTemplate = async () => {
         if (!selectedTemplate) {
@@ -153,7 +178,7 @@ export function UserHabitCreationPage(props: { currentUser: User | undefined }) 
 
     return (
         <div className="habit-creation-page">
-            <Box px={6} display="flex" gap={8}>
+            <Box px={6} display="flex" gap={8} className="page">
                 {/* Боковая панель с шаблонами */}
                 <Box flex="1">
                     <FormControl mb={4}>
@@ -215,6 +240,7 @@ export function UserHabitCreationPage(props: { currentUser: User | undefined }) 
                         <List spacing={3} mt={4}>
                             {allTags.map((tag) => (
                                 <ListItem key={tag.id}
+                                          cursor="pointer"
                                           onClick={() => handleAddTag(tag.id, tag.name)}>
                                     {tag.name}
                                 </ListItem>
@@ -223,7 +249,7 @@ export function UserHabitCreationPage(props: { currentUser: User | undefined }) 
 
                         <HStack mt={2} wrap="wrap">
                             {customHabit.tags.map((tag, index) => (
-                                <Tag key={index} size="md" colorScheme="teal" borderRadius="full">
+                                <Tag key={index} size="md" colorScheme="teal" borderRadius="full" cursor="pointer">
                                     <TagLabel>{tag.name}</TagLabel>
                                     <TagCloseButton onClick={() => handleRemoveTag(tag.id, tag.name)} />
                                 </Tag>

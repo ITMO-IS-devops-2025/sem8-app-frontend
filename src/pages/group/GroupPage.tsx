@@ -18,20 +18,45 @@ import {GroupHabitPersonal} from "../../model/habit/GroupHabitPersonal";
 import {GroupController} from "../../controllers/GroupController";
 import {ErrorResponse} from "../../controllers/BaseController";
 import {UserController} from "../../controllers/UserController";
+import {NavigateOnLogout} from "../../utils/auth/NavigateOnLogin";
 
-export function GroupPage(props: { currentUser: User | undefined }) {
+export function GroupPage(props: { currentUser: User | undefined; setCurrentUser: (newPersonData: User) => void; }) {
     const {groupId} = useParams<{ groupId: string }>();
     const [group, setGroup] = useState<Group | null>(null);
     const [commonHabits, setCommonHabits] = useState<Habit[]>([]);
     const [personalHabits, setPersonalHabits] = useState<GroupHabitPersonal[]>([]);
     const [error, setError] = useState(false);
-    const navigate = useNavigate();
+    let navigate = useNavigate();
     const [groupName, setGroupName] = useState<string>("");
     const [participants, setParticipant] = useState<User[]>([]);
     const [newParticipantLogin, setNewParticipantLogin] = useState<string>("");
     const [newParticipant, setNewParticipant] = useState<User>();
     const [addUserError, setAddUserError] = useState<string | null>(null);
     const [addUserSuccess, setAddUserSuccess] = useState<string | null>(null);
+
+    async function fetchCurrentUser() {
+        try {
+            const response = await new UserController().getCurrentUser();
+            if (response instanceof ErrorResponse) {
+                console.log(response)
+                if (response.code == 401) {
+                    navigate('/signIn')
+                }
+            } else  {
+                console.log("Запрашиваем пользвователя", response)
+                // @ts-ignore
+                props.setCurrentUser(response)
+            }
+        } catch (err) {
+            if (props.currentUser === undefined) navigate('/signIn')
+        }
+    }
+
+    useEffect(() => {
+        if (props.currentUser === undefined) {
+            fetchCurrentUser()
+        }
+    }, [props.currentUser]);
 
     async function fetchGroupData() {
         if (!groupId) return;
@@ -108,21 +133,21 @@ export function GroupPage(props: { currentUser: User | undefined }) {
             return;
         }
 
-        if (userResponse.id in participants.map(participant => participant.userId)) {
+        if (userResponse.userId in participants.map(participant => participant.userId)) {
             setAddUserError("Такой пользователь уже есть.");
             setAddUserSuccess(null);
             return;
         }
 
-        setParticipant([...participants, {userId: userResponse.id, name: userResponse.name, login: newParticipantLogin}]);
+        setParticipant([...participants, userResponse]);
         setAddUserSuccess(`Пользователь ${newParticipantLogin} успешно добавлен!`);
         setAddUserError(null);
 
-        await new GroupController().addUserToGroup(groupId!!, userResponse.id)
+        await new GroupController().addUserToGroup(groupId!!, userResponse.userId)
     };
 
     return (
-        <div className="group-page">
+        <div className="page">
             {error && <div className="error-message">Произошла ошибка при загрузке данных группы.</div>}
 
             {group && (
@@ -153,7 +178,7 @@ export function GroupPage(props: { currentUser: User | undefined }) {
                     <Heading size="sm" mt={2}>
                         Добавить участников:
                     </Heading>
-                    <FormControl mt={2} width={'30%'}>
+                    <FormControl mt={2}>
                         <Input
                             placeholder="Введите логин пользователя"
                             value={newParticipantLogin}
@@ -171,13 +196,13 @@ export function GroupPage(props: { currentUser: User | undefined }) {
                         {addUserSuccess && <Text color="green.500" mt={2}>{addUserSuccess}</Text>}
                     </FormControl>
 
-                    <Box mt = {4} display="flex" gap={8}>
+                    <Box mt={4} display="flex" gap={8}>
                         {/* Общие привычки */}
                         <Box flex="1">
                             <Heading as="h2" size="md">
                                 Общие привычки
                             </Heading>
-                            <List spacing={3} mt = {4}>
+                            <List spacing={3} mt={4}>
                                 {[...commonHabits].map((habit) => (
                                     <ListItem
                                         key={habit.id}
@@ -188,13 +213,11 @@ export function GroupPage(props: { currentUser: User | undefined }) {
                                         onClick={() => navigate(`/group/${groupId}/group-common-habit/${habit.id}`)}
                                     >
                                         <strong>{habit.name}</strong>
-                                        <Link to={`/group/${habit.id.toString()}`}>
-                                            <Box mt={1}>
-                                                <div>Периодичность: {habit.periodicity.value} {habit.periodicity.type}</div>
-                                                <div>Цель: {habit.goal}</div>
-                                                <div>Тип результата: {habit.resultType}</div>
-                                            </Box>
-                                        </Link>
+                                        <Box mt={1}>
+                                            <div>Периодичность: {habit.periodicity.value} {habit.periodicity.type}</div>
+                                            <div>Цель: {habit.goal}</div>
+                                            <div>Тип результата: {habit.resultType}</div>
+                                        </Box>
                                     </ListItem>
                                 ))}
                             </List>
@@ -205,7 +228,7 @@ export function GroupPage(props: { currentUser: User | undefined }) {
                             <Heading as="h2" size="md">
                                 Индивидуальные привычки
                             </Heading>
-                            <List spacing={3} mt = {4}>
+                            <List spacing={3} mt={4}>
                                 {[...personalHabits].map((habit) => (
                                     <ListItem
                                         key={habit.id}
@@ -216,13 +239,11 @@ export function GroupPage(props: { currentUser: User | undefined }) {
                                         onClick={() => navigate(`/group/${groupId}/group-personal-habit/${habit.id}`)}
                                     >
                                         <strong>{habit.name}</strong>
-                                        <Link to={`/group/${habit.id.toString()}`}>
-                                            <Box mt={1}>
-                                                <div>Периодичность: {habit.periodicity.value} {habit.periodicity.type}</div>
-                                                <div>Цель: {habit.goal}</div>
-                                                <div>Тип результата: {habit.resultType}</div>
-                                            </Box>
-                                        </Link>
+                                        <Box mt={1}>
+                                            <div>Периодичность: {habit.periodicity.value} {habit.periodicity.type}</div>
+                                            <div>Цель: {habit.goal}</div>
+                                            <div>Тип результата: {habit.resultType}</div>
+                                        </Box>
                                     </ListItem>
                                 ))}
                             </List>

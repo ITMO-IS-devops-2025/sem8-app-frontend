@@ -23,13 +23,13 @@ import {User} from "../../../model/user/User";
 import {HabitTemplate} from "../../../model/habit/HabitTemplate";
 import {HabitController} from "../../../controllers/HabitController";
 import {ErrorResponse} from "../../../controllers/BaseController";
+import {NavigateOnLogout} from "../../../utils/auth/NavigateOnLogin";
 
-export function GroupHabitCreationPage(props: { currentUser: User | undefined }) {
+export function GroupHabitCreationPage(props: { currentUser: User | undefined;setCurrentUser: (newPersonData: User) => void; }) {
     const { groupId } = useParams<{ groupId: string }>();
     const [habitTemplates, setHabitTemplates] = useState<HabitTemplate[]>([]);
     const [selectedTemplate, setSelectedTemplate] = useState<string | null>(null);
     const [error, setError] = useState(false);
-    const navigate = useNavigate();
     const [habitType, setHabitType] = useState<"personal" | "group" | "">("");
     // State для кастомной привычки
     const [customHabit, setCustomHabit] = useState({
@@ -45,7 +45,31 @@ export function GroupHabitCreationPage(props: { currentUser: User | undefined })
     });
 
     const [allTags, setTags] = useState<{id: string, name: string}[]>([]);
+    const navigate = useNavigate();
 
+    async function fetchCurrentUser() {
+        try {
+            const response = await new UserController().getCurrentUser();
+            if (response instanceof ErrorResponse) {
+                console.log(response)
+                if (response.code == 401) {
+                    navigate('/signIn')
+                }
+            } else  {
+                console.log("Запрашиваем пользвователя", response)
+                // @ts-ignore
+                props.setCurrentUser(response)
+            }
+        } catch (err) {
+            if (props.currentUser === undefined) navigate('/signIn')
+        }
+    }
+
+    useEffect(() => {
+        if (props.currentUser === undefined) {
+            fetchCurrentUser()
+        }
+    }, [props.currentUser]);
 
     useEffect(() => {
         async function fetchHabitTemplates() {
@@ -171,7 +195,7 @@ export function GroupHabitCreationPage(props: { currentUser: User | undefined })
     };
 
     return (
-        <div className="habit-creation-page">
+        <div className="page">
             <Box px={6}>
                 {/* Выбор типа зачета */}
                 <FormControl mb={4}>
@@ -252,9 +276,10 @@ export function GroupHabitCreationPage(props: { currentUser: User | undefined })
 
                         <FormControl mb={4}>
                             <FormLabel>Теги</FormLabel>
-                            <List spacing={3} mt={4}>
+                            <List spacing={1} mt={4}>
                                 {allTags.map((tag) => (
                                     <ListItem key={tag.id}
+                                              cursor="pointer"
                                               onClick={() => handleAddTag(tag.id, tag.name)}>
                                         {tag.name}
                                     </ListItem>
@@ -263,7 +288,7 @@ export function GroupHabitCreationPage(props: { currentUser: User | undefined })
 
                             <HStack mt={2} wrap="wrap">
                                 {customHabit.tags.map((tag, index) => (
-                                    <Tag key={index} size="md" colorScheme="teal" borderRadius="full">
+                                    <Tag key={index} size="md" colorScheme="teal" borderRadius="full" cursor="pointer">
                                         <TagLabel>{tag.name}</TagLabel>
                                         <TagCloseButton onClick={() => handleRemoveTag(tag.id, tag.name)} />
                                     </Tag>

@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from "react";
-import {useParams} from "react-router-dom";
+import {useNavigate, useParams} from "react-router-dom";
 import {HabitController} from "../../../controllers/HabitController";
 import {Habit} from "../../../model/habit/Habit";
 import {List, ListItem, Text, Box, Heading, Input, Button, Checkbox, HStack, Tag, TagLabel} from "@chakra-ui/react";
@@ -10,8 +10,9 @@ import {Textarea} from "@chakra-ui/icons";
 import {GroupHabitPersonal} from "../../../model/habit/GroupHabitPersonal";
 import {Statistic} from "../../../model/habit/Statistics";
 import {ErrorResponse} from "../../../controllers/BaseController";
+import {NavigateOnLogout} from "../../../utils/auth/NavigateOnLogin";
 
-export function GroupPersonalHabitPage(props: { currentUser: User | undefined }) {
+export function GroupPersonalHabitPage(props: { currentUser: User | undefined; setCurrentUser: (newPersonData: User) => void; }) {
     const {habitId, groupId} = useParams<{ habitId: string; groupId: string }>();
     const [habit, setHabit] = useState<GroupHabitPersonal>();
     const [error, setError] = useState(false);
@@ -19,6 +20,31 @@ export function GroupPersonalHabitPage(props: { currentUser: User | undefined })
     const [comments, setComments] = useState<{ [key: string]: string }>({});
     const [statistics, setStatistics] = useState<Statistic | null>(null);
     const [userNames, setUserNames] = useState<{ [userId: string]: string }>({});
+    const navigate = useNavigate();
+
+    async function fetchCurrentUser() {
+        try {
+            const response = await new UserController().getCurrentUser();
+            if (response instanceof ErrorResponse) {
+                console.log(response)
+                if (response.code == 401) {
+                    navigate('/signIn')
+                }
+            } else  {
+                console.log("Запрашиваем пользвователя", response)
+                // @ts-ignore
+                props.setCurrentUser(response)
+            }
+        } catch (err) {
+            if (props.currentUser === undefined) navigate('/signIn')
+        }
+    }
+
+    useEffect(() => {
+        if (props.currentUser === undefined) {
+            fetchCurrentUser()
+        }
+    }, [props.currentUser]);
 
     useEffect(() => {
         async function fetchHabitData() {
@@ -30,7 +56,7 @@ export function GroupPersonalHabitPage(props: { currentUser: User | undefined })
                     setError(true);
                 } else if ("name" in response) {
                     setHabit(response);
-                    const statsResponse = await new GroupController().getCommonHabitStatistics(groupId, habitId);
+                    const statsResponse = await new GroupController().getPersonalHabitStatistics(groupId, habitId);
                     if (statsResponse instanceof ErrorResponse) {
                         console.error("Ошибка при загрузке статистики:", statsResponse);
                     } else {
@@ -116,11 +142,11 @@ export function GroupPersonalHabitPage(props: { currentUser: User | undefined })
     };
 
     return (
-        <div className="habit-page">
+        <div className="page">
             {error && <div className="error-message">Произошла ошибка при загрузке данных привычки.</div>}
 
             {habit && (
-                <Box px={6}>
+                <Box px={6} width={ '60%' }>
                     <Heading as="h1">Привычка: {habit.name}</Heading>
                     <Text fontSize="xl">Описание: {habit.description}</Text>
                     <Text fontSize="xl">Тэги: </Text>
@@ -140,10 +166,10 @@ export function GroupPersonalHabitPage(props: { currentUser: User | undefined })
                             <Text fontSize="lg">Доля (чего-то я хз): {statistics.value}</Text>
                         </Box>
                     )}
-                    <Heading as="h2" size="mt" mt={4}>Оценки:</Heading>
+                    <Heading as="h2" size="mt" mt={10}>Оценки:</Heading>
                     <List spacing={3}>
                         {habit.marks?.map((mark, index) => (
-                            <ListItem key={index}>
+                            <ListItem key={index} mb={20}>
                                 <Text>Дата: {new Date(mark.timestamp).toLocaleString("ru-RU", {
                                     timeZone: "UTC",
                                     day: "2-digit",
