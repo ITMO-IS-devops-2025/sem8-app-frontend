@@ -116,7 +116,7 @@ export function GroupCreationPage(props: { currentUser: User | undefined; setCur
                     Создать новую группу
                 </Heading>
                 {error && <Text color="red.500" mb={3}>{error}</Text>}
-                <FormControl mb={4}>
+                <FormControl mb={4} isRequired>
                     <FormLabel>Название группы</FormLabel>
                     <Input
                         placeholder="Введите название группы"

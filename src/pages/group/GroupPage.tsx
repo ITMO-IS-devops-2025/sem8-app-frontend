@@ -70,7 +70,10 @@ export function GroupPage(props: { currentUser: User | undefined; setCurrentUser
                 setError(true);
             } else {
                 setGroup(groupResponse);
+                setParticipant(groupResponse.participants)
             }
+
+
 
             // Загружаем общие привычки
             const commonHabitsResponse = await groupController.getGroupCommonHabits(groupId);
@@ -123,27 +126,28 @@ export function GroupPage(props: { currentUser: User | undefined; setCurrentUser
     const handleAddParticipant = async () => {
         if (!newParticipantLogin) return;
 
-        const userController = new UserController();
-
-        // Ищем пользователя по логину
-        const userResponse = await userController.getUserByLogin(newParticipantLogin);
-        if (userResponse instanceof ErrorResponse) {
-            setAddUserError("Пользователь с таким логином не найден.");
-            setAddUserSuccess(null);
-            return;
-        }
-
-        if (userResponse.userId in participants.map(participant => participant.userId)) {
+        if (participants.map(participant => participant.login).includes(newParticipantLogin)) {
             setAddUserError("Такой пользователь уже есть.");
             setAddUserSuccess(null);
             return;
+        } else {
+            const userController = new UserController();
+
+            // Ищем пользователя по логину
+            const userResponse = await userController.getUserByLogin(newParticipantLogin);
+            if (userResponse instanceof ErrorResponse) {
+                setAddUserError("Пользователь с таким логином не найден.");
+                setAddUserSuccess(null);
+                return;
+            } else  {
+
+                setParticipant([...participants, userResponse]);
+                setAddUserSuccess(`Пользователь ${newParticipantLogin} успешно добавлен!`);
+                setAddUserError(null);
+
+                await new GroupController().addUserToGroup(groupId!!, userResponse.userId)
+            }
         }
-
-        setParticipant([...participants, userResponse]);
-        setAddUserSuccess(`Пользователь ${newParticipantLogin} успешно добавлен!`);
-        setAddUserError(null);
-
-        await new GroupController().addUserToGroup(groupId!!, userResponse.userId)
     };
 
     return (
@@ -160,13 +164,6 @@ export function GroupPage(props: { currentUser: User | undefined; setCurrentUser
                         Участники:
                     </Heading>
 
-                    <List>
-                        {group.participants.map((participant) => (
-                            <ListItem>
-                                <Text>{participant.login}</Text>
-                            </ListItem>
-                        ))}
-                    </List>
                     <List>
                         {participants.map((participant) => (
                             <ListItem>

@@ -13,7 +13,7 @@ import {
     Tag,
     TagCloseButton,
     TagLabel,
-    HStack,
+    HStack, NumberInput, NumberInputField, NumberInputStepper, NumberIncrementStepper, NumberDecrementStepper,
 } from "@chakra-ui/react";
 import {useNavigate, useParams} from "react-router-dom";
 import { UserController } from "../../../controllers/UserController";
@@ -180,11 +180,17 @@ export function GroupHabitCreationPage(props: { currentUser: User | undefined;se
         }));
     };
 
+
     const handleAddTag = (id: string, name: string) => {
-        setCustomHabit((prev) => ({
-            ...prev,
-            tags: [...prev.tags, {id, name}]
-        }));
+        setCustomHabit((prev) => {
+            if (prev.tags.some(tag => tag.id === id)) {
+                return prev; // Если тег уже есть, возвращаем текущее состояние
+            }
+            return {
+                ...prev,
+                tags: [...prev.tags, { id, name }]
+            };
+        });
     };
 
     const handleRemoveTag = (id: string, name: string) => {
@@ -256,7 +262,7 @@ export function GroupHabitCreationPage(props: { currentUser: User | undefined;se
                     {/* Форма для кастомной привычки */}
                     <Box flex="1">
                         <Heading size="md" mt={6}>Создать кастомную привычку</Heading>
-                        <FormControl mb={4}>
+                        <FormControl mb={4} isRequired>
                             <FormLabel>Название привычки</FormLabel>
                             <Input
                                 placeholder="Введите название"
@@ -298,20 +304,25 @@ export function GroupHabitCreationPage(props: { currentUser: User | undefined;se
 
                         <FormControl mb={4}>
                             <FormLabel>Периодичность</FormLabel>
-                            <Input
-                                placeholder="Значение (например, 3)"
+                            <NumberInput
+                                defaultValue={2.5}
                                 value={customHabit.periodicity.value}
-                                onChange={(e) => handlePeriodicityChange("value", e.target.value)}
-                            />
+                                onChange={(e) => handlePeriodicityChange("value", e)}>
+                                <NumberInputField />
+                                <NumberInputStepper>
+                                    <NumberIncrementStepper />
+                                    <NumberDecrementStepper />
+                                </NumberInputStepper>
+                            </NumberInput>
                             <Select
                                 mt={2}
                                 value={customHabit.periodicity.type}
                                 onChange={(e) => handlePeriodicityChange("type", e.target.value)}
                             >
                                 <option value="">Выберите тип</option>
-                                <option value="Day">Дни</option>
-                                <option value="Week">Недели</option>
-                                <option value="Month">Месяцы</option>
+                                <option value="Day">День</option>
+                                <option value="Week">Неделя</option>
+                                <option value="Month">Месяц</option>
                             </Select>
                         </FormControl>
 
@@ -329,12 +340,15 @@ export function GroupHabitCreationPage(props: { currentUser: User | undefined;se
 
                         <FormControl mb={4}>
                             <FormLabel>Цель</FormLabel>
-                            <Input
-                                placeholder="Введите цель"
-                                value={customHabit.goal}
-                                onChange={(e) => handleInputChange("goal", e.target.value)}
-                                isDisabled={customHabit.resultType !== "Float"}
-                            />
+                            <NumberInput value={customHabit.goal}
+                                         onChange={(e) => handleInputChange("goal", e)}
+                                         isDisabled={customHabit.resultType !== "Float"}>
+                                <NumberInputField />
+                                <NumberInputStepper>
+                                    <NumberIncrementStepper />
+                                    <NumberDecrementStepper />
+                                </NumberInputStepper>
+                            </NumberInput>
                         </FormControl>
 
                         <Button colorScheme="blue" onClick={handleCreateCustomHabit} isDisabled={!habitType}>
