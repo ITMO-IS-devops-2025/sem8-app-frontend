@@ -1,7 +1,6 @@
 import React, {useState, useEffect} from "react";
 import {useNavigate, useParams} from "react-router-dom";
 import {HabitController} from "../../../controllers/HabitController";
-import {Habit} from "../../../model/habit/Habit";
 import {List, ListItem, Text, Box, Heading, Input, Button, Checkbox, HStack, Tag, TagLabel} from "@chakra-ui/react";
 import {User} from "../../../model/user/User";
 import {UserController} from "../../../controllers/UserController";
@@ -10,7 +9,6 @@ import {Textarea} from "@chakra-ui/icons";
 import {GroupHabitPersonal} from "../../../model/habit/GroupHabitPersonal";
 import {Statistic} from "../../../model/habit/Statistics";
 import {ErrorResponse} from "../../../controllers/BaseController";
-import {NavigateOnLogout} from "../../../utils/auth/NavigateOnLogin";
 
 export function GroupPersonalHabitPage(props: { currentUser: User | undefined; setCurrentUser: (newPersonData: User) => void; }) {
     const {habitId, groupId} = useParams<{ habitId: string; groupId: string }>();
@@ -216,6 +214,7 @@ export function GroupPersonalHabitPage(props: { currentUser: User | undefined; s
                                                     mt={2}
                                                     colorScheme="blue"
                                                     onClick={() => handleSubmit(personalMark.id, mark.timestamp)}
+                                                    isDisabled={personalMark.userId === props.currentUser?.userId}
                                                 >
                                                     Сохранить
                                                 </Button>

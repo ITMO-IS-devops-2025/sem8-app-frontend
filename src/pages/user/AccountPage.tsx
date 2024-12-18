@@ -3,30 +3,26 @@ import {User} from "../../model/user/User";
 import {
     Heading,
     Button,
-    List,
-    ListItem,
     Box,
+    Text,
     FormLabel,
     Input,
     FormControl,
     InputRightElement,
     InputGroup
 } from "@chakra-ui/react";
-import {HabitController} from "../../controllers/HabitController";
-import {Link, useNavigate} from "react-router-dom";
-import {Habit} from "../../model/habit/Habit";
+import {useNavigate} from "react-router-dom";
 import {UserController} from "../../controllers/UserController";
 import {ErrorResponse} from "../../controllers/BaseController";
 import {useToast} from "@chakra-ui/icons";
-import {NavigateOnLogout} from "../../utils/auth/NavigateOnLogin";
 
 export function AccountPage(props: { currentUser: User | undefined; setCurrentUser: (newPersonData: User) => void; }) {
-    const [habits, setHabits] = useState<Habit[]>([]);
     const [error, setError] = useState(false);
     let navigate = useNavigate();
     const [newName, setNewName] = useState<string>();
     const [prevPassword, setPrevPassword] = useState<string>();
     const [newPassword, setNewPassword] = useState<string>();
+    const [passwordError, setPasswordError] = useState<string>()
     const toast = useToast();
     let [show, setShow] = useState(false)
     let handleClick = () => setShow(!show)
@@ -54,12 +50,17 @@ export function AccountPage(props: { currentUser: User | undefined; setCurrentUs
 
     async function handlePasswordChange() {
         if (!prevPassword || !newPassword) {
-            setError(true);
+            setPasswordError("Пароль не должен быть пустым")
             return;
         }
         try {
             const response = await new UserController().changeUserPassword(prevPassword, newPassword);
             if (response instanceof ErrorResponse) {
+                if (response.code === 401) {
+                    setPasswordError("Неправильный пароль!")
+                } else {
+                    setPasswordError("Пароль слишком слабый! Пароль должен содержать не менее 6 символов, строчные и заглавные буквы, один спец символ -_@+")
+                }
                 setError(true);
             } else {
                 toast({
@@ -70,6 +71,7 @@ export function AccountPage(props: { currentUser: User | undefined; setCurrentUs
                 });
                 setPrevPassword("");
                 setNewPassword("");
+                setPasswordError("")
             }
         } catch (err) {
             setError(true);
@@ -155,6 +157,7 @@ export function AccountPage(props: { currentUser: User | undefined; setCurrentUs
                             </InputRightElement>
                         </InputGroup>
                     </FormControl>
+                    <Text color="red.500"> {passwordError} </Text>
                     <Button colorScheme="teal" onClick={handlePasswordChange}>
                         Сохранить
                     </Button>
