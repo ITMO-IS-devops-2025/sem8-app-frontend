@@ -234,6 +234,7 @@ export function GroupPersonalHabitPage(props: { currentUser: User | undefined; s
                                                 <Button
                                                     mt={2}
                                                     colorScheme="blue"
+                                                    isDisabled={personalMark.userId === props.currentUser?.userId}
                                                     onClick={() => {
                                                         handleSubmit(personalMark.id, mark.timestamp);
                                                         setEditingMarks((prev) => ({ ...prev, [personalMark.id]: false }));
