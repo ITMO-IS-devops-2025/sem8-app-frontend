@@ -6,9 +6,8 @@ COPY package.json /panpipe-frontend/
 RUN npm install
 
 COPY tsconfig.json /panpipe-frontend/
+COPY public/ /panpipe-frontend/public/
 COPY src/ /panpipe-frontend/src
-
-VOLUME ["/panpipe-frontend/public"]
 
 USER node
 
